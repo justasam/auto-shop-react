@@ -8,6 +8,7 @@ export const Routes = () => {
   return (
     <div>
       <NavBar />
+      <div style={{paddingTop: 52, margin: 0}}></div>
       <Switch>
         <Route exact path="/Home" component={HomeScreen} />
         <Route exact path="/">

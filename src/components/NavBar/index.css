@@ -30,6 +30,7 @@
 }
 
 .navbar_link {
+  position: relative;
   display: inline-block;
   padding: 0px 20px;
   line-height: 52px;
@@ -45,4 +46,27 @@
   top: 0;
   height: 52px;
   clear: both;
+}
+
+.navbar a::before {
+  display: block;
+  content: "";
+  width: 35px;
+  height: 4px;
+  background-color: black;
+  position: absolute;
+  bottom: 10px;
+  left: 50%;
+  transform: translateX(-150%);
+  transition: 0.5s transform;
+  opacity: 0;
+}
+.navbar a:hover::before {
+  opacity: 1;
+  transform: translateX(-50%);
+}
+
+.navbar .is-active::before {
+  opacity: 1;
+  transform: translateX(-50%);
 }
