@@ -1,0 +1,52 @@
+.input {
+  position: relative;
+  width: 100%;
+  height: 50px;
+  border-radius: 10px;
+  border: none;
+  outline: none;
+  padding: 0 20px;
+  box-sizing: border-box;
+  font-size: 18px;
+}
+
+.input_label_right {
+  position: absolute;
+  right: 10px;
+}
+
+.select {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  -o-appearance: none;
+  cursor: pointer;
+}
+
+.select_icon {
+  position: absolute;
+  right: 10px;
+  pointer-events: none;
+}
+
+.select option {
+  padding: 20px 0;
+}
+
+.button {
+  position: relative;
+  height: 50px;
+  outline: none;
+  border: 2px solid white;
+  background-color: transparent;
+  color: white;
+  border-radius: 10px;
+  font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: 0.5s all;
+}
+
+.button:hover {
+  background-color: white;
+  color: black;
+}
