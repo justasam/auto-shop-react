@@ -1,0 +1,48 @@
+.navbar {
+  background-color: red;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 52px;
+}
+
+.navbar a {
+  text-decoration: none;
+  color: black;
+  height: 52px;
+  display: inline-block;
+}
+
+.navbar_logo {
+  position: relative;
+  left: 20px;
+  line-height: 52px;
+  display: inline-block;
+}
+
+.navbar_links_main {
+  position: absolute;
+  padding: 0;
+  margin: 0;
+  list-style: none;
+  display: inline-block;
+}
+
+.navbar_link {
+  display: inline-block;
+  padding: 0px 20px;
+  line-height: 52px;
+  height: 52px;
+}
+
+.navbar_links_sep {
+  margin: 0;
+  padding: 0;
+  display: inline-block;
+  position: absolute;
+  right: 10px;
+  top: 0;
+  height: 52px;
+  clear: both;
+}
