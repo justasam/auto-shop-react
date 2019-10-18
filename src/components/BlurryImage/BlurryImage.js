@@ -7,19 +7,20 @@ const BlurryImage = ({src, width='100vw'}) => {
       margin: 0,
       padding: 0,
     }}>
-      <img src={src} alt="blurred" style={{
-        position: 'relative',
-        width: width,
-      }}/>
-      <div style={{
+      <img src={src} alt="regular" style={{
         position: 'absolute',
         top: 0,
         left: 0,
         width: width,
         height: '100%',
-        backgroundColor: 'black',
-        opacity: 0.5
-      }}></div>
+        zIndex: -2
+      }} />
+      <img src={src} alt="blurred" style={{
+        position: 'relative',
+        width: width,
+        filter: 'blur(6px) brightness(90%)',
+        zIndex: -1
+      }}/>
     </div>
   )
 }
