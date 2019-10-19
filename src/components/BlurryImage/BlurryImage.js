@@ -1,6 +1,6 @@
 import React from 'react';
 
-const BlurryImage = ({src, width='100vw', children}) => {
+const BlurryImage = ({src, width='100%', children}) => {
   return (
     <div style={{
       position: 'relative',

@@ -62,6 +62,7 @@ EOF
   echo -e "\n Created index.js...\n"
   cat > "${name}.js" << EOF
 import React from 'react';
+import './index.css';
 
 const $name = props => {
   return (
