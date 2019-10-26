@@ -2,6 +2,10 @@ import React from 'react';
 import { SquareItem } from '../SquareItem';
 import './index.css';
 
+import 'slick-carousel/slick/slick.css';
+import 'slick-carousel/slick/slick-theme.css';
+import Slider from 'react-slick';
+
 const mockData = [
   {
     image: 'https://picsum.photos/565', 
@@ -58,14 +62,21 @@ const Carousel = ({
   HoverComponent=HoverComponentDefault,
   hoverProps=['title', 'desc']
 }) => {
+  const settings = {
+    dots: true,
+    infinite: true,
+    speed: 500,
+    slidesToShow: 3,
+    slidesToScroll: 2,
+  }
   return (
     <div className='carousel_wrapper'>
       <h3>{title}</h3>
-      <div className='carousel'>
+      <Slider {...settings}>
         {items.map(item => (
           <SquareItem key={item.link} HoverComponent={HoverComponent} hoverProps={hoverProps} item={item} />
         ))}
-      </div>
+      </Slider>
     </div>
   )
 }

@@ -19,3 +19,9 @@
 .square_item:hover .hover_component {
   opacity: 1;
 }
+
+.square_item img {
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+}
