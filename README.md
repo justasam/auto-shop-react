@@ -1,3 +1,3 @@
-1.install npm 
-npm install
-npm run build
+1. install npm 
+2. npm install
+3. npm run build
