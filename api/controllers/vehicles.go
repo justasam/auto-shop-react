@@ -5,6 +5,7 @@ import (
 )
 
 // GetVehicles returns vehicles
-func GetVehicles(c echo.Context) {
+func GetVehicles(c echo.Context) error {
+	return nil
 
 }

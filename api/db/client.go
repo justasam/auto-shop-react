@@ -1,9 +1,12 @@
 package db
 
 import (
+	"autoshop/types"
 	"fmt"
 
 	// this is needed to enable mysql database support
+
+	"github.com/go-sql-driver/mysql"
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/jmoiron/sqlx"
 	"github.com/labstack/gommon/log"
@@ -11,10 +14,18 @@ import (
 
 // Client is db client object
 type Client struct {
-	db        *sqlx.DB
-	ex        sqlx.Ext
-	committed bool
+	db         *sqlx.DB
+	ex         sqlx.Ext
+	committed  bool
+	viewPrefix string
 }
+
+var conf Config
+
+const (
+	uniqueViolation     = 1062
+	foreignKeyViolation = 1452
+)
 
 // Config stores database configuration
 type Config struct {
@@ -31,26 +42,68 @@ type Config struct {
 	MySQLAdminPass    string `json:"mysql_admin_pass" default:"root"`
 }
 
-// Connect returns new db connections
-func Connect(conf Config) (client *Client, err error) {
-	// Initially setup admin connection
-	adminCn := fmt.Sprintf("%s:%s@(%s:%s)/%s",
-		conf.MySQLAdminUser,
-		conf.MySQLAdminPass,
-		conf.MySQLHost,
-		conf.MySQLPort,
-		conf.DatabaseName,
-	)
+// Init sets config
+func Init(c Config) {
+	conf = c
+}
 
-	rawdb, err := sqlx.Connect("mysql", adminCn)
+// Connect returns new db connections
+func Connect(connType string) (*Client, error) {
+	cn := fmt.Sprintf("%%s:%%s@(%s:%s)/%s", conf.MySQLHost, conf.MySQLPort, conf.DatabaseName)
+	viewPrefix := ""
+	switch connType {
+	case "admin":
+		cn = fmt.Sprintf(cn, conf.MySQLAdminUser, conf.MySQLAdminPass)
+		viewPrefix = "admin_v"
+	case "employee":
+		cn = fmt.Sprintf(cn, conf.MySQLEmployeeUser, conf.MySQLEmployeePass)
+		viewPrefix = "employee_v"
+	case "customer":
+		cn = fmt.Sprintf(cn, conf.MySQLCustomerUser, conf.MySQLCustomerPass)
+		viewPrefix = "customer_v"
+	case "guest":
+		cn = fmt.Sprintf(cn, conf.MySQLGuestUser, conf.MySQLGuestPass)
+		viewPrefix = "guest_v"
+	default:
+		return nil, fmt.Errorf("Invalid connection type: %s", connType)
+	}
+
+	rawdb, err := sqlx.Connect("mysql", cn)
 	if err != nil {
 		return nil, err
 	}
 
 	return &Client{
-		db: rawdb,
-		ex: rawdb,
+		db:         rawdb,
+		ex:         rawdb,
+		viewPrefix: viewPrefix,
 	}, nil
+}
+
+func (c *Client) applyView(query string) string {
+	return fmt.Sprintf(query, c.viewPrefix)
+}
+
+func (c *Client) transformError(err error) *types.Error {
+	if err == nil {
+		return nil
+	}
+	// Check key violation error
+	if mq, ok := err.(*mysql.MySQLError); ok {
+		if mq.Number == foreignKeyViolation {
+			return types.ValidationError(mq.Message)
+		} else if mq.Number == uniqueViolation {
+			return types.DuplicateError(mq.Message)
+		}
+	}
+
+	return types.DatabaseError(err)
+}
+
+// Close closes connection
+func (c *Client) Close() error {
+	c.viewPrefix = ""
+	return c.db.Close()
 }
 
 // DB returns internal sqlx db connection
@@ -79,8 +132,9 @@ func (c *Client) Begin() (*Client, error) {
 	}
 
 	return &Client{
-		db: c.db,
-		ex: tx,
+		db:         c.db,
+		ex:         tx,
+		viewPrefix: c.viewPrefix,
 	}, nil
 }
 

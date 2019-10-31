@@ -9,7 +9,8 @@ import (
 
 // GetVehicles returns vehicles
 func (c *Client) GetVehicles(filter *types.GetVehiclesFilter, pageNumber, perPage int) ([]types.Vehicle, int, *types.Error) {
-	queryf := "SELECT %s FROM guest.vehicles "
+	queryf := "SELECT %%s FROM %s_vehicles "
+	queryf = c.applyView(queryf)
 	query, namedParams := applyVehicleFilter(queryf, filter)
 
 	// Select total for pagination
@@ -34,7 +35,8 @@ func (c *Client) GetVehicles(filter *types.GetVehiclesFilter, pageNumber, perPag
 
 // GetVehicle returns specified vehicle
 func (c *Client) GetVehicle(id string) (*types.Vehicle, error) {
-	query := "SELECT * FROM guest.vehicles WHERE id=?"
+	query := "SELECT * FROM %s_vehicles WHERE id=?"
+	query = c.applyView(query)
 
 	var vehicle types.Vehicle
 	err := c.db.Get(&vehicle, query, id)

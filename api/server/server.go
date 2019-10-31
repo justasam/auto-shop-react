@@ -6,9 +6,14 @@ import (
 	"sort"
 	"time"
 
+	sv "github.com/Rekfuki/swag-validator"
 	"github.com/fvbock/endless"
-	"github.com/labstack/echo"
-	"github.com/labstack/echo/middleware"
+	"github.com/gorilla/sessions"
+	"github.com/labstack/echo-contrib/session"
+	"github.com/labstack/echo/v4"
+	"github.com/labstack/echo/v4/middleware"
+	"github.com/miketonks/swag"
+	"github.com/miketonks/swag/swagger"
 	log "github.com/sirupsen/logrus"
 
 	"autoshop/db"
@@ -17,14 +22,48 @@ import (
 
 // ContextParams stores context parameters for server initialization
 type ContextParams struct {
-	DB *db.Client
+	DBConf db.Config
 }
 
 // ContextObjects attaches backend clients to the API context
 func ContextObjects(contextParams ContextParams) echo.MiddlewareFunc {
 	return func(next echo.HandlerFunc) echo.HandlerFunc {
 		return func(c echo.Context) error {
-			c.Set("db", contextParams.DB)
+			c.Set("dbconf", contextParams.DBConf)
+			return next(c)
+		}
+	}
+}
+
+// DefaultContentType sets default content type
+func DefaultContentType() echo.MiddlewareFunc {
+	return func(next echo.HandlerFunc) echo.HandlerFunc {
+		return func(c echo.Context) error {
+			t := c.Request().Header.Get("Content-Type")
+			if t == "" {
+				c.Request().Header.Set("Content-Type", "application/json; charset=UTF-8")
+			}
+
+			return next(c)
+		}
+	}
+}
+
+// CheckSession sets session details to context
+func CheckSession() echo.MiddlewareFunc {
+	return func(next echo.HandlerFunc) echo.HandlerFunc {
+		return func(c echo.Context) error {
+			sess, _ := session.Get("session", c)
+
+			// If account type is not set assume it's a guest
+			if _, found := sess.Values["account_type"]; !found {
+				sess.Values["account_type"] = types.GuestAccount
+			} else {
+				c.Set("owner_id", sess.Values["owner_id"])
+				c.Set("account_type", sess.Values["account_type"])
+				c.Set("account_id", sess.Values["account_id"])
+			}
+
 			return next(c)
 		}
 	}
@@ -37,10 +76,21 @@ func CreateRouter(params ContextParams) *echo.Echo {
 
 	r.Use(
 		ContextObjects(params),
+		middleware.Logger(),
+		middleware.Recover(),
+		middleware.Secure(),
 	)
 
-	r.Use(middleware.Logger())
-	r.Use(middleware.Recover())
+	r.Use(session.Middleware(sessions.NewCookieStore([]byte("secret"))))
+
+	autoshopAPI := CreateSwaggerAPI()
+
+	api := r.Group("", sv.SwaggerValidatorEcho(autoshopAPI), DefaultContentType(), CheckSession())
+	autoshopAPI.Walk(func(path string, endpoint *swagger.Endpoint) {
+		h := endpoint.Handler.(func(c echo.Context) error)
+		path = swag.ColonPath(path)
+		api.Add(endpoint.Method, path, h)
+	})
 
 	// Set static asset base directory
 	r.Static("/", "../build")
@@ -56,10 +106,33 @@ func CreateRouter(params ContextParams) *echo.Echo {
 	}
 	sort.Strings(routes)
 	for _, route := range routes {
-		log.Debug(route)
+		log.Print(route)
 	}
 
 	return r
+}
+
+// CreateSwaggerAPI creates all swagger endpoints.
+func CreateSwaggerAPI() *swagger.API {
+	api := swag.New(
+		swag.Title("Autoshop API"),
+		swag.BasePath("/autoshop/api"),
+		swag.Endpoints(
+			aggregateEndpoints(
+				authAPI(),
+				customerAPI(),
+			)...,
+		),
+	)
+	return api
+}
+
+func aggregateEndpoints(endpoints ...[]*swagger.Endpoint) []*swagger.Endpoint {
+	res := []*swagger.Endpoint{}
+	for _, v := range endpoints {
+		res = append(res, v...)
+	}
+	return res
 }
 
 // Run runs the server

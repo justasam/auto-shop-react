@@ -28,13 +28,10 @@ func main() {
 		log.Fatalf("Failed to unmarshal configuration file: %s", err.Error())
 	}
 
-	dbClient, err := db.Connect(conf.MySQLConfig)
-	if err != nil {
-		log.Fatalf("Failed to create admin database client: %s", err.Error())
-	}
+	db.Init(conf.MySQLConfig)
 
 	server.Run(server.ContextParams{
-		DB: dbClient,
+		DBConf: conf.MySQLConfig,
 	})
 
 	log.Exit(0)
