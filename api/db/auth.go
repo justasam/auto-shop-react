@@ -25,7 +25,7 @@ func (c *Client) GetAccountByUsername(username string) (*types.Account, *types.E
 
 // GetAccountByID returns account by username
 func (c *Client) GetAccountByID(id string) (*types.Account, *types.Error) {
-	query := "SELECT a.* FROM %s_accounts WHERE id=? INNER JOIN "
+	query := "SELECT * FROM %s_accounts WHERE id=?"
 	query = c.applyView(query)
 
 	var account types.Account
@@ -54,6 +54,10 @@ func (c *Client) CreateAccount(p types.Account) (*types.Account, *types.Error) {
 	}
 
 	// Get the account back
+	account, dbErr := c.GetAccountByID(p.ID)
+	if dbErr != nil {
+		return nil, dbErr
+	}
 
-	return &p, nil
+	return account, nil
 }

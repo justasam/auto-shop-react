@@ -1,8 +1,11 @@
 package db
 
 import (
+	"database/sql"
 	"fmt"
 	"strings"
+
+	uuid "github.com/satori/go.uuid"
 
 	"autoshop/types"
 )
@@ -19,7 +22,7 @@ func (c *Client) GetVehicles(filter *types.GetVehiclesFilter, pageNumber, perPag
 	var total int
 	err := c.db.Select(&total, query, namedParams)
 	if err != nil {
-		return nil, 0, types.DatabaseError(err)
+		return nil, 0, c.transformError(err)
 	}
 
 	query = fmt.Sprintf(query, "*")
@@ -27,24 +30,168 @@ func (c *Client) GetVehicles(filter *types.GetVehiclesFilter, pageNumber, perPag
 	vehicles := []types.Vehicle{}
 	err = c.db.Select(&vehicles, query, namedParams, pageNumber*perPage, perPage)
 	if err != nil {
-		return nil, 0, types.DatabaseError(err)
+		return nil, 0, c.transformError(err)
 	}
 
 	return vehicles, total, nil
 }
 
 // GetVehicle returns specified vehicle
-func (c *Client) GetVehicle(id string) (*types.Vehicle, error) {
-	query := "SELECT * FROM %s_vehicles WHERE id=?"
+func (c *Client) GetVehicle(id string) (*types.Vehicle, *types.Error) {
+	query := `SELECT v.*, GROUP_CONCAT(vp.file_name) AS vehicle_pictures
+		FROM %s_vehicles v
+		JOIN %s_vehicle_pictures vp ON vp.vehicle_id = v.id
+		WHERE v.id=? GROUP BY v.id`
 	query = c.applyView(query)
 
 	var vehicle types.Vehicle
 	err := c.db.Get(&vehicle, query, id)
 	if err != nil {
-		return nil, types.DatabaseError(err)
+		if err == sql.ErrNoRows {
+			return nil, nil
+		}
+		return nil, c.transformError(err)
 	}
 
+	vehicle.Images = strings.Split(vehicle.UnsplitImagePaths, ",")
+
 	return &vehicle, nil
+}
+
+// CreateVehicle creates a new vehicle entry in the db
+func (c *Client) CreateVehicle(p types.VehiclePost) (*types.Vehicle, *types.Error) {
+	query := `INSERT INTO %s_vehicles (id, make, model, year, price, milage,
+		body_type, fuel_type, doors, gearbox, seats, fuel_consumption, 
+		colour, engine, description, specification, drivetrain) 
+		VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)`
+
+	query = c.applyView(query)
+
+	_, err := c.ex.Exec(query, p.ID, p.Make, p.Model, p.Year, p.Price,
+		p.Milage, p.BodyType, p.FuelType, p.Doors, p.Gearbox, p.Seats,
+		p.FuelConsumption, p.Colour, p.Engine, p.Description, p.Specificaction,
+		p.Drivetrain)
+	if err != nil {
+		return nil, c.transformError(err)
+	}
+
+	// Get the vehicle back
+	vehicle, dbErr := c.GetVehicle(p.ID)
+	if dbErr != nil {
+		return nil, dbErr
+	}
+
+	return vehicle, nil
+}
+
+// CreateVehiclePhotoEntries inserts vehicles photo paths to the db
+func (c *Client) CreateVehiclePhotoEntries(vehicleID string, paths []string) *types.Error {
+	valueStrings := []string{}
+	valueArgs := []interface{}{}
+
+	for _, p := range paths {
+		valueStrings = append(valueStrings, "(?, ?)")
+		valueArgs = append(valueArgs, vehicleID)
+		valueArgs = append(valueArgs, p)
+	}
+
+	query := fmt.Sprintf(`INSERT INTO %%s_vehicle_pictures (vehicle_id, file_name) VALUES %s`,
+		strings.Join(valueStrings, ","))
+	query = c.applyView(query)
+
+	_, err := c.ex.Exec(query, valueArgs...)
+	if err != nil {
+		return c.transformError(err)
+	}
+
+	return nil
+}
+
+// GetVehiclePurchaseEntry returns vehicle purchase entry based on id
+func (c *Client) GetVehiclePurchaseEntry(vehicleID string) (*types.VehiclePurchaseEntry, *types.Error) {
+	query := `SELECT * FROM %s_vehicle_purchases where vehicle_id=?`
+	query = c.applyView(query)
+
+	var purchase types.VehiclePurchaseEntry
+	err := c.db.Get(&purchase, query, vehicleID)
+	if err != nil {
+		if err == sql.ErrNoRows {
+			return nil, nil
+		}
+		return nil, c.transformError(err)
+	}
+
+	return &purchase, nil
+}
+
+// CreateVehiclePurchaseEntry creates a new vehicle purchase entry
+func (c *Client) CreateVehiclePurchaseEntry(p *types.VehiclePurchaseEntryPost) (*types.VehiclePurchaseEntry, *types.Error) {
+	query := `INSERT INTO %s_vehicle_purchases 
+		(id, purchased_from_customer_id, bought_for, vehicle_id, purchased_by_employee_id)
+		VALUES (?, ?, ?, ?, ?)`
+	query = c.applyView(query)
+
+	_, err := c.ex.Exec(query, p.ID, p.PruchasedFromCustomerID,
+		p.BoughtFor, p.VehicleID, p.PurchasedByEmployeeID)
+	if err != nil {
+		return nil, c.transformError(err)
+	}
+
+	// Get the entry back
+	purchase, dbErr := c.GetVehiclePurchaseEntry(p.VehicleID)
+	if dbErr != nil {
+		return nil, dbErr
+	}
+
+	return purchase, nil
+}
+
+// PurchaseVehicle creates a new vehicle, inserts photo paths and creates a new purchase record
+func (c *Client) PurchaseVehicle(p types.VehiclePost) (*types.Vehicle, *types.Error) {
+	var err error
+	c, err = c.Begin()
+	if err != nil {
+		return nil, c.transformError(err)
+	}
+	defer c.End()
+
+	// Insert vehicle first
+	_, dbErr := c.CreateVehicle(p)
+	if dbErr != nil {
+		return nil, dbErr
+	}
+
+	// Insert vehicle photo data
+	dbErr = c.CreateVehiclePhotoEntries(p.ID, p.ImagePaths)
+	if dbErr != nil {
+		return nil, dbErr
+	}
+
+	entry := &types.VehiclePurchaseEntryPost{
+		ID:                      uuid.NewV4().String(),
+		VehicleID:               p.ID,
+		BoughtFor:               p.BoughtFor,
+		PruchasedFromCustomerID: p.CustomerID,
+		PurchasedByEmployeeID:   p.EmployeeID,
+	}
+
+	// Create purchase record
+	_, dbErr = c.CreateVehiclePurchaseEntry(entry)
+	if dbErr != nil {
+		return nil, dbErr
+	}
+
+	err = c.Commit()
+	if err != nil {
+		return nil, c.transformError(err)
+	}
+
+	vehicle, dbErr := c.GetVehicle(p.ID)
+	if dbErr != nil {
+		return nil, dbErr
+	}
+
+	return vehicle, nil
 }
 
 func applyVehicleFilter(query string, filter *types.GetVehiclesFilter) (string, map[string]interface{}) {
@@ -107,11 +254,6 @@ func applyVehicleFilter(query string, filter *types.GetVehiclesFilter) (string, 
 		subQuery += "AND doors=:doors"
 	}
 
-	if filter.Transmission != nil {
-		namedParams["transmission"] = *filter.Transmission
-		subQuery += "AND transmission=:transmission"
-	}
-
 	if filter.Gearbox != nil {
 		namedParams["gearbox"] = *filter.Gearbox
 		subQuery += "AND gearbox=:gearbox"
@@ -151,11 +293,6 @@ func applyVehicleFilter(query string, filter *types.GetVehiclesFilter) (string, 
 	if filter.EngineTo != nil {
 		namedParams["engine_to"] = *filter.EngineTo
 		subQuery += "AND engine <= :engine_to"
-	}
-
-	if filter.MOT != nil {
-		namedParams["mot"] = *filter.MOT
-		subQuery += "AND mot <= :mot"
 	}
 
 	if len(subQuery) > 0 {

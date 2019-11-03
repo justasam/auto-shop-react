@@ -13,7 +13,7 @@ import (
 func customerAPI() []*swagger.Endpoint {
 	login := endpoint.New("POST", "/customers", "Create customer",
 		endpoint.Handler(controllers.CreateCustomer),
-		endpoint.Response(http.StatusCreated, types.Customer{}, "Successful login"),
+		endpoint.Response(http.StatusCreated, types.Customer{}, "Successful"),
 		endpoint.Body(types.CustomerPost{}, "Customer payload", true),
 		endpoint.Tags("Customers"),
 	)

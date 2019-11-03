@@ -3,10 +3,10 @@ package db
 import (
 	"autoshop/types"
 	"fmt"
-
-	// this is needed to enable mysql database support
+	"strings"
 
 	"github.com/go-sql-driver/mysql"
+	// this is needed to enable mysql database support
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/jmoiron/sqlx"
 	"github.com/labstack/gommon/log"
@@ -81,7 +81,7 @@ func Connect(connType string) (*Client, error) {
 }
 
 func (c *Client) applyView(query string) string {
-	return fmt.Sprintf(query, c.viewPrefix)
+	return strings.ReplaceAll(query, "%s", c.viewPrefix)
 }
 
 func (c *Client) transformError(err error) *types.Error {

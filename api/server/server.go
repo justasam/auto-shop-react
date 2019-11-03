@@ -1,6 +1,7 @@
 package server
 
 import (
+	"encoding/gob"
 	"fmt"
 	"net/http"
 	"sort"
@@ -16,6 +17,7 @@ import (
 	"github.com/miketonks/swag/swagger"
 	log "github.com/sirupsen/logrus"
 
+	"autoshop/controllers"
 	"autoshop/db"
 	"autoshop/types"
 )
@@ -54,7 +56,6 @@ func CheckSession() echo.MiddlewareFunc {
 	return func(next echo.HandlerFunc) echo.HandlerFunc {
 		return func(c echo.Context) error {
 			sess, _ := session.Get("session", c)
-
 			// If account type is not set assume it's a guest
 			if _, found := sess.Values["account_type"]; !found {
 				sess.Values["account_type"] = types.GuestAccount
@@ -82,6 +83,10 @@ func CreateRouter(params ContextParams) *echo.Echo {
 	)
 
 	r.Use(session.Middleware(sessions.NewCookieStore([]byte("secret"))))
+
+	gob.Register(types.Customer{})
+
+	r.GET("/ping", controllers.Ping)
 
 	autoshopAPI := CreateSwaggerAPI()
 
@@ -121,6 +126,8 @@ func CreateSwaggerAPI() *swagger.API {
 			aggregateEndpoints(
 				authAPI(),
 				customerAPI(),
+				vehiclesAPI(),
+				employeeAPI(),
 			)...,
 		),
 	)

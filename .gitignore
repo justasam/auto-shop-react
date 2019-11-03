@@ -1,4 +1,5 @@
 node_modules
+*/static/*
 build
 package-lock.json
 go.sum
