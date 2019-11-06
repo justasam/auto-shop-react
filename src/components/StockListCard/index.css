@@ -1,0 +1,272 @@
+.StockListCard {
+    position: relative;
+    background: white;
+    padding: 10px;
+    display: inline-block;
+    width: 95%;
+    margin: 1em 2.5%;
+    transform: all 0.5s ease;
+    color: black;
+    box-shadow: 5px 15px 45px #828181;
+    border-radius: 30px;
+    min-height: 80vh;
+}
+
+.StockListCard ul {
+    padding: 0;
+}
+
+.StockListCard li {
+    list-style-type: none;
+}
+
+.StockListCard .cart {
+    padding: 1em 0;
+}
+
+.StockListCard .cart .items {
+    display: block;
+    width: 100%;
+    vertical-align: middle;
+    padding: 1.5em 0;
+    border-bottom: 1px solid #676767;
+}
+
+.StockListCard .cart .items .infoWrap {
+    display: table;
+    width: 100%;
+}
+
+.StockListCard .cart .items .infoWrap .cartSection {
+    display: table-cell;
+    vertical-align: middle;
+}
+
+.StockListCard .cart .items .infoWrap .cartSection.removeWrap {
+    text-align: center;
+}
+
+.StockListCard .cart .items .infoWrap .cartSection.removeWrap a.remove {
+    height: 30px;
+    width: 30px;
+    text-decoration: none;
+    color: #fff;
+    font-weight: bold;
+    background: green;
+    display: inline-block;
+    border-radius: 100%;
+    transition: all 1s ease;
+}
+
+.StockListCard .cart .items .infoWrap .cartSection.removeWrap a.remove:hover {
+    background: #f30;
+    opacity: 1;
+}
+
+.StockListCard .cart .items .infoWrap .cartSection .itemNumber {
+    font-size: 0.75em;
+    color: #777;
+    margin-bottom: 0.5em;
+}
+
+.StockListCard .cart .items .infoWrap .cartSection p {
+    margin: 0;
+    display: inline-table;
+}
+
+.StockListCard .cart .items .infoWrap .cartSection p .quantity {
+    font-weight: bold;
+    color: #333;
+}
+
+.StockListCard .cart .items .infoWrap .cartSection p.stockStatus {
+    color: green;
+    font-weight: bold;
+    padding: 0.5em 0 0 1em;
+    text-transform: uppercase;
+}
+
+.StockListCard .cart .items .infoWrap .cartSection p.stockStatus.out {
+    color: red;
+}
+
+.StockListCard .cart .items .infoWrap .cartSection .itemImg {
+    width: 4em;
+    float: left;
+    margin-right: 2em;
+    border-radius: 10px;
+}
+
+.StockListCard .cart .items .infoWrap .cartSection.prodTotal,
+.StockListCard .cart .items .infoWrap .cartSection.qtyWrap {
+    text-align: center;
+}
+
+.StockListCard .cart .items .infoWrap .cartSection.prodTotal p,
+.StockListCard .cart .items .infoWrap .cartSection.qtyWrap p {
+    font-weight: bold;
+    font-size: 1.25em;
+}
+
+.StockListCard .cart .items .infoWrap .cartSection input.qty {
+    width: 2em;
+    text-align: center;
+    font-size: 1em;
+    padding: 0.25em;
+    margin: 1em 0.5em 0 0;
+    display: inline-flex;
+}
+
+.StockListCard .cart .items .infoWrap .cartSection .itemImg {
+    width: 8em;
+    display: inline;
+    margin: 0 1.5em;
+    border-radius: 10px;
+}
+
+.StockListCard .promoCode {
+    float: left;
+    width: 35%;
+    padding: 2%;
+}
+
+.StockListCard .promoCode label {
+    display: block;
+    width: 100%;
+    font-style: italic;
+    font-size: 1.15em;
+    margin-bottom: 0.5em;
+}
+
+.StockListCard .promoCode input {
+    width: 60%;
+    min-width: 200px;
+    padding: 1em;
+    float: left;
+    border: none;
+    border-radius: 30px;
+    background-color: rgb(209, 209, 209);
+}
+
+.StockListCard .promoCode input:active,
+.StockListCard .promoCode input:focus {
+    outline: 0;
+}
+
+.StockListCard .btn:link,
+.StockListCard .btn:visited {
+    text-decoration: none;
+    margin: 1em 2em;
+    padding: 0.5em 1.5em;
+    color: #fff;
+    background: #82ca9c;
+    font-weight: bold;
+    border-radius: 50px;
+    float: right;
+    text-align: center;
+    transition: all 0.25s linear;
+}
+
+.StockListCard .btn:after {
+    content: "\276f";
+    padding: 0.5em;
+    position: relative;
+    right: 0;
+    transition: all 0.15s linear;
+}
+
+.StockListCard .btn:active,
+.StockListCard .btn:focus,
+.StockListCard .btn:hover {
+    background: #f69679;
+}
+
+.StockListCard .btn:active:after,
+.StockListCard .btn:focus:after,
+.StockListCard .btn:hover:after {
+    right: -10px;
+}
+
+.StockListCard .subtotal {
+    float: right;
+    width: 60%;
+}
+
+.StockListCard .subtotal .totalRow {
+    padding: 0.5em;
+    text-align: right;
+}
+
+.StockListCard .subtotal .totalRow.final {
+    font-size: 1.5em;
+    font-weight: bold;
+}
+
+.StockListCard .subtotal .totalRow span {
+    display: inline-block;
+    padding: 0 0 0 1em;
+    text-align: right;
+}
+
+.StockListCard .subtotal .totalRow .label {
+    font-size: 0.85em;
+    text-transform: uppercase;
+    color: #777;
+}
+
+.StockListCard .subtotal .totalRow .value {
+    width: 35%;
+    text-align: center;
+}
+
+@media only screen and (max-width: 39.375em) {
+    .StockListCard .projTitle {
+        font-size: 1.5em;
+        padding: 10% 5%;
+    }
+
+    .StockListCard .heading {
+        padding: 1em;
+        font-size: 90%;
+    }
+
+    .StockListCard .cart .items .cartSection {
+        width: 90%;
+        display: block;
+        float: left;
+    }
+
+    .StockListCard .cart .items .cartSection.qtyWrap {
+        width: 10%;
+        text-align: center;
+        padding: 0.5em 0;
+        float: right;
+    }
+
+    .StockListCard .cart .items .cartSection.qtyWrap:before {
+        content: "QTY";
+        display: block;
+        padding: 0.25em;
+        font-size: 0.75em;
+    }
+
+    .StockListCard .cart .items .cartSection.prodTotal,
+    .StockListCard .cart .items .cartSection.removeWrap {
+        display: none;
+    }
+
+    .StockListCard .cart .items .cartSection .itemImg {
+        width: 25%;
+    }
+
+    .StockListCard .promoCode,
+    .StockListCard .subtotal {
+        width: 100%;
+    }
+
+    .StockListCard a.btn.continue {
+        width: 100%;
+        text-align: center;
+        margin: 0;
+    }
+}
