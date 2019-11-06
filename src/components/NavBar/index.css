@@ -5,6 +5,7 @@
   left: 0;
   width: 100vw;
   height: 52px;
+  z-index: 2; /* make sure it always on the top ! */
 }
 
 .navbar a {
