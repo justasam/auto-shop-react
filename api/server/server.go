@@ -1,7 +1,6 @@
 package server
 
 import (
-	"encoding/gob"
 	"fmt"
 	"net/http"
 	"sort"
@@ -84,11 +83,12 @@ func CreateRouter(params ContextParams) *echo.Echo {
 
 	r.Use(session.Middleware(sessions.NewCookieStore([]byte("secret"))))
 
-	gob.Register(types.Customer{})
-
 	r.GET("/ping", controllers.Ping)
 
 	autoshopAPI := CreateSwaggerAPI()
+
+	// Swagger UI
+	r.GET("/autoshop/api/doc/json", echo.WrapHandler(autoshopAPI.Handler(true)))
 
 	api := r.Group("", sv.SwaggerValidatorEcho(autoshopAPI), DefaultContentType(), CheckSession())
 	autoshopAPI.Walk(func(path string, endpoint *swagger.Endpoint) {

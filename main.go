@@ -31,10 +31,10 @@ func main() {
 	db.Init(conf.MySQLConfig)
 
 	// Check if static folder is present
-	if _, err := os.Stat("static/vehicle_pictures/"); os.IsNotExist(err) {
+	if _, err := os.Stat("./vehicle_pictures/"); os.IsNotExist(err) {
 		log.Warnln("Static folder not found, creating....")
 		// Try to create it
-		err = os.MkdirAll("static/vehicle_pictures/", os.ModePerm)
+		err = os.MkdirAll("./vehicle_pictures/", os.ModePerm)
 		if err != nil {
 			log.Fatalf("Failed to create static dir: %s", err)
 		}
