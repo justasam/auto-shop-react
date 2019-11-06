@@ -1,8 +1,9 @@
 package db
 
 import (
-	"autoshop/types"
 	"database/sql"
+
+	"autoshop/api/types"
 )
 
 // GetAccountByUsername returns account by username

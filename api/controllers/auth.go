@@ -10,8 +10,8 @@ import (
 	"github.com/labstack/echo/v4"
 	validator "gopkg.in/go-playground/validator.v8"
 
-	"autoshop/db"
-	"autoshop/types"
+	"autoshop/api/db"
+	"autoshop/api/types"
 )
 
 // Login handles login

@@ -7,8 +7,8 @@ import (
 	"github.com/labstack/echo/v4"
 	uuid "github.com/satori/go.uuid"
 
-	"autoshop/db"
-	"autoshop/types"
+	"autoshop/api/db"
+	"autoshop/api/types"
 )
 
 // CreateCustomer creates customer

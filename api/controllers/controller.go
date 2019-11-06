@@ -1,12 +1,13 @@
 package controllers
 
 import (
-	"autoshop/types"
 	"net/http"
 
 	"github.com/gorilla/sessions"
 	"github.com/labstack/echo-contrib/session"
 	"github.com/labstack/echo/v4"
+
+	"autoshop/api/types"
 )
 
 // Ping returns a ping response

@@ -1,12 +1,13 @@
 package server
 
 import (
-	"autoshop/controllers"
-	"autoshop/types"
 	"net/http"
 
 	"github.com/miketonks/swag/endpoint"
 	"github.com/miketonks/swag/swagger"
+
+	"autoshop/api/controllers"
+	"autoshop/api/types"
 )
 
 func vehiclesAPI() []*swagger.Endpoint {

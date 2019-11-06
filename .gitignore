@@ -3,3 +3,6 @@ node_modules
 build
 package-lock.json
 go.sum
+web
+deploy
+conf.json

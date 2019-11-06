@@ -1,7 +1,6 @@
 package db
 
 import (
-	"autoshop/types"
 	"fmt"
 	"strings"
 
@@ -10,6 +9,8 @@ import (
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/jmoiron/sqlx"
 	"github.com/labstack/gommon/log"
+
+	"autoshop/api/types"
 )
 
 // Client is db client object

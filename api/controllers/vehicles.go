@@ -1,8 +1,6 @@
 package controllers
 
 import (
-	"autoshop/db"
-	"autoshop/types"
 	"encoding/base64"
 	"fmt"
 	"net/http"
@@ -10,6 +8,9 @@ import (
 
 	"github.com/labstack/echo/v4"
 	uuid "github.com/satori/go.uuid"
+
+	"autoshop/api/db"
+	"autoshop/api/types"
 )
 
 // GetVehicles returns vehicles

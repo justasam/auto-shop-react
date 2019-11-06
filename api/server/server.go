@@ -17,9 +17,9 @@ import (
 	"github.com/miketonks/swag/swagger"
 	log "github.com/sirupsen/logrus"
 
-	"autoshop/controllers"
-	"autoshop/db"
-	"autoshop/types"
+	"autoshop/api/controllers"
+	"autoshop/api/db"
+	"autoshop/api/types"
 )
 
 // ContextParams stores context parameters for server initialization
@@ -98,10 +98,11 @@ func CreateRouter(params ContextParams) *echo.Echo {
 	})
 
 	// Set static asset base directory
-	r.Static("/", "../build")
+	r.Static("/", "./web")
 
 	// Homepage
-	r.File("/", "../build/index.html")
+	r.File("/Home", "./web/index.html")
+	r.File("/", "./web/index.html")
 
 	var routes []string
 	for _, route := range r.Routes() {

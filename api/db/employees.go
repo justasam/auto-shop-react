@@ -1,8 +1,9 @@
 package db
 
 import (
-	"autoshop/types"
 	"database/sql"
+
+	"autoshop/api/types"
 )
 
 // CreateEmployee creates a new employee in the db

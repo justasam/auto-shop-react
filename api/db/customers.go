@@ -1,9 +1,10 @@
 package db
 
 import (
-	"autoshop/types"
 	"database/sql"
 	"time"
+
+	"autoshop/api/types"
 )
 
 // CreateCustomer creates a new customer in the db

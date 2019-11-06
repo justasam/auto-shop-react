@@ -7,7 +7,7 @@ import (
 
 	uuid "github.com/satori/go.uuid"
 
-	"autoshop/types"
+	"autoshop/api/types"
 )
 
 // GetVehicles returns vehicles

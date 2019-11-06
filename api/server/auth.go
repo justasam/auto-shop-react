@@ -6,8 +6,8 @@ import (
 	"github.com/miketonks/swag/endpoint"
 	"github.com/miketonks/swag/swagger"
 
-	"autoshop/controllers"
-	"autoshop/types"
+	"autoshop/api/controllers"
+	"autoshop/api/types"
 )
 
 func authAPI() []*swagger.Endpoint {

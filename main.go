@@ -7,8 +7,8 @@ import (
 
 	log "github.com/sirupsen/logrus"
 
-	"autoshop/db"
-	"autoshop/server"
+	"autoshop/api/db"
+	"autoshop/api/server"
 )
 
 type config struct {
@@ -17,7 +17,6 @@ type config struct {
 }
 
 func main() {
-
 	confFile, err := ioutil.ReadFile("conf.json")
 	if err != nil {
 		log.Fatalf("Failed to read configuration file: %s", err.Error())
