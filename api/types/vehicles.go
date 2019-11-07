@@ -2,25 +2,35 @@ package types
 
 // GetVehiclesFilter used for fitlering vehicles
 type GetVehiclesFilter struct {
-	Make            *string  `json:"make"`
-	Model           *string  `json:"model"`
-	YearFrom        *string  `json:"year_from"`
-	YearTo          *string  `json:"year_to"`
-	PriceFrom       *float64 `json:"price_from"`
-	PriceTo         *float64 `json:"price_to"`
-	MilageFrom      *int     `json:"milage_from"`
-	MilageTo        *int     `json:"milage_to"`
-	BodyTypes       []string `json:"body_types"`
-	FuelTypes       []string `json:"fuel_types"`
-	Doors           *int     `json:"doors"`
-	Gearbox         *string  `json:"gearbox"`
-	Drivetrain      *string  `json:"drivetrain"`
-	SeatsFrom       *int     `json:"seats_from"`
-	SeatsTo         *int     `json:"seats_to"`
-	FuelConsumption *float64 `json:"fuel_consumption"`
-	Colours         []string `json:"colours"`
-	EngineFrom      *float64 `json:"engine_from"`
-	EngineTo        *float64 `json:"engine_to"`
+	Make            *string  `json:"make,omitempty"`
+	Model           *string  `json:"model,omitempty"`
+	YearFrom        *string  `json:"year_from,omitempty"`
+	YearTo          *string  `json:"year_to,omitempty"`
+	PriceFrom       *float64 `json:"price_from,omitempty"`
+	PriceTo         *float64 `json:"price_to,omitempty"`
+	MilageFrom      *int     `json:"milage_from,omitempty"`
+	MilageTo        *int     `json:"milage_to,omitempty"`
+	BodyTypes       []string `json:"body_types,omitempty"`
+	FuelTypes       []string `json:"fuel_types,omitempty"`
+	Doors           *int     `json:"doors,omitempty"`
+	Gearbox         *string  `json:"gearbox,omitempty"`
+	Drivetrain      *string  `json:"drivetrain,omitempty"`
+	SeatsFrom       *int     `json:"seats_from,omitempty"`
+	SeatsTo         *int     `json:"seats_to,omitempty"`
+	FuelConsumption *float64 `json:"fuel_consumption,omitempty"`
+	Colours         []string `json:"colours,omitempty"`
+	EngineFrom      *float64 `json:"engine_from,omitempty"`
+	EngineTo        *float64 `json:"engine_to,omitempty"`
+	PerPage         int      `json:"per_page" minimum:"1" default:"10"`
+	PageNumber      int      `json:"page_num" minimum:"1" default:"1"`
+}
+
+// GetVehiclesResponse represents response of GET ALL
+type GetVehiclesResponse struct {
+	Objects    []Vehicle `json:"objects"`
+	Total      int       `json:"total"`
+	PerPage    int       `json:"per_page"`
+	PageNumber int       `json:"page_number"`
 }
 
 // Vehicle represents a vehicle
@@ -95,8 +105,17 @@ type VehiclePurchaseEntry struct {
 	PurchasedByEmployeeID   string  `db:"purchased_by_employee_id" json:"purchased_by_employee_id"`
 }
 
-// Make represents make of vehicle
-type Make struct {
-	Name   string `json:"name"`
-	ImgSrc string `json:"src"`
+// VehicleMakePost payload for make creation
+type VehicleMakePost struct {
+	ID        string `db:"string" json:"-"`
+	Name      string `db:"name" json:"name" min_length:"1" binding:"required"`
+	Image     string `json:"image" binding:"required"`
+	ImagePath string `db:"image_path"`
+}
+
+// VehicleMake represents make of vehicle
+type VehicleMake struct {
+	ID      string `db:"id" json:"id"`
+	Name    string `db:"name" json:"name"`
+	ImgPath string `db:"image_path" json:"image_path"`
 }
