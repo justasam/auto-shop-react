@@ -85,6 +85,10 @@ func CreateRouter(params ContextParams) *echo.Echo {
 		middleware.Recover(),
 		middleware.Secure(),
 		session.Middleware(sessions.NewCookieStore([]byte("supersecret"))),
+		middleware.StaticWithConfig(middleware.StaticConfig{
+			Root:  "./web",
+			HTML5: true,
+		}),
 	)
 
 	r.GET("/ping", controllers.Ping)
@@ -101,8 +105,8 @@ func CreateRouter(params ContextParams) *echo.Echo {
 		api.Add(endpoint.Method, path, h)
 	})
 
-	// Set static asset base directory
-	r.Static("/", "./web")
+	// // Set static asset base directory
+	// r.Static("/", "./web")
 
 	// Homepage
 	r.File("/Home", "./web/index.html", CheckSession())
