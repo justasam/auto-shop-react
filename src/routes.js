@@ -2,8 +2,10 @@ import React from 'react';
 import { HomeScreen } from './screens/HomeScreen';
 import { Parts } from './screens/Parts';
 import { Cart } from './screens/Cart';
+import { Branches } from './screens/Branches';
 import { NoMatch } from './screens/NoMatch';
 import { NavBar } from './components/NavBar';
+import { Admin } from './screens/Admin';
 import { Route, Switch, Redirect } from 'react-router-dom';
 
 export const Routes = () => {
@@ -14,7 +16,9 @@ export const Routes = () => {
       <Switch>
         <Route exact path="/Home" component={HomeScreen} />
         <Route exact path="/Parts" component={Parts} />
+        <Route exact path="/Branches" component={Branches} />
         <Route exact path="/Cart" component={Cart} />
+        <Route exact path="/Admin" component={Admin} />
         <Route exact path="/">
           <Redirect to="/Home" />
         </Route>
