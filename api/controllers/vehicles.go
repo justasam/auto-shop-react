@@ -46,8 +46,8 @@ func GetVehicles(c echo.Context) error {
 
 	return c.JSON(http.StatusOK, types.GetVehiclesResponse{
 		Objects:    vehicles,
-		PerPage:    payload.PerPage,
-		PageNumber: payload.PageNumber,
+		PerPage:    perPage,
+		PageNumber: pageNumb,
 		Total:      total,
 	})
 }

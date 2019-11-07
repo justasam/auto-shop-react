@@ -22,7 +22,7 @@ web-install:
 	npm install
 
 .PHONY: build
-build: npm-build go-build
+build: web-build go-build
 	mkdir -p $(BUILD_CONTEXT)
 	cp -r $(COMPILED_WEB_DIR) $(BUILD_CONTEXT)
 

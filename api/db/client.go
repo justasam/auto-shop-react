@@ -50,7 +50,7 @@ func Init(c Config) {
 
 // Connect returns new db connections
 func Connect(connType string) (*Client, error) {
-	cn := fmt.Sprintf("%%s:%%s@(%s:%s)/%s", conf.MySQLHost, conf.MySQLPort, conf.DatabaseName)
+	cn := fmt.Sprintf("%%s:%%s@(%s:%s)/%s?parseTime=true", conf.MySQLHost, conf.MySQLPort, conf.DatabaseName)
 	viewPrefix := ""
 	switch connType {
 	case "admin":

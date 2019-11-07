@@ -13,10 +13,10 @@ import (
 // GetVehicles returns vehicles
 func (c *Client) GetVehicles(filter *types.GetVehiclesFilter, pageNumber, perPage int) ([]types.Vehicle, int, *types.Error) {
 	queryf := "SELECT %s FROM %%s_vehicles "
-	query, namedParams := applyVehicleFilter(queryf, filter)
+	queryf, namedParams := applyVehicleFilter(queryf, filter)
 
 	// Select total for pagination
-	query = fmt.Sprintf(query, "count(*)")
+	query := fmt.Sprintf(queryf, "count(*)")
 	query = c.applyView(query)
 
 	nstmt, err := c.db.PrepareNamed(query)
@@ -32,9 +32,9 @@ func (c *Client) GetVehicles(filter *types.GetVehiclesFilter, pageNumber, perPag
 
 	query = fmt.Sprintf(queryf, "*")
 	query = c.applyView(query)
-	query += "OFFSET :offset LIMIT :limit"
+	query += " LIMIT :offset, :limit"
 
-	namedParams["offset"] = pageNumber * perPage
+	namedParams["offset"] = (pageNumber - 1) * perPage
 	namedParams["limit"] = perPage
 
 	nstmt, err = c.db.PrepareNamed(query)
@@ -381,8 +381,8 @@ func applyVehicleFilter(query string, filter *types.GetVehiclesFilter) (string, 
 	}
 
 	if len(subQuery) > 0 {
-		subQuery = strings.TrimPrefix("AND", subQuery)
-		query += subQuery
+		subQuery = strings.TrimPrefix(subQuery, "AND")
+		query += "WHERE " + subQuery
 	}
 
 	return query, namedParams

@@ -1,5 +1,9 @@
 package types
 
+import (
+	"time"
+)
+
 // GetVehiclesFilter used for fitlering vehicles
 type GetVehiclesFilter struct {
 	Make            *string  `json:"make,omitempty"`
@@ -35,25 +39,26 @@ type GetVehiclesResponse struct {
 
 // Vehicle represents a vehicle
 type Vehicle struct {
-	ID              string   `db:"id" json:"id"`
-	Make            string   `db:"make" json:"make"`
-	Model           string   `db:"model" json:"model"`
-	Year            string   `db:"year" json:"year"`
-	Price           float64  `db:"price" json:"price"`
-	Milage          int      `db:"milage" json:"milage"`
-	BodyType        string   `db:"body_type" json:"body_type"`
-	FuelType        string   `db:"fuel_type" json:"fuel_type"`
-	Doors           int      `db:"doors" json:"doors"`
-	Gearbox         string   `db:"gearbox" json:"gearbox"`
-	Drivetrain      string   `db:"drivetrain" json:"drivetrain"`
-	Seats           int      `db:"seats" json:"seats"`
-	FuelConsumption float64  `db:"fuel_consumption" json:"fuel_consumption"`
-	Colour          string   `db:"colour" json:"colour"`
-	Engine          float64  `db:"engine" json:"engine"`
-	Description     string   `db:"description" json:"description"`
-	Specificaction  string   `db:"specification" json:"specificaction"`
-	Listed          bool     `db:"listed" json:"listed"`
-	Images          []string `json:"images"`
+	ID              string    `db:"id" json:"id"`
+	Make            string    `db:"make" json:"make"`
+	Model           string    `db:"model" json:"model"`
+	Year            string    `db:"year" json:"year"`
+	Price           float64   `db:"price" json:"price"`
+	Milage          int       `db:"milage" json:"milage"`
+	BodyType        string    `db:"body_type" json:"body_type"`
+	FuelType        string    `db:"fuel_type" json:"fuel_type"`
+	Doors           int       `db:"doors" json:"doors"`
+	Gearbox         string    `db:"gearbox" json:"gearbox"`
+	Drivetrain      string    `db:"drivetrain" json:"drivetrain"`
+	Seats           int       `db:"seats" json:"seats"`
+	FuelConsumption float64   `db:"fuel_consumption" json:"fuel_consumption"`
+	Colour          string    `db:"colour" json:"colour"`
+	Engine          float64   `db:"engine" json:"engine"`
+	Description     string    `db:"description" json:"description"`
+	Specificaction  string    `db:"specification" json:"specificaction"`
+	Listed          bool      `db:"listed" json:"listed"`
+	Images          []string  `json:"images"`
+	CreatedAt       time.Time `db:"created_at" json:"created_at"`
 
 	// Since MYSQL has no arrays, the paths have to be aggregated
 	UnsplitImagePaths string `db:"vehicle_pictures" json:"-"`
