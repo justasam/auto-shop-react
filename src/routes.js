@@ -4,6 +4,7 @@ import { Parts } from './screens/Parts';
 import { Cart } from './screens/Cart';
 import { NoMatch } from './screens/NoMatch';
 import { NavBar } from './components/NavBar';
+import { SwaggerAPI } from './screens/SwaggerAPI';
 import { Route, Switch, Redirect } from 'react-router-dom';
 
 export const Routes = () => {
@@ -15,6 +16,7 @@ export const Routes = () => {
         <Route exact path="/Home" component={HomeScreen} />
         <Route exact path="/Parts" component={Parts} />
         <Route exact path="/Cart" component={Cart} />
+        <Route exact path="/api" component={SwaggerAPI} />
         <Route exact path="/">
           <Redirect to="/Home" />
         </Route>
