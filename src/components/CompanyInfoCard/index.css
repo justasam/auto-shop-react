@@ -1,0 +1,113 @@
+.CompanyInfoCards {
+    display: flex;
+    flex-wrap: wrap;
+    list-style: none;
+    padding: 0;
+}
+
+.CompanyInfoCards button {
+    border-radius: 30px;
+    outline: none;
+}
+
+.CompanyInfoCards__item {
+    display: flex;
+    border-radius: 20px;
+    overflow: hidden;
+    margin: 1em;
+    box-shadow: 15px 10px 30px #888888;
+}
+
+@media (min-width: 40rem) {
+    .CompanyInfoCards__item {
+        width: 45%;
+    }
+}
+
+@media (min-width: 56rem) {
+    .CompanyInfoCards__item {
+        width: 30%;
+    }
+}
+
+.card {
+    width: 100%;
+    background-color: white;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.card:hover .card__image {
+    -webkit-filter: contrast(100%);
+    filter: contrast(100%);
+}
+
+.card__content {
+    display: flex;
+    flex: 1 1 auto;
+    flex-direction: column;
+    padding: 1rem;
+}
+
+.card__image {
+    height: 150px;
+    width: 100%;
+    object-fit: cover;
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    border-top-left-radius: 0.25rem;
+    border-top-right-radius: 0.25rem;
+    -webkit-filter: contrast(70%);
+    filter: contrast(70%);
+    border-radius: 20px;
+    overflow: hidden;
+    position: relative;
+    transition: -webkit-filter 0.5s cubic-bezier(0.43, 0.41, 0.22, 0.91);
+    transition: filter 0.5s cubic-bezier(0.43, 0.41, 0.22, 0.91);
+    transition: filter 0.5s cubic-bezier(0.43, 0.41, 0.22, 0.91), -webkit-filter 0.5s cubic-bezier(0.43, 0.41, 0.22, 0.91);
+}
+
+.card__image::before {
+    content: "";
+    display: block;
+    padding-top: 56.25%;
+}
+
+@media (min-width: 40rem) {
+    .card__image::before {
+        padding-top: 66.6%;
+    }
+}
+
+.card__image--flowers {
+    background-image: url(https://unsplash.it/800/600?image=82);
+}
+
+.card__image--river {
+    background-image: url(https://unsplash.it/800/600?image=11);
+}
+
+.card__image--record {
+    background-image: url(https://unsplash.it/800/600?image=39);
+}
+
+.card__image--fence {
+    background-image: url(https://unsplash.it/800/600?image=59);
+}
+
+.card__title {
+    color: #696969;
+    font-size: 1.25rem;
+    font-weight: 300;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+}
+
+.card__text {
+    flex: 1 1 auto;
+    font-size: 0.875rem;
+    line-height: 1.5;
+    margin-bottom: 1.25rem;
+}
