@@ -32,7 +32,7 @@ deploy:
 	scp -r -i ${PEM_FILE} $(BUILD_CONTEXT)/* $(SERVER_USER)@$(SERVER):/home/ubuntu/webserver/
 
 .PHONY: deploy-web
-deploy:
+deploy-web:
 	@echo "Deploying web files to server..."
 	scp -r $(COMPILED_WEB_DIR) $(SERVER_USER)@$(SERVER):/home/ubuntu/webserver/
 
