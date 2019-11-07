@@ -23,7 +23,9 @@ import (
 
 // ContextParams stores context parameters for server initialization
 type ContextParams struct {
-	DBConf db.Config
+	VehiclePicturesPath     string
+	VehicleMakePicturesPath string
+	DBConf                  db.Config
 }
 
 // ContextObjects attaches backend clients to the API context
@@ -31,6 +33,8 @@ func ContextObjects(contextParams ContextParams) echo.MiddlewareFunc {
 	return func(next echo.HandlerFunc) echo.HandlerFunc {
 		return func(c echo.Context) error {
 			c.Set("dbconf", contextParams.DBConf)
+			c.Set("vehiclePicturesPath", contextParams.VehiclePicturesPath)
+			c.Set("vehicleMakePicturesPath", contextParams.VehicleMakePicturesPath)
 			return next(c)
 		}
 	}
@@ -58,6 +62,7 @@ func CheckSession() echo.MiddlewareFunc {
 			// If account type is not set assume it's a guest
 			if _, found := sess.Values["account_type"]; !found {
 				sess.Values["account_type"] = types.GuestAccount
+				c.Set("account_type", types.GuestAccount)
 			} else {
 				c.Set("owner_id", sess.Values["owner_id"])
 				c.Set("account_type", sess.Values["account_type"])
@@ -79,16 +84,19 @@ func CreateRouter(params ContextParams) *echo.Echo {
 		middleware.Logger(),
 		middleware.Recover(),
 		middleware.Secure(),
+		session.Middleware(sessions.NewCookieStore([]byte("supersecret"))),
+		middleware.StaticWithConfig(middleware.StaticConfig{
+			Root:  "./web",
+			HTML5: true,
+		}),
 	)
-
-	r.Use(session.Middleware(sessions.NewCookieStore([]byte("secret"))))
 
 	r.GET("/ping", controllers.Ping)
 
 	autoshopAPI := CreateSwaggerAPI()
 
 	// Swagger UI
-	r.GET("/autoshop/api/doc/json", echo.WrapHandler(autoshopAPI.Handler(true)))
+	r.GET("/autoshop/api/json", echo.WrapHandler(autoshopAPI.Handler(true)))
 
 	api := r.Group("", sv.SwaggerValidatorEcho(autoshopAPI), DefaultContentType(), CheckSession())
 	autoshopAPI.Walk(func(path string, endpoint *swagger.Endpoint) {
@@ -97,12 +105,12 @@ func CreateRouter(params ContextParams) *echo.Echo {
 		api.Add(endpoint.Method, path, h)
 	})
 
-	// Set static asset base directory
-	r.Static("/", "./web")
+	// // Set static asset base directory
+	// r.Static("/", "./web")
 
 	// Homepage
-	r.File("/Home", "./web/index.html")
-	r.File("/", "./web/index.html")
+	r.File("/Home", "./web/index.html", CheckSession())
+	r.File("/", "./web/index.html", CheckSession())
 
 	var routes []string
 	for _, route := range r.Routes() {

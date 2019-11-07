@@ -37,11 +37,11 @@ func Login(c echo.Context) error {
 
 	// Do not differentiate between found and not found
 	if account == nil {
-		return echo.NewHTTPError(http.StatusBadRequest, "Invalid username or password")
+		return echo.NewHTTPError(http.StatusUnauthorized, "Invalid username or password")
 	}
 
 	if payload.Password != account.Password {
-		return echo.NewHTTPError(http.StatusBadRequest, "Invalid username or password")
+		return echo.NewHTTPError(http.StatusUnauthorized, "Invalid username or password")
 	}
 
 	// Set the session
@@ -65,7 +65,7 @@ func Login(c echo.Context) error {
 		return fmt.Errorf("Error saving session: %s", err)
 	}
 
-	return c.JSON(http.StatusOK, "")
+	return c.JSON(http.StatusOK, nil)
 }
 
 func validatorError(err error) types.ErrorResponse {

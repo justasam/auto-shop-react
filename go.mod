@@ -4,6 +4,7 @@ go 1.13
 
 require (
 	github.com/Rekfuki/swag-validator v0.0.0-20191031195903-0845721d5135
+	github.com/davecgh/go-spew v1.1.1
 	github.com/fvbock/endless v0.0.0-20170109170031-447134032cb6
 	github.com/go-sql-driver/mysql v1.4.1
 	github.com/gorilla/sessions v1.2.0

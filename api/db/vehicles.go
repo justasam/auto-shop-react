@@ -12,23 +12,38 @@ import (
 
 // GetVehicles returns vehicles
 func (c *Client) GetVehicles(filter *types.GetVehiclesFilter, pageNumber, perPage int) ([]types.Vehicle, int, *types.Error) {
-	queryf := "SELECT %%s FROM %s_vehicles "
-	queryf = c.applyView(queryf)
-	query, namedParams := applyVehicleFilter(queryf, filter)
+	queryf := "SELECT %s FROM %%s_vehicles "
+	queryf, namedParams := applyVehicleFilter(queryf, filter)
 
 	// Select total for pagination
-	query = fmt.Sprintf(query, "count(*)")
+	query := fmt.Sprintf(queryf, "count(*)")
+	query = c.applyView(query)
 
-	var total int
-	err := c.db.Select(&total, query, namedParams)
+	nstmt, err := c.db.PrepareNamed(query)
 	if err != nil {
 		return nil, 0, c.transformError(err)
 	}
 
-	query = fmt.Sprintf(query, "*")
-	query += "OFFSET ? LIMIT ?"
+	var total int
+	err = nstmt.Get(&total, namedParams)
+	if err != nil {
+		return nil, 0, c.transformError(err)
+	}
+
+	query = fmt.Sprintf(queryf, "*")
+	query = c.applyView(query)
+	query += " LIMIT :offset, :limit"
+
+	namedParams["offset"] = (pageNumber - 1) * perPage
+	namedParams["limit"] = perPage
+
+	nstmt, err = c.db.PrepareNamed(query)
+	if err != nil {
+		return nil, 0, c.transformError(err)
+	}
+
 	vehicles := []types.Vehicle{}
-	err = c.db.Select(&vehicles, query, namedParams, pageNumber*perPage, perPage)
+	err = nstmt.Select(&vehicles, namedParams)
 	if err != nil {
 		return nil, 0, c.transformError(err)
 	}
@@ -194,6 +209,76 @@ func (c *Client) PurchaseVehicle(p types.VehiclePost) (*types.Vehicle, *types.Er
 	return vehicle, nil
 }
 
+// GetBestSellingMakes returns best selling vehicle makes
+func (c *Client) GetBestSellingMakes(limit int) ([]types.VehicleMake, *types.Error) {
+	query := `SELECT v.make as make, m.image_path as image_path 
+		FROM %s_vehicles v JOIN %s_makes m ON v.make=m.name
+		ORDER BY created_at DESC LIMIT ?`
+	query = c.applyView(query)
+
+	if limit == 0 {
+		limit = 10
+	}
+
+	var makes []types.VehicleMake
+	err := c.db.Select(&makes, query, limit)
+	if err != nil {
+		return nil, c.transformError(err)
+	}
+
+	return makes, nil
+}
+
+// GetVehicleMakeByName returns specified vehicle make from the db
+func (c *Client) GetVehicleMakeByName(name string) (*types.VehicleMake, *types.Error) {
+	query := `SELECT * FROM %s_vehicle_makes WHERE name=?`
+	query = c.applyView(query)
+
+	var make types.VehicleMake
+	err := c.db.Get(&make, query, name)
+	if err != nil {
+		if err == sql.ErrNoRows {
+			return nil, nil
+		}
+		return nil, c.transformError(err)
+	}
+
+	return &make, nil
+}
+
+// CreateVehicleMake inserts a new make into the db
+func (c *Client) CreateVehicleMake(p types.VehicleMakePost) (*types.VehicleMake, *types.Error) {
+	query := `INSERT INTO %s_vehicle_makes (id, name, image_path)
+		VALUES (? , ? , ?)`
+	query = c.applyView(query)
+
+	_, err := c.ex.Exec(query, p.ID, p.Name, p.ImagePath)
+	if err != nil {
+		return nil, c.transformError(err)
+	}
+
+	// Get the make back
+	make, dbErr := c.GetVehicleMakeByName(p.Name)
+	if dbErr != nil {
+		return nil, dbErr
+	}
+
+	return make, nil
+}
+
+// DeleteVehicleMake deletes vehcile make from db
+func (c *Client) DeleteVehicleMake(name string) *types.Error {
+	query := `DELETE FROM %s_vehicle_makes where name=?`
+	query = c.applyView(query)
+
+	_, err := c.ex.Exec(query, name)
+	if err != nil {
+		return c.transformError(err)
+	}
+
+	return nil
+}
+
 func applyVehicleFilter(query string, filter *types.GetVehiclesFilter) (string, map[string]interface{}) {
 	namedParams := map[string]interface{}{}
 	subQuery := ""
@@ -296,8 +381,8 @@ func applyVehicleFilter(query string, filter *types.GetVehiclesFilter) (string, 
 	}
 
 	if len(subQuery) > 0 {
-		subQuery = strings.TrimPrefix("AND", subQuery)
-		query += subQuery
+		subQuery = strings.TrimPrefix(subQuery, "AND")
+		query += "WHERE " + subQuery
 	}
 
 	return query, namedParams

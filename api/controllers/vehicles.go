@@ -5,6 +5,8 @@ import (
 	"fmt"
 	"net/http"
 	"os"
+	"reflect"
+	"strconv"
 
 	"github.com/labstack/echo/v4"
 	uuid "github.com/satori/go.uuid"
@@ -15,18 +17,181 @@ import (
 
 // GetVehicles returns vehicles
 func GetVehicles(c echo.Context) error {
-	return nil
+	accountType := c.Get("account_type").(string)
+	var payload types.GetVehiclesFilter
+	err := c.Bind(&payload)
+	if err != nil {
+		return echo.NewHTTPError(http.StatusBadRequest, validatorError(err))
+	}
 
+	db, err := db.Connect(accountType)
+	if err != nil {
+		return fmt.Errorf("Error connecting to the database: %s", err)
+	}
+	defer db.Close()
+
+	perPage := 10
+	pageNumb := 1
+	if payload.PerPage > 0 {
+		perPage = payload.PerPage
+	}
+	if payload.PageNumber > 0 {
+		pageNumb = payload.PageNumber
+	}
+
+	vehicles, total, dbErr := db.GetVehicles(&payload, pageNumb, perPage)
+	if dbErr != nil {
+		return dbErr
+	}
+
+	return c.JSON(http.StatusOK, types.GetVehiclesResponse{
+		Objects:    vehicles,
+		PerPage:    perPage,
+		PageNumber: pageNumb,
+		Total:      total,
+	})
 }
 
 // GetBestSellingMakes returns best selling makes
-func GetBestSellingMakes(e echo.Context) error {
+func GetBestSellingMakes(c echo.Context) error {
+	limit, _ := strconv.Atoi(c.QueryParam("limit"))
+	accountType := c.Get("account_type").(string)
 
+	db, err := db.Connect(accountType)
+	if err != nil {
+		return fmt.Errorf("Error connecting to the database: %s", err)
+	}
+	defer db.Close()
+
+	makes, dbErr := db.GetBestSellingMakes(limit)
+	if dbErr != nil {
+		return dbErr
+	}
+
+	return c.JSON(http.StatusOK, makes)
+}
+
+// CreateVehicleMake creates a new make
+func CreateVehicleMake(c echo.Context) error {
+	vpmp := c.Get("vehicleMakePicturesPath").(string)
+	var payload types.VehicleMakePost
+	err := c.Bind(&payload)
+	if err != nil {
+		return echo.NewHTTPError(http.StatusBadRequest, validatorError(err))
+	}
+
+	// If not an employee shoo away
+	_, found := getSessionByType(types.EmployeeAccount, c)
+	if !found {
+		return echo.NewHTTPError(http.StatusForbidden)
+	}
+
+	// Add ID
+	payload.ID = uuid.NewV4().String()
+
+	db, err := db.Connect(types.EmployeeAccount)
+	if err != nil {
+		return fmt.Errorf("Error connecting to the database: %s", err)
+	}
+	defer db.Close()
+
+	// Check if the make already exists, if so don't let overwrite
+	make, dbErr := db.GetVehicleMakeByName(payload.Name)
+	if dbErr != nil {
+		return dbErr
+	}
+
+	if make != nil {
+		return echo.NewHTTPError(http.StatusBadRequest, "Make already exsists")
+	}
+
+	// Create image on disk first
+	// Create folder for vehicle photos
+	err = os.Mkdir(vpmp+"/"+payload.Name, os.ModePerm)
+	if err != nil && !os.IsExist(err) {
+		return fmt.Errorf("Failed to create folder to store images: %s", err)
+	}
+	path := fmt.Sprintf("%s/%s/base.png", vpmp, payload.Name)
+	payload.ImagePath = path
+
+	bytes, err := base64.StdEncoding.DecodeString(payload.Image)
+	if err != nil {
+		return fmt.Errorf("Failed to decode image: %s", err)
+	}
+
+	file, err := os.Create(payload.ImagePath)
+	if err != nil {
+		return fmt.Errorf("Failed to create image file: %s", err)
+	}
+	defer file.Close()
+
+	_, err = file.Write(bytes)
+	if err != nil {
+		return fmt.Errorf("Failed to write image to file: %s", err)
+	}
+
+	make, dbErr = db.CreateVehicleMake(payload)
+	if dbErr != nil {
+		return dbErr
+	}
+
+	return c.JSON(http.StatusCreated, make)
+}
+
+// DeleteVehicleMake deletes vehicle make
+func DeleteVehicleMake(c echo.Context) error {
+	makeName := c.Param("make_name")
+	// If not an employee shoo away
+	_, found := getSessionByType(types.EmployeeAccount, c)
+	if !found {
+		return echo.NewHTTPError(http.StatusForbidden)
+	}
+
+	db, err := db.Connect(types.EmployeeAccount)
+	if err != nil {
+		return fmt.Errorf("Error connecting to the database: %s", err)
+	}
+	defer db.Close()
+
+	// Check if the vehicle make exists
+	make, dbErr := db.GetVehicleMakeByName(makeName)
+	if dbErr != nil {
+		return dbErr
+	}
+
+	// If make is not found return 404
+	if make == nil {
+		return echo.NewHTTPError(http.StatusNotFound, "Make not found")
+	}
+
+	dbErr = db.DeleteVehicleMake(makeName)
+	if dbErr != nil {
+		return dbErr
+	}
+
+	// Delete photo
+	_, err = os.Stat(make.ImgPath)
+	if err != nil && !os.IsNotExist(err) {
+		return fmt.Errorf("Failed to find vehicle make image: %s", err)
+	}
+
+	err = os.Remove(make.ImgPath)
+	if err != nil && !os.IsNotExist(err) {
+		return fmt.Errorf("Failed to delete vehicle make image: %s", err)
+	}
+
+	return c.JSON(http.StatusNoContent, nil)
+}
+
+// GetRecentlyListedVehicles returns recently listed vehicles
+func GetRecentlyListedVehicles(c echo.Context) error {
 	return nil
 }
 
 // PurchaseVehicle creates a vehicle and its acquisition record
 func PurchaseVehicle(c echo.Context) error {
+	vpp := c.Get("vehiclePicturesPath").(string)
+
 	var payload types.VehiclePost
 	err := c.Bind(&payload)
 	if err != nil {
@@ -53,20 +218,15 @@ func PurchaseVehicle(c echo.Context) error {
 	}
 
 	// Create folder for vehicle photos
-	err = os.Mkdir("static/vehicle_pictures/"+payload.ID, os.ModePerm)
-	if err != nil {
+	err = os.Mkdir(vpp+"/"+payload.ID, os.ModePerm)
+	if err != nil && !os.IsExist(err) {
 		return fmt.Errorf("Failed to create folder to store images: %s", err)
 	}
 
 	// Create image paths for vehicle
 	for i := 0; i < len(payload.Images); i++ {
-		path := fmt.Sprintf("static/vehicle_pictures/%s/%d.jpg", payload.ID, i)
+		path := fmt.Sprintf("%s/%s/%d.jpg", vpp, payload.ID, i)
 		payload.ImagePaths = append(payload.ImagePaths, path)
-	}
-
-	vehicle, dbErr := db.PurchaseVehicle(payload)
-	if dbErr != nil {
-		return fmt.Errorf("Failed to create vehicle: %s", dbErr)
 	}
 
 	// Decode and create images on disk
@@ -88,5 +248,22 @@ func PurchaseVehicle(c echo.Context) error {
 		}
 	}
 
+	vehicle, dbErr := db.PurchaseVehicle(payload)
+	if dbErr != nil {
+		return fmt.Errorf("Failed to create vehicle: %s", dbErr)
+	}
+
 	return c.JSON(http.StatusCreated, vehicle)
+}
+
+func getQueryParam(t reflect.Kind, param string, c echo.Context) interface{} {
+	switch t {
+	case reflect.Int:
+		r, _ := strconv.Atoi(c.QueryParam(param))
+		return r
+	case reflect.String:
+		return c.Param(param)
+	default:
+		return fmt.Errorf("Unsupported type %s", t)
+	}
 }
