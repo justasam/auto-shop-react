@@ -36,7 +36,7 @@ func vehiclesAPI() []*swagger.Endpoint {
 				Minimum:     &[]int64{1}[0], // fugly but that's the only way to take temporary address
 			},
 		}),
-		endpoint.Tags("vehicles"),
+		endpoint.Tags("Vehicles"),
 	)
 
 	createVehicleMake := endpoint.New("POST", "/vehicles/makes", "Vehicle make creation",
