@@ -1,6 +1,99 @@
+/*
+    Produc container
+*/
+.FilterCard {
+	 margin: .5em auto;
+	 padding: .5em 1em;
+	 border-radius: 5px;
+     overflow: hidden;
+}
+ .FilterCard .badge {
+	 display: inline-block;
+	 padding: 6px 12px;
+	 border-radius: 50px;
+	 font-weight: 500;
+	 text-transform: uppercase;
+	 line-height: 1;
+}
+ .FilterCard .results-section {
+	 display: grid;
+	 grid-gap: 35px;
+}
+ .FilterCard .results--list {
+	 grid-template-columns: 100%;
+}
+ .FilterCard .filter-section {
+	 margin: 1em 0;
+}
+ .FilterCard .filter-section .filters-item {
+     margin: .5em;
+	 display: grid;
+	 grid-template-columns: 1fr auto;
+}
+ .FilterCard .filter-section .filters-item .checkbox {
+	 position: relative;
+	 user-select: none;
+}
+ .FilterCard .filter-section .filters-item .checkbox input {
+	 display: none;
+}
+ .FilterCard .filter-section .filters-item .checkbox label {
+	 position: relative;
+	 vertical-align: middle;
+	 cursor: pointer;
+	 padding-left: 35px;
+}
+ .FilterCard .filter-section .filters-item .checkbox span.box {
+	 display: inline-block;
+	 width: 20px;
+	 border-radius: 5px;
+	 border: 1px solid black;
+	 width: 25px;
+	 height: 25px;
+	 vertical-align: middle;
+	 transition: 1s ease;
+	 position: absolute;
+	 left: 0;
+}
+ .FilterCard .filter-section .filters-item .checkbox input:checked + label span.box {
+	 background: rgb(0, 215, 208);
+}
+ @media (min-width: 500px) and (max-width: 992px) {
+	 .FilterCard .filter-section {
+		 display: grid;
+		 grid-template-columns: repeat(3, 1fr);
+	}
+}
+ @media (max-width: 768px) {
+	 .FilterCard .results-header__option {
+		 display: none;
+	}
+}
+ @media (min-width: 992px) {
+	 .FilterCard .FilterCard-wrapper {
+		 display: grid;
+		 grid: min-content auto / minmax(250px, 15%) 1fr;
+	}
+	 .FilterCard .filter-section-wrapper {
+		 position: relative;
+	}
+	 .FilterCard .filter-section {
+		 position: sticky;
+		 top: 30px;
+	}
+	 .FilterCard .results-section {
+		 margin-left: 1em;
+	}
+}
+
+
+/*
+    Product card
+*/
+
 .product-container {
-    margin: 1em 5%;
-    width: 90%;
+    margin: 1em 2.5%;
+    width: 95%;
     justify-content: center;
     flex-direction: column;
     align-items: center;
@@ -76,7 +169,7 @@
     align-items: center;
     background: linear-gradient(to bottom, #6bffc8 0%, #42c8cb 100%);
     border-radius: 10px;
-    padding: 0.5em 0;
+    padding: .5em 0;
     width: 100%;
 }
 
@@ -89,7 +182,7 @@
 }
 
 .product-details {
-    padding: 40px;
+    padding: 20px;
     background-color: white;
     border-radius: 0 0 20px 20px;
 }
@@ -117,7 +210,7 @@
 }
 
 .product-details header {
-    margin-bottom: 0.5em;
+    margin-bottom: .5em;
     position: relative;
 }
 

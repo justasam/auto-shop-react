@@ -6,7 +6,7 @@ const ProductCard = props => {
 
     for (var i = 0; i < 10; i++) {
         items.push(
-            <div className="product-container" data-aos="zoom-in">
+            <div className="product-container">
               <div className="product-image">
                   <img src="//www.carlogos.org/logo/Tesla-logo.png" alt="" className="product-logo" />
                   <img src="//www.nathanielcars.co.uk/files/cache/800c17f209980ffe0c2985d55411c6ee.png" alt="" className="product-pic" />
@@ -54,7 +54,67 @@ const ProductCard = props => {
         )
     }
     return (
-        <div>{items}</div>
+        <aside class="FilterCard">
+        <div class="FilterCard-wrapper">
+            <div class="filter-section-wrapper">
+                <section class="filter-section">
+                    <div class="filters">
+                        <h5 class="filters__title"> Color </h5>
+                        <div class="filters-item">
+                            <div class="checkbox">
+                                <input id="checkbox-1" type="checkbox" />
+                                <label for="checkbox-1">R <span class="box"></span></label>
+                            </div>
+                            <span class="badgey">9</span>
+                        </div>
+                        <div class="filters-item">
+                            <div class="checkbox">
+                                <input id="checkbox-2" type="checkbox" />
+                                <label for="checkbox-2">G <span class="box"></span></label>
+                            </div>
+                            <span class="badgey">99</span>
+                        </div>
+                        <div class="filters-item">
+                            <div class="checkbox">
+                                <input id="checkbox-3" type="checkbox" />
+                                <label for="checkbox-3">B <span class="box"></span>
+                                </label>
+                            </div>
+                            <span class="badgey">999</span>
+                        </div>
+                    </div>
+
+                    <div class="filters">
+                        <h5 class="filters__title"> Size </h5>
+                        <div class="filters-item">
+                            <div class="checkbox">
+                                <input id="checkbox-5" type="checkbox" />
+                                <label for="checkbox-5">Small <span class="box"></span></label>
+                            </div>
+                            <span class="badgey">9</span>
+                        </div>
+                        <div class="filters-item">
+                            <div class="checkbox">
+                                <input id="checkbox-6" type="checkbox" />
+                                <label for="checkbox-6">Medium <span class="box"></span></label>
+                            </div>
+                            <span class="badgey">99</span>
+                        </div>
+                        <div class="filters-item">
+                            <div class="checkbox">
+                                <input id="checkbox-7" type="checkbox" />
+                                <label for="checkbox-7">Large <span class="box"></span>
+                                </label>
+                            </div>
+                            <span class="badgey">999</span>
+                        </div>
+                    </div>
+                </section>
+            </div>
+
+            <section class="results-section">{items}</section>
+        </div>
+    </aside>
     )
 }
 
