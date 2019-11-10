@@ -1,5 +1,10 @@
 package types
 
+import (
+	"encoding/json"
+	"time"
+)
+
 // EmployeePost employee creation payload
 type EmployeePost struct {
 	Name        string `json:"name" binding:"required"`
@@ -9,7 +14,7 @@ type EmployeePost struct {
 	Position    string `json:"position" binding:"required"`
 	Email       string `json:"email" binding:"required"`
 	PhoneNumber string `json:"phone_number" binding:"required"`
-	BranchID    string `json:"branch_id" binding:"required"`
+	BranchID    string `json:"branch_id" binding:"required" format:"uuid"`
 	Username    string `json:"username" binding:"required"`
 	Password    string `json:"password" binding:"password"`
 
@@ -18,16 +23,60 @@ type EmployeePost struct {
 	ID        string `json:"-"`
 }
 
+// GetEmployeesFilter to filter employees by
+type GetEmployeesFilter struct {
+	Position *string `db:"position"`
+	BranchID *string `db:"branch_id"`
+	Address  *string `db:"address"`
+}
+
+// EmployeePut represents payload for updating employee
+type EmployeePut struct {
+	ID          string
+	Name        string  `json:"name" binding:"required"`
+	Surname     string  `json:"surname" binding:"required"`
+	DateOfBirth string  `json:"date_of_birth" binding:"required"`
+	Address     string  `json:"address" binding:"required"`
+	Position    *string `json:"position,omitempty"`
+	Email       string  `json:"email" binding:"required"`
+	PhoneNumber string  `json:"phone_number" binding:"required"`
+	BranchID    *string `json:"branch_id,omitempty" format:"uuid"`
+	AccountID   string
+}
+
 // Employee represents employee
 type Employee struct {
-	ID          string `db:"id" json:"id"`
+	ID          string `db:"id" json:"id,omitempty"`
 	Name        string `db:"name" json:"name"`
 	Surname     string `db:"surname" json:"surname"`
-	DateOfBirth string `db:"date_of_birth" json:"date_of_birth"`
-	Address     string `db:"address" json:"address"`
-	Position    string `db:"position" json:"position"`
-	Email       string `db:"email" json:"email"`
-	PhoneNumber string `db:"phone_number" json:"phone_number"`
-	BranchID    string `db:"branch_id" json:"branch_id"`
-	AccountID   string `db:"account_id" json:"account_id"`
+	DateOfBirth string `db:"date_of_birth" json:"date_of_birth,omitempty"`
+	Address     string `db:"address" json:"address,omitempty"`
+	Position    string `db:"position" json:"position,omitempty"`
+	Email       string `db:"email" json:"email,omitempty"`
+	PhoneNumber string `db:"phone_number" json:"phone_number,omitempty"`
+	BranchID    string `db:"branch_id" json:"branch_id,omitempty"`
+	AccountID   string `db:"account_id" json:"account_id,omitempty"`
+	IsDeleted   bool   `db:"is_deleted" json:"is_deleted,omitempty"`
+}
+
+// MarshalJSON implements json.Marshaler
+func (s Employee) MarshalJSON() ([]byte, error) {
+	type Alias Employee
+	if s.DateOfBirth != "" {
+		t, _ := time.Parse("2006-01-02T15:04:05Z", s.DateOfBirth)
+		s.DateOfBirth = t.Format("2006-01-02")
+	}
+	return json.Marshal(struct {
+		Alias
+	}{
+		Alias: (Alias)(s),
+	})
+}
+
+// GetEmployeesResponse represents GET ALL employees
+type GetEmployeesResponse struct {
+	Objects    []Employee `json:"objects"`
+	Total      int        `json:"total"`
+	PerPage    int        `json:"per_page"`
+	PageNumber int        `json:"page_number"`
 }

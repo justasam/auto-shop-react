@@ -11,14 +11,22 @@ import (
 )
 
 func authAPI() []*swagger.Endpoint {
-	login := endpoint.New("POST", "/login", "Login",
+	login := endpoint.New("POST", "/auth/login", "Login",
 		endpoint.Handler(controllers.Login),
-		endpoint.Response(http.StatusOK, "", "Successful login"),
+		endpoint.Response(http.StatusOK, types.Account{}, "Successful login"),
 		endpoint.Body(types.LoginPost{}, "Login payload", true),
+		endpoint.Tags("Auth"),
+	)
+
+	currentEntity := endpoint.New("GET", "/auth/user",
+		"Get currently logged user (either customer or employee)",
+		endpoint.Handler(controllers.GetLoggedInUser),
+		endpoint.Response(http.StatusOK, map[string]interface{}{}, "Success"),
 		endpoint.Tags("Auth"),
 	)
 
 	return []*swagger.Endpoint{
 		login,
+		currentEntity,
 	}
 }

@@ -2,6 +2,8 @@ package db
 
 import (
 	"database/sql"
+	"fmt"
+	"strings"
 
 	"autoshop/api/types"
 )
@@ -55,7 +57,51 @@ func (c *Client) CreateEmployee(p types.EmployeePost) (*types.Employee, *types.E
 	return employee, nil
 }
 
-// GetEmployeeByID returns  from DB
+// GetEmployees returns employee from DB
+func (c *Client) GetEmployees(filter *types.GetEmployeesFilter, pageNumber,
+	perPage int) ([]types.Employee, int, *types.Error) {
+	queryf := `SELECT %s FROM %%s_employees `
+	queryf, namedParams := applyEmployeeFilter(queryf, *filter)
+
+	query := fmt.Sprintf(queryf, "count(*)")
+	query = c.applyView(query)
+
+	nstmt, err := c.db.PrepareNamed(query)
+	if err != nil {
+		return nil, 0, c.transformError(err)
+	}
+
+	var total int
+	err = nstmt.Get(&total, namedParams)
+	if err != nil {
+		return nil, 0, c.transformError(err)
+	}
+
+	query = fmt.Sprintf(queryf, "*")
+	query = c.applyView(query)
+	query += " LIMIT :offset, :limit"
+
+	namedParams["offset"] = (pageNumber - 1) * perPage
+	namedParams["limit"] = perPage
+
+	nstmt, err = c.db.PrepareNamed(query)
+	if err != nil {
+		return nil, 0, c.transformError(err)
+	}
+
+	var employees []types.Employee
+	err = nstmt.Select(&employees, namedParams)
+	if err != nil {
+		if err == sql.ErrNoRows {
+			return nil, 0, nil
+		}
+		return nil, 0, c.transformError(err)
+	}
+
+	return employees, total, nil
+}
+
+// GetEmployeeByID returns employee from DB
 func (c *Client) GetEmployeeByID(id string) (*types.Employee, *types.Error) {
 	query := `SELECT * FROM %s_employees WHERE id=?`
 	query = c.applyView(query)
@@ -70,4 +116,79 @@ func (c *Client) GetEmployeeByID(id string) (*types.Employee, *types.Error) {
 	}
 
 	return &employee, nil
+}
+
+// UpdateEmployee updates employee
+func (c *Client) UpdateEmployee(id string, p types.EmployeePut) (*types.Employee, *types.Error) {
+	query := `UPDATE %s_employees 
+		SET name=:name, surname=:surname, position=:position, address=:address, 
+		phone_number=:phonenumber, email=:email, branch_id=:branchid, 
+		date_of_birth=:dateofbirth, account_id=:account_id
+		WHERE id=:id`
+	query = c.applyView(query)
+
+	_, err := c.ex.Exec(query, p)
+	if err != nil {
+		return nil, c.transformError(err)
+	}
+
+	// Get the employee back
+	employee, dbErr := c.GetEmployeeByID(id)
+	if dbErr != nil {
+		return nil, dbErr
+	}
+
+	return employee, nil
+}
+
+// DeleteEmployee deletes employee
+func (c *Client) DeleteEmployee(id string) *types.Error {
+	query := `UPDATE %s_employees SET is_deleted=true, account_id='' WHERE id=?`
+	query = c.applyView(query)
+
+	var err error
+	c, err = c.Begin()
+	if err != nil {
+		return c.transformError(err)
+	}
+	defer c.End()
+
+	_, err = c.ex.Exec(query, id)
+	if err != nil {
+		return c.transformError(err)
+	}
+
+	// Also delete employee's account
+	dbErr := c.DeleteOwnerAccount(id)
+	if dbErr != nil {
+		return dbErr
+	}
+
+	err = c.Commit()
+	if err != nil {
+		return c.transformError(err)
+	}
+
+	return nil
+}
+
+func applyEmployeeFilter(query string, filter types.GetEmployeesFilter) (string, map[string]interface{}) {
+	namedParams := map[string]interface{}{}
+	subQuery := ""
+	if filter.Position != nil {
+		namedParams["position"] = *filter.Position
+		subQuery += "AND position=:position"
+	}
+
+	if filter.BranchID != nil {
+		namedParams["branch_id"] = *filter.BranchID
+		subQuery += "AND branch_id=:branch_id"
+	}
+
+	if len(subQuery) > 0 {
+		subQuery = strings.TrimPrefix(subQuery, "AND")
+		query += "WHERE " + subQuery
+	}
+
+	return query, namedParams
 }

@@ -62,3 +62,29 @@ func (c *Client) CreateAccount(p types.Account) (*types.Account, *types.Error) {
 
 	return account, nil
 }
+
+// DeleteAccount deletes account
+func (c *Client) DeleteAccount(id string) *types.Error {
+	query := `DELETE FROM %s_accounts WHERE id=?`
+	query = c.applyView(query)
+
+	_, err := c.ex.Exec(query, id)
+	if err != nil {
+		return c.transformError(err)
+	}
+
+	return nil
+}
+
+// DeleteOwnerAccount deletes owners account
+func (c *Client) DeleteOwnerAccount(customerID string) *types.Error {
+	query := `DELETE FROM %s_accounts WHERE owner_id=?`
+	query = c.applyView(query)
+
+	_, err := c.ex.Exec(query, customerID)
+	if err != nil {
+		return c.transformError(err)
+	}
+
+	return nil
+}

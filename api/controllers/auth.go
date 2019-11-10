@@ -65,7 +65,45 @@ func Login(c echo.Context) error {
 		return fmt.Errorf("Error saving session: %s", err)
 	}
 
-	return c.JSON(http.StatusOK, nil)
+	return c.JSON(http.StatusOK, account)
+}
+
+// GetLoggedInUser returns currently logged in user or employee
+func GetLoggedInUser(c echo.Context) error {
+	accountID := c.Get("account_id").(string)
+	ownerID := c.Get("owner_id").(string)
+	accountType := c.Get("account_type").(string)
+
+	if accountID == "" || ownerID == "" || accountType == types.GuestAccount {
+		return echo.NewHTTPError(http.StatusNotFound)
+	}
+
+	// Establish admin connection
+	db, err := db.Connect(types.AdminAccount)
+	if err != nil {
+		return fmt.Errorf("Error connecting to the database: %s", err)
+	}
+	defer db.Close()
+
+	var dbErr *types.Error
+	entity := map[string]interface{}{}
+
+	if accountType == types.EmployeeAccount || accountType == types.AdminAccount {
+		entity["employee"], dbErr = db.GetEmployeeByID(ownerID)
+	} else {
+		entity["customer"], dbErr = db.GetCustomerByID(ownerID)
+	}
+
+	if dbErr != nil {
+		return dbErr
+	}
+
+	// This should not happen
+	if len(entity) == 0 {
+		return echo.NewHTTPError(http.StatusNotFound)
+	}
+
+	return c.JSON(http.StatusOK, "")
 }
 
 func validatorError(err error) types.ErrorResponse {

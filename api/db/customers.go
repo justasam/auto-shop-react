@@ -2,7 +2,10 @@ package db
 
 import (
 	"database/sql"
+	"fmt"
 	"time"
+
+	"github.com/jmoiron/sqlx"
 
 	"autoshop/api/types"
 )
@@ -56,6 +59,50 @@ func (c *Client) CreateCustomer(p types.CustomerPost) (*types.Customer, *types.E
 	return customer, nil
 }
 
+// GetCustomers returns customers
+func (c *Client) GetCustomers(filter *types.GetCustomersFilter, perPage,
+	pageNumber int) ([]types.Customer, int, *types.Error) {
+	queryf := `SELECT %s FROM %%s_customers `
+	queryf, namedParams := applyCustomerFilter(queryf, *filter)
+
+	query := fmt.Sprintf(queryf, "count(*)")
+	query = c.applyView(query)
+
+	nstmt, err := c.db.PrepareNamed(query)
+	if err != nil {
+		return nil, 0, c.transformError(err)
+	}
+
+	var total int
+	err = nstmt.Get(&total, namedParams)
+	if err != nil {
+		return nil, 0, c.transformError(err)
+	}
+
+	query = fmt.Sprintf(queryf, "*")
+	query = c.applyView(query)
+	query += " LIMIT :offset, :limit"
+
+	namedParams["offset"] = (pageNumber - 1) * perPage
+	namedParams["limit"] = perPage
+
+	nstmt, err = c.db.PrepareNamed(query)
+	if err != nil {
+		return nil, 0, c.transformError(err)
+	}
+
+	var customers []types.Customer
+	err = nstmt.Select(&customers, namedParams)
+	if err != nil {
+		if err == sql.ErrNoRows {
+			return nil, 0, nil
+		}
+		return nil, 0, c.transformError(err)
+	}
+
+	return customers, total, nil
+}
+
 // GetCustomerByID returns customer from DB
 func (c *Client) GetCustomerByID(id string) (*types.Customer, *types.Error) {
 	query := `SELECT * FROM %s_customers WHERE id=?`
@@ -71,4 +118,67 @@ func (c *Client) GetCustomerByID(id string) (*types.Customer, *types.Error) {
 	}
 
 	return &customer, nil
+}
+
+// DeleteCustomer deletes customer from db
+func (c *Client) DeleteCustomer(id string) *types.Error {
+	query := `UPDATE %s_customers SET is_deleted=true, account_id='' WHERE id=?`
+	query = c.applyView(query)
+
+	var err error
+	c, err = c.Begin()
+	if err != nil {
+		return c.transformError(err)
+	}
+	defer c.End()
+
+	_, err = c.ex.Exec(query, id)
+	if err != nil {
+		return c.transformError(err)
+	}
+
+	// Also delete customers account
+	dbErr := c.DeleteOwnerAccount(id)
+	if dbErr != nil {
+		return dbErr
+	}
+
+	err = c.Commit()
+	if err != nil {
+		return c.transformError(err)
+	}
+
+	return nil
+}
+
+// UpdateCustomer updates customer
+func (c *Client) UpdateCustomer(id string, p types.CustomerPut) (*types.Customer, *types.Error) {
+	query := `UPDATE %s_customers 
+		SET name=:name, surname=:surname, address=:address, 
+		phone_number=:phonenumber, email=:email, 
+		date_of_birth=:dateofbirth, account_id=:accountid
+		WHERE id=:id`
+	query = c.applyView(query)
+	query, args, err := sqlx.Named(query, p)
+	if err != nil {
+		return nil, c.transformError(err)
+	}
+
+	_, err = c.ex.Exec(query, args...)
+	if err != nil {
+		return nil, c.transformError(err)
+	}
+
+	// Get the employee back
+	customer, dbErr := c.GetCustomerByID(id)
+	if dbErr != nil {
+		return nil, dbErr
+	}
+
+	return customer, nil
+}
+func applyCustomerFilter(query string, filter types.GetCustomersFilter) (string, map[string]interface{}) {
+	namedParams := map[string]interface{}{}
+
+	return query, namedParams
 }

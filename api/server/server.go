@@ -59,15 +59,49 @@ func CheckSession() echo.MiddlewareFunc {
 	return func(next echo.HandlerFunc) echo.HandlerFunc {
 		return func(c echo.Context) error {
 			sess, _ := session.Get("session", c)
+
 			// If account type is not set assume it's a guest
 			if _, found := sess.Values["account_type"]; !found {
 				sess.Values["account_type"] = types.GuestAccount
+				sess.Values["account_id"] = ""
+				sess.Values["owner_id"] = ""
 				c.Set("account_type", types.GuestAccount)
-			} else {
-				c.Set("owner_id", sess.Values["owner_id"])
-				c.Set("account_type", sess.Values["account_type"])
-				c.Set("account_id", sess.Values["account_id"])
+				c.Set("account_id", "")
+				c.Set("owner_id", "")
 			}
+
+			if sess.Values["account_type"] != types.GuestAccount {
+				// Check if the account still exists
+				db, err := db.Connect(types.AdminAccount)
+				if err != nil {
+					return fmt.Errorf("Error connecting to the database: %s", err)
+				}
+				defer db.Close()
+
+				accountID := sess.Values["account_id"].(string)
+				account, dbErr := db.GetAccountByID(accountID)
+				if dbErr != nil {
+					return dbErr
+				}
+
+				// If account is not found, wipe session.
+				if account == nil {
+					sess.Options.MaxAge = -1
+					err = sess.Save(c.Request(), c.Response())
+					if err != nil {
+						return fmt.Errorf("Failed to save session: %s", err)
+					}
+				} else {
+					c.Set("owner_id", account.OwnerID)
+					c.Set("account_type", account.Type)
+					c.Set("account_id", account.ID)
+				}
+			}
+
+			// Set the headers
+			c.Response().Header().Set("Autoshop-Account-Type", sess.Values["account_type"].(string))
+			c.Response().Header().Set("Autoshop-Account-ID", sess.Values["account_id"].(string))
+			c.Response().Header().Set("Autoshop-Account-Owner-ID", sess.Values["owner_id"].(string))
 
 			return next(c)
 		}
@@ -77,6 +111,7 @@ func CheckSession() echo.MiddlewareFunc {
 // CreateRouter creates the router.
 func CreateRouter(params ContextParams) *echo.Echo {
 	r := echo.New()
+	r.Debug = true
 	r.HTTPErrorHandler = errorHandler
 
 	r.Use(
@@ -84,11 +119,9 @@ func CreateRouter(params ContextParams) *echo.Echo {
 		middleware.Logger(),
 		middleware.Recover(),
 		middleware.Secure(),
+		middleware.CORS(),
 		session.Middleware(sessions.NewCookieStore([]byte("supersecret"))),
-		middleware.StaticWithConfig(middleware.StaticConfig{
-			Root:  "./web",
-			HTML5: true,
-		}),
+		CheckSession(),
 	)
 
 	r.GET("/ping", controllers.Ping)
@@ -104,13 +137,6 @@ func CreateRouter(params ContextParams) *echo.Echo {
 		path = swag.ColonPath(path)
 		api.Add(endpoint.Method, path, h)
 	})
-
-	// // Set static asset base directory
-	// r.Static("/", "./web")
-
-	// Homepage
-	r.File("/Home", "./web/index.html", CheckSession())
-	r.File("/", "./web/index.html", CheckSession())
 
 	var routes []string
 	for _, route := range r.Routes() {
@@ -137,6 +163,7 @@ func CreateSwaggerAPI() *swagger.API {
 				customerAPI(),
 				vehiclesAPI(),
 				employeeAPI(),
+				accountsAPI(),
 			)...,
 		),
 	)

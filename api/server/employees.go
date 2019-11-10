@@ -18,7 +18,53 @@ func employeeAPI() []*swagger.Endpoint {
 		endpoint.Tags("Employees"),
 	)
 
+	getEmployees := endpoint.New("GET", "/employees", "Get employees",
+		endpoint.Handler(controllers.GetEmployees),
+		endpoint.Response(http.StatusOK, types.GetEmployeesResponse{}, "Successful"),
+		endpoint.QueryMap(map[string]swagger.Parameter{
+			"per_page": {
+				Type:        "integer",
+				Description: "Records per page",
+				Default:     "10",
+				Minimum:     &[]int64{1}[0], // fugly but that's the only way to take temporary address
+			},
+			"page_number": {
+				Type:        "integer",
+				Description: "Records per page",
+				Default:     "1",
+				Minimum:     &[]int64{1}[0], // fugly but that's the only way to take temporary address
+			},
+		}),
+		endpoint.Tags("Employees"),
+	)
+
+	getEmployee := endpoint.New("GET", "/employees/{employee_id}", "Get employee",
+		endpoint.Handler(controllers.GetEmployee),
+		endpoint.Response(http.StatusOK, types.Employee{}, "Successful"),
+		endpoint.Path("employee_id", "string", "uuid", "UUID of an employee"),
+		endpoint.Tags("Employees"),
+	)
+
+	updateEmployee := endpoint.New("PUT", "/employees/{employee_id}", "Update employee",
+		endpoint.Handler(controllers.UpdateEmployee),
+		endpoint.Response(http.StatusOK, types.Employee{}, "Successful"),
+		endpoint.Path("employee_id", "string", "uuid", "UUID of an employee"),
+		endpoint.Body(types.EmployeePut{}, "Employee update payload", true),
+		endpoint.Tags("Employees"),
+	)
+
+	deleteEmployee := endpoint.New("DELETE", "/employees/{employee_id}", "Delete employee",
+		endpoint.Handler(controllers.DeleteEmployee),
+		endpoint.Response(http.StatusNoContent, "", "Successful"),
+		endpoint.Path("employee_id", "string", "uuid", "UUID of an employee"),
+		endpoint.Tags("Employees"),
+	)
+
 	return []*swagger.Endpoint{
 		createEmployee,
+		getEmployees,
+		getEmployee,
+		updateEmployee,
+		deleteEmployee,
 	}
 }
