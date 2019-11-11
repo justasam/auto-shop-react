@@ -59,11 +59,17 @@ func Login(c echo.Context) error {
 	sess.Values["account_type"] = account.Type
 	sess.Values["account_id"] = account.ID
 	sess.Values["owner_id"] = account.OwnerID
+	sess.Values["username"] = account.Username
 
 	err = sess.Save(c.Request(), c.Response())
 	if err != nil {
 		return fmt.Errorf("Error saving session: %s", err)
 	}
+
+	c.Response().Header().Set("X-Autoshop-Account-Type", account.Type)
+	c.Response().Header().Set("X-Autoshop-Account-ID", account.ID)
+	c.Response().Header().Set("X-Autoshop-Account-Owner-ID", account.OwnerID)
+	c.Response().Header().Set("X-Autoshop-Account-Username", sess.Values["username"].(string))
 
 	return c.JSON(http.StatusOK, account)
 }
@@ -103,7 +109,7 @@ func GetLoggedInUser(c echo.Context) error {
 		return echo.NewHTTPError(http.StatusNotFound)
 	}
 
-	return c.JSON(http.StatusOK, "")
+	return c.JSON(http.StatusOK, entity)
 }
 
 func validatorError(err error) types.ErrorResponse {

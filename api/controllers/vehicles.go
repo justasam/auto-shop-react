@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"encoding/base64"
+	"encoding/json"
 	"fmt"
 	"net/http"
 	"os"
@@ -74,22 +75,22 @@ func GetBestSellingMakes(c echo.Context) error {
 // CreateVehicleMake creates a new make
 func CreateVehicleMake(c echo.Context) error {
 	vpmp := c.Get("vehicleMakePicturesPath").(string)
+	accountType := c.Get("account_type").(string)
+
+	if accountType != types.AdminAccount && accountType != types.EmployeeAccount {
+		return echo.NewHTTPError(http.StatusForbidden)
+	}
+
 	var payload types.VehicleMakePost
 	err := c.Bind(&payload)
 	if err != nil {
 		return echo.NewHTTPError(http.StatusBadRequest, validatorError(err))
 	}
 
-	// If not an employee shoo away
-	_, found := getSessionByType(types.EmployeeAccount, c)
-	if !found {
-		return echo.NewHTTPError(http.StatusForbidden)
-	}
-
 	// Add ID
 	payload.ID = uuid.NewV4().String()
 
-	db, err := db.Connect(types.EmployeeAccount)
+	db, err := db.Connect(accountType)
 	if err != nil {
 		return fmt.Errorf("Error connecting to the database: %s", err)
 	}
@@ -185,12 +186,33 @@ func DeleteVehicleMake(c echo.Context) error {
 
 // GetRecentlyListedVehicles returns recently listed vehicles
 func GetRecentlyListedVehicles(c echo.Context) error {
-	return nil
+	accountType := c.Get("account_type").(string)
+	to := c.QueryParam("to")
+	count := getQueryParam(reflect.Int, "count", c).(int)
+
+	db, err := db.Connect(accountType)
+	if err != nil {
+		return fmt.Errorf("Error connecting to the database: %s", err)
+	}
+	defer db.Close()
+
+	recent, _, dbErr := db.GetVehicles(&types.GetVehiclesFilter{ListedAtLatest: &to}, 1, count)
+	if dbErr != nil {
+		return dbErr
+	}
+
+	return c.JSON(http.StatusOK, recent)
 }
 
 // PurchaseVehicle creates a vehicle and its acquisition record
 func PurchaseVehicle(c echo.Context) error {
 	vpp := c.Get("vehiclePicturesPath").(string)
+	accountType := c.Get("account_type").(string)
+	accountOwnerID := c.Get("owner_id").(string)
+
+	if accountType != types.AdminAccount && accountType != types.EmployeeAccount {
+		return echo.NewHTTPError(http.StatusForbidden)
+	}
 
 	var payload types.VehiclePost
 	err := c.Bind(&payload)
@@ -198,19 +220,23 @@ func PurchaseVehicle(c echo.Context) error {
 		return echo.NewHTTPError(http.StatusBadRequest, validatorError(err))
 	}
 
-	sess, found := getSessionByType(types.EmployeeAccount, c)
-	if !found {
-		return echo.NewHTTPError(http.StatusForbidden)
+	// If spec is present, try to parse it
+	if payload.Specificaction != nil {
+		var validJSON map[string]interface{}
+		err := json.Unmarshal([]byte(*payload.Specificaction), &validJSON)
+		if err != nil {
+			return echo.NewHTTPError(http.StatusBadRequest, "Invalid specification")
+		}
 	}
 
-	db, err := db.Connect(types.EmployeeAccount)
+	db, err := db.Connect(accountType)
 	if err != nil {
 		return fmt.Errorf("Error connecting to the database: %s", err)
 	}
 	defer db.Close()
 
 	payload.ID = uuid.NewV4().String()
-	payload.EmployeeID = sess.Values["owner_id"].(string)
+	payload.EmployeeID = accountOwnerID
 
 	if payload.Specificaction == nil {
 		empty := "{}"
@@ -254,6 +280,38 @@ func PurchaseVehicle(c echo.Context) error {
 	}
 
 	return c.JSON(http.StatusCreated, vehicle)
+}
+
+// SellVehicle marks vehicle as sold and adds new sales entry
+func SellVehicle(c echo.Context) error {
+	accountType := c.Get("account_type").(string)
+	accountOwnerID := c.Get("owner_id").(string)
+
+	if accountType != types.EmployeeAccount && accountType != types.AdminAccount {
+		return echo.NewHTTPError(http.StatusForbidden)
+	}
+
+	var payload types.VehicleSalePost
+	err := c.Bind(&payload)
+	if err != nil {
+		return echo.NewHTTPError(http.StatusBadRequest, validatorError(err))
+	}
+
+	db, err := db.Connect(accountType)
+	if err != nil {
+		return fmt.Errorf("Error connecting to the database: %s", err)
+	}
+	defer db.Close()
+
+	payload.ID = uuid.NewV4().String()
+	payload.EmployeeID = accountOwnerID
+
+	dbErr := db.SellVehicle(payload)
+	if dbErr != nil {
+		return dbErr
+	}
+
+	return c.JSON(http.StatusOK, "")
 }
 
 func getQueryParam(t reflect.Kind, param string, c echo.Context) interface{} {

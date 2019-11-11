@@ -204,6 +204,128 @@ func UpdateEmployee(c echo.Context) error {
 	return c.JSON(http.StatusOK, employee)
 }
 
+// GetEmployeeSales returns employee sales
+func GetEmployeeSales(c echo.Context) error {
+	accountType := c.Get("account_type").(string)
+	employeeID := c.Param("employee_id")
+
+	if accountType != types.EmployeeAccount && accountType != types.AdminAccount {
+		return echo.NewHTTPError(http.StatusForbidden)
+	}
+
+	db, err := db.Connect(accountType)
+	if err != nil {
+		return fmt.Errorf("Error connecting to the database: %s", err)
+	}
+	defer db.Close()
+
+	sales, dbErr := db.GetEmployeeSales(employeeID)
+	if dbErr != nil {
+		return dbErr
+	}
+
+	total := 0.0
+	for _, s := range sales {
+		total += s.SoldFor
+	}
+
+	return c.JSON(http.StatusOK, types.EmployeeSales{
+		Sales: sales,
+		Total: total,
+	})
+}
+
+// GetEmployeesSales returns employee sales
+func GetEmployeesSales(c echo.Context) error {
+	accountType := c.Get("account_type").(string)
+
+	if accountType != types.EmployeeAccount && accountType != types.AdminAccount {
+		return echo.NewHTTPError(http.StatusForbidden)
+	}
+
+	db, err := db.Connect(accountType)
+	if err != nil {
+		return fmt.Errorf("Error connecting to the database: %s", err)
+	}
+	defer db.Close()
+
+	sales, dbErr := db.GetEmployeesSales()
+	if dbErr != nil {
+		return dbErr
+	}
+
+	total := 0.0
+	for _, s := range sales {
+		total += s.SoldFor
+	}
+
+	return c.JSON(http.StatusOK, types.EmployeeSales{
+		Sales: sales,
+		Total: total,
+	})
+}
+
+// GetEmployeePurchases returns purchases made by employee
+func GetEmployeePurchases(c echo.Context) error {
+	accountType := c.Get("account_type").(string)
+	employeeID := c.Param("employee_id")
+
+	if accountType != types.AdminAccount && accountType != types.EmployeeAccount {
+		return echo.NewHTTPError(http.StatusForbidden)
+	}
+
+	db, err := db.Connect(accountType)
+	if err != nil {
+		return fmt.Errorf("Error connecting to the database: %s", err)
+	}
+	defer db.Close()
+
+	purchases, dbErr := db.GetEmployeePurchases(employeeID)
+	if dbErr != nil {
+		return dbErr
+	}
+
+	total := 0.0
+	for _, p := range purchases {
+		total += p.PurchasedFor
+	}
+
+	return c.JSON(http.StatusOK, types.EmployeePurchases{
+		Total:     total,
+		Purchases: purchases,
+	})
+}
+
+// GetEmployeesPurchases returns purchases made by employees
+func GetEmployeesPurchases(c echo.Context) error {
+	accountType := c.Get("account_type").(string)
+
+	if accountType != types.AdminAccount {
+		return echo.NewHTTPError(http.StatusForbidden)
+	}
+
+	db, err := db.Connect(accountType)
+	if err != nil {
+		return fmt.Errorf("Error connecting to the database: %s", err)
+	}
+	defer db.Close()
+
+	purchases, dbErr := db.GetEmployeesPurchases()
+	if dbErr != nil {
+		return dbErr
+	}
+
+	total := 0.0
+	for _, p := range purchases {
+		total += p.PurchasedFor
+	}
+
+	return c.JSON(http.StatusOK, types.EmployeePurchases{
+		Total:     total,
+		Purchases: purchases,
+	})
+}
+
 func getOptionalString(c echo.Context, param string) *string {
 	val := c.QueryParam(param)
 	if val != "" {

@@ -12,7 +12,8 @@ import (
 
 // GetVehicles returns vehicles
 func (c *Client) GetVehicles(filter *types.GetVehiclesFilter, pageNumber, perPage int) ([]types.Vehicle, int, *types.Error) {
-	queryf := "SELECT %s FROM %%s_vehicles "
+	queryf := `SELECT %s FROM %%s_vehicles v 
+		JOIN %%s_vehicle_pictures vp ON vp.vehicle_id = v.id `
 	queryf, namedParams := applyVehicleFilter(queryf, filter)
 
 	// Select total for pagination
@@ -30,9 +31,9 @@ func (c *Client) GetVehicles(filter *types.GetVehiclesFilter, pageNumber, perPag
 		return nil, 0, c.transformError(err)
 	}
 
-	query = fmt.Sprintf(queryf, "*")
+	query = fmt.Sprintf(queryf, "v.*, GROUP_CONCAT(vp.file_name) AS vehicle_pictures")
 	query = c.applyView(query)
-	query += " LIMIT :offset, :limit"
+	query += " GROUP BY id LIMIT :offset, :limit"
 
 	namedParams["offset"] = (pageNumber - 1) * perPage
 	namedParams["limit"] = perPage
@@ -211,9 +212,12 @@ func (c *Client) PurchaseVehicle(p types.VehiclePost) (*types.Vehicle, *types.Er
 
 // GetBestSellingMakes returns best selling vehicle makes
 func (c *Client) GetBestSellingMakes(limit int) ([]types.VehicleMake, *types.Error) {
-	query := `SELECT v.make as make, m.image_path as image_path 
-		FROM %s_vehicles v JOIN %s_makes m ON v.make=m.name
-		ORDER BY created_at DESC LIMIT ?`
+	query := `SELECT m.id, m.name, m.image_path, count(vs.id) as cnt 
+		FROM %s_vehicle_sales vs 
+		JOIN %s_vehicles v on v.id=vs.vehicle_id 
+		JOIN %s_vehicle_makes m on m.name=v.make 
+		GROUP BY m.id, m.name, m.image_path
+		ORDER BY cnt LIMIT ?`
 	query = c.applyView(query)
 
 	if limit == 0 {
@@ -378,6 +382,11 @@ func applyVehicleFilter(query string, filter *types.GetVehiclesFilter) (string, 
 	if filter.EngineTo != nil {
 		namedParams["engine_to"] = *filter.EngineTo
 		subQuery += "AND engine <= :engine_to"
+	}
+
+	if filter.ListedAtLatest != nil {
+		namedParams["created_at"] = *filter.ListedAtLatest
+		subQuery += "AND create_at >= :created_at"
 	}
 
 	if len(subQuery) > 0 {

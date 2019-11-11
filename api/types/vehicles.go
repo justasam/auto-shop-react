@@ -27,6 +27,8 @@ type GetVehiclesFilter struct {
 	EngineTo        *float64 `json:"engine_to,omitempty"`
 	PerPage         int      `json:"per_page" minimum:"1" default:"10"`
 	PageNumber      int      `json:"page_num" minimum:"1" default:"1"`
+
+	ListedAtLatest *string
 }
 
 // GetVehiclesResponse represents response of GET ALL
@@ -88,8 +90,8 @@ type VehiclePost struct {
 	Images     []string `json:"images" binding:"required" min_items:"1"`
 	CustomerID string   `json:"customer_id" binding:"required"`
 	BoughtFor  float64  `json:"bought_for" binding:"required"`
-	EmployeeID string
-	ImagePaths []string
+	EmployeeID string   `json:"-"`
+	ImagePaths []string `json:"-"`
 }
 
 // VehiclePurchaseEntryPost payload for creating vehicle purchase record
@@ -115,7 +117,7 @@ type VehicleMakePost struct {
 	ID        string `db:"string" json:"-"`
 	Name      string `db:"name" json:"name" min_length:"1" binding:"required"`
 	Image     string `json:"image" binding:"required"`
-	ImagePath string `db:"image_path"`
+	ImagePath string `db:"image_path" json:"-"`
 }
 
 // VehicleMake represents make of vehicle
@@ -123,4 +125,15 @@ type VehicleMake struct {
 	ID      string `db:"id" json:"id"`
 	Name    string `db:"name" json:"name"`
 	ImgPath string `db:"image_path" json:"image_path"`
+	Count   string `db:"cnt" json:"count"`
+}
+
+// VehicleSalePost represents post payload for vehicle sale
+type VehicleSalePost struct {
+	SoldFor          string `json:"sold_for" binding:"required"`
+	SoldToCustomerID string `json:"sold_ot" format:"uuid" binding:"required"`
+
+	ID         string
+	EmployeeID string
+	VehicleID  string
 }

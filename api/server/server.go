@@ -65,9 +65,11 @@ func CheckSession() echo.MiddlewareFunc {
 				sess.Values["account_type"] = types.GuestAccount
 				sess.Values["account_id"] = ""
 				sess.Values["owner_id"] = ""
+				sess.Values["username"] = ""
 				c.Set("account_type", types.GuestAccount)
 				c.Set("account_id", "")
 				c.Set("owner_id", "")
+				c.Response().Header().Set("X-Autoshop-Account-Type", types.GuestAccount)
 			}
 
 			if sess.Values["account_type"] != types.GuestAccount {
@@ -92,17 +94,19 @@ func CheckSession() echo.MiddlewareFunc {
 						return fmt.Errorf("Failed to save session: %s", err)
 					}
 				} else {
+					sess.Values["account_type"] = account.Type
+					sess.Values["account_id"] = account.ID
+					sess.Values["owner_id"] = account.OwnerID
+					sess.Values["username"] = account.Username
 					c.Set("owner_id", account.OwnerID)
 					c.Set("account_type", account.Type)
 					c.Set("account_id", account.ID)
+					c.Response().Header().Set("X-Autoshop-Account-Type", account.Type)
+					c.Response().Header().Set("X-Autoshop-Account-ID", account.ID)
+					c.Response().Header().Set("X-Autoshop-Account-Owner-ID", account.OwnerID)
+					c.Response().Header().Set("X-Autoshop-Account-Username", account.Username)
 				}
 			}
-
-			// Set the headers
-			c.Response().Header().Set("Autoshop-Account-Type", sess.Values["account_type"].(string))
-			c.Response().Header().Set("Autoshop-Account-ID", sess.Values["account_id"].(string))
-			c.Response().Header().Set("Autoshop-Account-Owner-ID", sess.Values["owner_id"].(string))
-
 			return next(c)
 		}
 	}
@@ -129,7 +133,7 @@ func CreateRouter(params ContextParams) *echo.Echo {
 	autoshopAPI := CreateSwaggerAPI()
 
 	// Swagger UI
-	r.GET("/autoshop/api/json", echo.WrapHandler(autoshopAPI.Handler(true)))
+	r.GET("/autoshop/api/json", echo.WrapHandler(autoshopAPI.Handler(true)), CheckSession())
 
 	api := r.Group("", sv.SwaggerValidatorEcho(autoshopAPI), DefaultContentType(), CheckSession())
 	autoshopAPI.Walk(func(path string, endpoint *swagger.Endpoint) {
@@ -156,6 +160,7 @@ func CreateRouter(params ContextParams) *echo.Echo {
 func CreateSwaggerAPI() *swagger.API {
 	api := swag.New(
 		swag.Title("Autoshop API"),
+		swag.Version("2.0"),
 		swag.BasePath("/autoshop/api"),
 		swag.Endpoints(
 			aggregateEndpoints(
@@ -164,6 +169,7 @@ func CreateSwaggerAPI() *swagger.API {
 				vehiclesAPI(),
 				employeeAPI(),
 				accountsAPI(),
+				branchesAPI(),
 			)...,
 		),
 	)

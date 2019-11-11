@@ -22,12 +22,11 @@ const Login = ({hidden}) => {
         // TODO: validate form
         let username = uname.current.value;
         let password = sha256(pwd.current.value);
-        console.log(username, password);
 
         const data = { username, password };
 
         try {
-          const res = await fetch('/auth/login', {
+          const res = await fetch('autoshop/api/auth/login', {
             method: 'POST',
             body: JSON.stringify(data),
             headers: {
@@ -35,7 +34,6 @@ const Login = ({hidden}) => {
             }
           });
           const jsonRes = await res.json();
-          console.log('success:', JSON.stringify(jsonRes));
         }
         catch (error) {
           console.error('Error:', error)

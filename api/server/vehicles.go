@@ -53,11 +53,18 @@ func vehiclesAPI() []*swagger.Endpoint {
 		endpoint.Tags("Vehicles"),
 	)
 
+	sellVehicle := endpoint.New("POST", "/vehicles/{vehicle_id}/sold", "Vehicle make creation",
+		endpoint.Handler(controllers.SellVehicle),
+		endpoint.Response(http.StatusCreated, "", "Success"),
+		endpoint.Body(types.VehicleSalePost{}, "Vehicle sale payload", true),
+		endpoint.Tags("Vehicles"),
+	)
 	return []*swagger.Endpoint{
 		getVehicles,
 		vehiclePurchase,
 		bestSellingMakes,
 		createVehicleMake,
 		deleteVehicleMake,
+		sellVehicle,
 	}
 }

@@ -172,6 +172,92 @@ func (c *Client) DeleteEmployee(id string) *types.Error {
 	return nil
 }
 
+// GetEmployeesSales returns all employee sales
+func (c *Client) GetEmployeesSales() ([]types.EmployeeSale, *types.Error) {
+	query := `SELECT * FROM %s_vehicle_sales`
+	query = c.applyView(query)
+
+	var sales []types.EmployeeSale
+	err := c.db.Select(&sales, query)
+	if err != nil {
+		return nil, c.transformError(err)
+	}
+
+	return sales, nil
+}
+
+// GetEmployeeSales returns employee sales
+func (c *Client) GetEmployeeSales(id string) ([]types.EmployeeSale, *types.Error) {
+	query := `SELECT * FROM %s_vehicle_sales where sold_by_employee_id=?`
+	query = c.applyView(query)
+
+	var sales []types.EmployeeSale
+	err := c.db.Select(&sales, query, id)
+	if err != nil {
+		return nil, c.transformError(err)
+	}
+
+	return sales, nil
+}
+
+// GetEmployeePurchases returns employee purchases
+func (c *Client) GetEmployeePurchases(id string) ([]types.EmployeePurchase, *types.Error) {
+	query := `SELECT * FROM %s_vehicle_purchases where purchased_by_employee_id=?`
+	query = c.applyView(query)
+
+	var purchases []types.EmployeePurchase
+	err := c.db.Select(&purchases, query, id)
+	if err != nil {
+		return nil, c.transformError(err)
+	}
+
+	return purchases, nil
+}
+
+// GetEmployeesPurchases returns all employee purchases
+func (c *Client) GetEmployeesPurchases() ([]types.EmployeePurchase, *types.Error) {
+	query := `SELECT * FROM %s_vehicle_purchases`
+	query = c.applyView(query)
+
+	var purchases []types.EmployeePurchase
+	err := c.db.Select(&purchases, query)
+	if err != nil {
+		return nil, c.transformError(err)
+	}
+
+	return purchases, nil
+}
+
+// SellVehicle marks vehicle as sold and enters a sale entry
+func (c *Client) SellVehicle(p types.VehicleSalePost) *types.Error {
+	query := `INSERT INTO %s_vehicle_sales (id, customer_id, sold_for, sold_by_employee_id, vehicle_id)
+		VALUES(?, ?, ?, ?, ?)`
+	var err error
+	c, err = c.Begin()
+	if err != nil {
+		return c.transformError(err)
+	}
+	defer c.End()
+
+	_, err = c.ex.Exec(query, p.ID, p.SoldToCustomerID, p.SoldFor, p.EmployeeID, p.VehicleID)
+	if err != nil {
+		return c.transformError(err)
+	}
+
+	query = `UPDATE %s_vehicles SET is_sold=true WHERE id=?`
+	_, err = c.ex.Exec(query, p.VehicleID)
+	if err != nil {
+		return c.transformError(err)
+	}
+
+	err = c.Commit()
+	if err != nil {
+		return c.transformError(err)
+	}
+
+	return nil
+}
+
 func applyEmployeeFilter(query string, filter types.GetEmployeesFilter) (string, map[string]interface{}) {
 	namedParams := map[string]interface{}{}
 	subQuery := ""

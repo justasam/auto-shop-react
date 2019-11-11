@@ -21,7 +21,7 @@ func (c *Client) CreateCustomer(p types.CustomerPost) (*types.Customer, *types.E
 	defer c.End()
 
 	// First create account
-	account, dbErr := c.CreateAccount(types.Account{
+	_, dbErr := c.CreateAccount(types.Account{
 		ID:       p.AccountID,
 		Username: p.Username,
 		Password: p.Password,
@@ -40,7 +40,7 @@ func (c *Client) CreateCustomer(p types.CustomerPost) (*types.Customer, *types.E
 	query = c.applyView(query)
 
 	_, err = c.ex.Exec(query, p.ID, p.Name, p.Surname, p.DateOfBirth,
-		p.Address, p.Email, p.PhoneNumber, account.ID, time.Now().Format("2006-01-02 15:04:05"))
+		p.Address, p.Email, p.PhoneNumber, p.AccountID, time.Now().Format("2006-01-02 15:04:05"))
 	if err != nil {
 		return nil, c.transformError(err)
 	}
@@ -62,7 +62,7 @@ func (c *Client) CreateCustomer(p types.CustomerPost) (*types.Customer, *types.E
 // GetCustomers returns customers
 func (c *Client) GetCustomers(filter *types.GetCustomersFilter, perPage,
 	pageNumber int) ([]types.Customer, int, *types.Error) {
-	queryf := `SELECT %s FROM %%s_customers `
+	queryf := `SELECT %s FROM %%s_customers`
 	queryf, namedParams := applyCustomerFilter(queryf, *filter)
 
 	query := fmt.Sprintf(queryf, "count(*)")
@@ -81,7 +81,7 @@ func (c *Client) GetCustomers(filter *types.GetCustomersFilter, perPage,
 
 	query = fmt.Sprintf(queryf, "*")
 	query = c.applyView(query)
-	query += " LIMIT :offset, :limit"
+	query += "AND is_deleted=false LIMIT :offset, :limit"
 
 	namedParams["offset"] = (pageNumber - 1) * perPage
 	namedParams["limit"] = perPage

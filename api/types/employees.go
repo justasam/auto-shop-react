@@ -80,3 +80,33 @@ type GetEmployeesResponse struct {
 	PerPage    int        `json:"per_page"`
 	PageNumber int        `json:"page_number"`
 }
+
+// EmployeeSale represents employee sale
+type EmployeeSale struct {
+	ID               string  `db:"id" json:"id"`
+	SoldFor          float64 `db:"sold_for" json:"sold_for"`
+	SoldToCustomerID string  `db:"customer_id" json:"sold_to_customer_id"`
+	VehicleID        string  `db:"vehicle_id" json:"vehicle_id"`
+	SoldByEmployeeID string  `db:"sold_by_employee_id" json:"sold_by_employee_id"`
+}
+
+// EmployeeSales represents all sales of an employee
+type EmployeeSales struct {
+	Sales []EmployeeSale `json:"sales"`
+	Total float64        `json:"total"`
+}
+
+// EmployeePurchase represents employee purchase
+type EmployeePurchase struct {
+	ID                      string  `db:"id" json:"id"`
+	PurchasedFor            float64 `db:"purchased_for" json:"purchased_for"`
+	PurchasedFromCustomerID string  `db:"purchased_from_customer_id" json:"purchased_from_customer_id"`
+	VehicleID               string  `db:"vehicle_id" json:"vehicle_id"`
+	PurchasedByEmployeeID   string  `db:"purchased_by_employee_id" json:"purchased_by_employee_id"`
+}
+
+// EmployeePurchases represents all purchases of an employee
+type EmployeePurchases struct {
+	Purchases []EmployeePurchase `json:"purchases"`
+	Total     float64            `json:"total"`
+}

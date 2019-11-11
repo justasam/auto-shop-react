@@ -26,7 +26,7 @@ func (c *Client) GetBranchByID(id string) (*types.Branch, *types.Error) {
 	query = c.applyView(query)
 
 	var branch types.Branch
-	err := c.db.Get(&branch, query)
+	err := c.db.Get(&branch, query, id)
 	if err != nil {
 		return nil, c.transformError(err)
 	}
@@ -36,8 +36,8 @@ func (c *Client) GetBranchByID(id string) (*types.Branch, *types.Error) {
 
 // CreateBranch creates a new branch in the db
 func (c *Client) CreateBranch(p types.BranchPost) (*types.Branch, *types.Error) {
-	query := `INSERT INTO %s_branches (id, name, address, manager)
-		VALUES (:id, :name, :address, :manager)`
+	query := `INSERT INTO %s_branches (id, name, address)
+		VALUES (:id, :name, :address)`
 	query = c.applyView(query)
 
 	query, args, err := sqlx.Named(query, p)
