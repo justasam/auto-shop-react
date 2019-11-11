@@ -1,1 +1,1 @@
-export { SearchInput, Dropdown, Button } from './Inputs';
+export { SearchInput, Dropdown, Button, Input } from './Inputs';

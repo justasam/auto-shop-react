@@ -18,6 +18,19 @@ const useInput = initialValue => {
   }
 };
 
+const Input = ({width=354, placeholder='Placeholder...', type='text'}) => {
+  const { bind } = useInput('');
+
+  return (
+    <div style={{
+      width: width,
+      position: 'relative'
+    }}>
+      <input type={type} className="input shadow nomp" placeholder={placeholder} {...bind} />
+    </div>
+  );
+}
+
 const SearchInput = ({width=354}) => {
   const { bind } = useInput('');
 
@@ -56,4 +69,4 @@ const Button = ({name, onClick, width=205, className}) => {
   )
 }
 
-export { SearchInput, Dropdown, Button };
+export { SearchInput, Dropdown, Button, Input };

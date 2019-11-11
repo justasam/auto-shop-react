@@ -1,0 +1,29 @@
+.login_form {
+  display: flex;
+  flex-direction: column;
+  background-color: white;
+  border-radius: 10px;
+  border: 1px solid #ddd;
+  box-sizing: border-box;
+  align-items: center;
+  width: 250px;
+  position: fixed;
+  right: 10px;
+  top: 62px;
+  transform-origin: top;
+  transition: 0.3s transform;
+  transform: scaleY(1);
+}
+
+.hidden {
+  transform: scaleY(0) scaleX(0);
+}
+
+.login_form > * {
+  margin: 10px 0;
+}
+
+.login_form > button {
+  color: black;
+  border-color: black;
+}
