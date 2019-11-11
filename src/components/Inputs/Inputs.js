@@ -18,7 +18,7 @@ const useInput = initialValue => {
   }
 };
 
-const Input = ({width=354, placeholder='Placeholder...', type='text'}) => {
+const Input = React.forwardRef(({width=354, placeholder='Placeholder...', type='text'}, ref) => {
   const { bind } = useInput('');
 
   return (
@@ -26,10 +26,10 @@ const Input = ({width=354, placeholder='Placeholder...', type='text'}) => {
       width: width,
       position: 'relative'
     }}>
-      <input type={type} className="input shadow nomp" placeholder={placeholder} {...bind} />
+      <input type={type} className="input shadow nomp" placeholder={placeholder} {...bind} ref={ref}/>
     </div>
   );
-}
+});
 
 const SearchInput = ({width=354}) => {
   const { bind } = useInput('');
