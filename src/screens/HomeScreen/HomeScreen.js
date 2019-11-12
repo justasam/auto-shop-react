@@ -58,7 +58,7 @@ const HomeScreen = props => {
       <BlurryImage src="https://www.tesla.com/ns_videos/commerce/content/dam/tesla/tesla-shop-marketing-imagery/hero-carousel/wall-connector.jpg">
         <SearchGroup />
       </BlurryImage>
-      <Carousel bestSellingMakes />
+      <Carousel data={bestSellingMakes} />
       {/* <Carousel recentlyListedVehicles/> */}
     </div>
   )

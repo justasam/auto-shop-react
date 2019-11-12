@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import { Input, Button } from '../Inputs';
 import forge from 'node-forge';
 import './index.css';
@@ -10,18 +10,27 @@ const sha256 = (pwd) => {
 }
 
 const Login = ({hidden, toggleHidden}) => {
+  let [ clicked, setClicked ] = useState(false);
+
   let uname = React.createRef();
   let pwd = React.createRef();
 
   return (
     <div className={`login_form shadow ${hidden ? 'hidden' : ''}`}>
       <h3>Login</h3>
-      <Input type="text" ref={uname} placeholder="Username" width="200px" />
-      <Input type="password" ref={pwd} placeholder="Password" width="200px" />
+      <Input type="text" clicked={clicked} ref={uname} placeholder="Username" width="200px" />
+      <Input type="password" clicked={clicked} ref={pwd} placeholder="Password" width="200px" />
       <Button name="SIGN IN" width="200px" onClick={async () => {
         // TODO: validate form
         let username = uname.current.value;
-        let password = sha256(pwd.current.value);
+        let password = pwd.current.value;
+
+        if (!username || !password) {
+          setClicked(true);
+          return;
+        }
+
+        password = sha256(password);
 
         const data = { username, password };
 

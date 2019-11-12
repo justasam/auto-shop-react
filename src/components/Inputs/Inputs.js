@@ -11,22 +11,24 @@ const useInput = initialValue => {
     bind: {
       value,
       onChange: event => {
-        console.log(event.target.value);
         setValue(event.target.value);
       }
     }
   }
 };
 
-const Input = React.forwardRef(({width=354, placeholder='Placeholder...', type='text'}, ref) => {
-  const { bind } = useInput('');
+const Input = React.forwardRef(({width=354, placeholder='Placeholder...', type='text', clicked=false}, ref) => {
+  const { value, bind } = useInput('');
 
   return (
     <div style={{
       width: width,
       position: 'relative'
     }}>
-      <input type={type} className="input shadow nomp" placeholder={placeholder} {...bind} ref={ref}/>
+      <input type={type} style={{
+        borderColor: 'red',
+        borderStyle: clicked && value.length === 0 ? 'solid' : 'none'
+      }} className="input shadow nomp" placeholder={placeholder} {...bind} ref={ref}/>
     </div>
   );
 });
