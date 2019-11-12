@@ -24,7 +24,7 @@ const NavBar = () => {
         <li onClick={() => setHidden(!hidden)} className="navbar_link" style={{float: 'left', cursor: 'pointer'}}>SIGN IN</li>
         <li className="navbar_link"><NavLink activeClassName="is-active" to="/Cart"><ShoppingCart height={52} /></NavLink></li>
       </ul>
-      <Login hidden={hidden} />
+      <Login hidden={hidden} toggleHidden={setHidden} />
     </div>
   )
 }

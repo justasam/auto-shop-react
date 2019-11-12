@@ -9,7 +9,7 @@ const sha256 = (pwd) => {
   return md.digest().toHex();
 }
 
-const Login = ({hidden}) => {
+const Login = ({hidden, toggleHidden}) => {
   let uname = React.createRef();
   let pwd = React.createRef();
 
@@ -34,9 +34,11 @@ const Login = ({hidden}) => {
             }
           });
           const jsonRes = await res.json();
+          toggleHidden(!hidden);
         }
         catch (error) {
           console.error('Error:', error)
+          toggleHidden(!hidden);
         }
 
       }}></Button>

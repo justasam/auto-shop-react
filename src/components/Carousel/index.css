@@ -1,0 +1,13 @@
+.slick-arrow::before {
+  display: none !important;
+}
+
+.slick-arrow > svg {
+  display: block;
+  margin: 0 auto;
+}
+
+.slick-slide {
+  box-sizing: border-box;
+  padding: 0 5px;
+}
