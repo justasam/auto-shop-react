@@ -8,7 +8,7 @@ import './index.css';
 const HomeScreen = props => {
 
   const [bestSellingMakes, setBestSellingMakes] = useState([])
-  const [recentlyListedVehicles, setRecentlyListedVehicles] = useState([])
+  const [recentlyListedVehicles, setRecentlyListedVehicles] = useState({})
   useEffect(() => {
     async function getTopSellers() {
         const response = await fetch(
@@ -28,7 +28,6 @@ const HomeScreen = props => {
               description: "",
             }
         })
-        console.log(data)
         setBestSellingMakes(data);
     };
 
@@ -51,7 +50,6 @@ const HomeScreen = props => {
     getTopSellers();
     getRecentlyListedVehicles();
   }, []);
-
 
   return (
     <div>

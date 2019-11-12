@@ -77,6 +77,8 @@ const Carousel = data => ({
   title='BEST SELLING MAKES',
   items=data,
 }) => {
+  console.log(items);
+  console.log(data);
   const settings = {
     dots: false,
     infinite: true,
