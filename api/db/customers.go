@@ -3,6 +3,7 @@ package db
 import (
 	"database/sql"
 	"fmt"
+	"strings"
 	"time"
 
 	"github.com/jmoiron/sqlx"
@@ -62,7 +63,7 @@ func (c *Client) CreateCustomer(p types.CustomerPost) (*types.Customer, *types.E
 // GetCustomers returns customers
 func (c *Client) GetCustomers(filter *types.GetCustomersFilter, perPage,
 	pageNumber int) ([]types.Customer, int, *types.Error) {
-	queryf := `SELECT %s FROM %%s_customers`
+	queryf := `SELECT %s FROM %%s_customers `
 	queryf, namedParams := applyCustomerFilter(queryf, *filter)
 
 	query := fmt.Sprintf(queryf, "count(*)")
@@ -81,7 +82,7 @@ func (c *Client) GetCustomers(filter *types.GetCustomersFilter, perPage,
 
 	query = fmt.Sprintf(queryf, "*")
 	query = c.applyView(query)
-	query += "AND is_deleted=false LIMIT :offset, :limit"
+	query += " LIMIT :offset, :limit"
 
 	namedParams["offset"] = (pageNumber - 1) * perPage
 	namedParams["limit"] = perPage
@@ -179,6 +180,16 @@ func (c *Client) UpdateCustomer(id string, p types.CustomerPut) (*types.Customer
 }
 func applyCustomerFilter(query string, filter types.GetCustomersFilter) (string, map[string]interface{}) {
 	namedParams := map[string]interface{}{}
+	subQuery := ""
+	if filter.IsDeleted != nil {
+		namedParams["is_deleted"] = *filter.IsDeleted
+		subQuery += "AND is_deleted=:is_deleted"
+	}
+
+	if len(subQuery) > 0 {
+		subQuery = strings.TrimPrefix(subQuery, "AND")
+		query += "WHERE " + subQuery
+	}
 
 	return query, namedParams
 }

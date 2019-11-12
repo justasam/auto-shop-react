@@ -135,7 +135,7 @@ func CreateRouter(params ContextParams) *echo.Echo {
 	// Swagger UI
 	r.GET("/autoshop/api/json", echo.WrapHandler(autoshopAPI.Handler(true)), CheckSession())
 
-	api := r.Group("", sv.SwaggerValidatorEcho(autoshopAPI), DefaultContentType(), CheckSession())
+	api := r.Group("", sv.SwaggerValidatorEcho(autoshopAPI), DefaultContentType(), CheckSession(), Pagination())
 	autoshopAPI.Walk(func(path string, endpoint *swagger.Endpoint) {
 		h := endpoint.Handler.(func(c echo.Context) error)
 		path = swag.ColonPath(path)
@@ -170,6 +170,7 @@ func CreateSwaggerAPI() *swagger.API {
 				employeeAPI(),
 				accountsAPI(),
 				branchesAPI(),
+				enquiriesAPI(),
 			)...,
 		),
 	)

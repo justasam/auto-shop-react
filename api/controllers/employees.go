@@ -325,11 +325,3 @@ func GetEmployeesPurchases(c echo.Context) error {
 		Purchases: purchases,
 	})
 }
-
-func getOptionalString(c echo.Context, param string) *string {
-	val := c.QueryParam(param)
-	if val != "" {
-		return &val
-	}
-	return nil
-}

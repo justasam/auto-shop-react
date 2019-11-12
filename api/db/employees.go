@@ -6,6 +6,8 @@ import (
 	"strings"
 
 	"autoshop/api/types"
+
+	"github.com/jmoiron/sqlx"
 )
 
 // CreateEmployee creates a new employee in the db
@@ -127,7 +129,12 @@ func (c *Client) UpdateEmployee(id string, p types.EmployeePut) (*types.Employee
 		WHERE id=:id`
 	query = c.applyView(query)
 
-	_, err := c.ex.Exec(query, p)
+	query, args, err := sqlx.Named(query, p)
+	if err != nil {
+		return nil, c.transformError(err)
+	}
+
+	_, err = c.ex.Exec(query, args...)
 	if err != nil {
 		return nil, c.transformError(err)
 	}
@@ -226,36 +233,6 @@ func (c *Client) GetEmployeesPurchases() ([]types.EmployeePurchase, *types.Error
 	}
 
 	return purchases, nil
-}
-
-// SellVehicle marks vehicle as sold and enters a sale entry
-func (c *Client) SellVehicle(p types.VehicleSalePost) *types.Error {
-	query := `INSERT INTO %s_vehicle_sales (id, customer_id, sold_for, sold_by_employee_id, vehicle_id)
-		VALUES(?, ?, ?, ?, ?)`
-	var err error
-	c, err = c.Begin()
-	if err != nil {
-		return c.transformError(err)
-	}
-	defer c.End()
-
-	_, err = c.ex.Exec(query, p.ID, p.SoldToCustomerID, p.SoldFor, p.EmployeeID, p.VehicleID)
-	if err != nil {
-		return c.transformError(err)
-	}
-
-	query = `UPDATE %s_vehicles SET is_sold=true WHERE id=?`
-	_, err = c.ex.Exec(query, p.VehicleID)
-	if err != nil {
-		return c.transformError(err)
-	}
-
-	err = c.Commit()
-	if err != nil {
-		return c.transformError(err)
-	}
-
-	return nil
 }
 
 func applyEmployeeFilter(query string, filter types.GetEmployeesFilter) (string, map[string]interface{}) {

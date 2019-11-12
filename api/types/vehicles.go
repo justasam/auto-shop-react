@@ -59,6 +59,7 @@ type Vehicle struct {
 	Description     string    `db:"description" json:"description"`
 	Specificaction  string    `db:"specification" json:"specificaction"`
 	Listed          bool      `db:"listed" json:"listed"`
+	IsSold          bool      `db:"is_sold" json:"is_sold"`
 	Images          []string  `json:"images"`
 	CreatedAt       time.Time `db:"created_at" json:"created_at"`
 
@@ -85,13 +86,35 @@ type VehiclePost struct {
 	Engine          float64 `db:"engine" json:"engine" binding:"required" minimum:"0"`
 	Description     string  `db:"description" json:"description" binding:"required"`
 	Drivetrain      string  `db:"drivetrain" json:"drivetrain" binding:"required" min_length:"1"`
-	Specificaction  *string `db:"specificaction" json:"specificaction,omitempty"`
+	Specificaction  *string `db:"specification" json:"specificaction,omitempty"`
 
 	Images     []string `json:"images" binding:"required" min_items:"1"`
 	CustomerID string   `json:"customer_id" binding:"required"`
-	BoughtFor  float64  `json:"bought_for" binding:"required"`
 	EmployeeID string   `json:"-"`
+	BoughtFor  float64  `json:"bought_for" binding:"required"`
 	ImagePaths []string `json:"-"`
+}
+
+// VehiclePut represents the vehicle update payload
+type VehiclePut struct {
+	Make            string  `db:"make" json:"make" binding:"required" min_length:"1"`
+	Model           string  `db:"model" json:"model" binding:"required" min_length:"1"`
+	Year            string  `db:"year" json:"year" binding:"required" pattern:"^\\d{4}$"`
+	Price           float64 `db:"price" json:"price" binding:"required" minimum:"1"`
+	Milage          int     `db:"milage" json:"milage" binding:"required"`
+	BodyType        string  `db:"body_type" json:"body_type" binding:"required" min_length:"1"`
+	FuelType        string  `db:"fuel_type" json:"fuel_type" binding:"required" min_length:"1"`
+	Doors           int     `db:"doors" json:"doors" binding:"required" minimum:"1"`
+	Gearbox         string  `db:"gearbox" json:"gearbox" binding:"required" min_length:"1"`
+	Seats           int     `db:"seats" json:"seats" binding:"required" minimum:"1"`
+	FuelConsumption float64 `db:"fuel_consumption" json:"fuel_consumption" binding:"required" minimum:"0"`
+	Colour          string  `db:"colour" json:"colour" binding:"required" min_length:"1"`
+	Engine          float64 `db:"engine" json:"engine" binding:"required" minimum:"0"`
+	Description     string  `db:"description" json:"description" binding:"required"`
+	Drivetrain      string  `db:"drivetrain" json:"drivetrain" binding:"required" min_length:"1"`
+	Specificaction  *string `db:"specification" json:"specificaction,omitempty"`
+
+	ID string `db:"id" json:"-"`
 }
 
 // VehiclePurchaseEntryPost payload for creating vehicle purchase record

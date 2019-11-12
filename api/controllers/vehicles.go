@@ -314,13 +314,88 @@ func SellVehicle(c echo.Context) error {
 	return c.JSON(http.StatusOK, "")
 }
 
+// UpdateVehicle updates a vehicle
+func UpdateVehicle(c echo.Context) error {
+	accountType := c.Get("account_type").(string)
+	vehicleID := c.Param("vehicle_id")
+
+	if accountType != types.EmployeeAccount && accountType != types.AdminAccount {
+		return echo.NewHTTPError(http.StatusForbidden)
+	}
+
+	var payload types.VehiclePut
+	err := c.Bind(&payload)
+	if err != nil {
+		return echo.NewHTTPError(http.StatusBadRequest, validatorError(err))
+	}
+
+	db, err := db.Connect(accountType)
+	if err != nil {
+		return fmt.Errorf("Error connecting to the database: %s", err)
+	}
+	defer db.Close()
+
+	// Get the vehicle to check if it exists
+	vehicle, dbErr := db.GetVehicle(vehicleID)
+	if dbErr != nil {
+		return dbErr
+	}
+
+	if vehicle == nil {
+		return echo.NewHTTPError(http.StatusNotFound)
+	}
+
+	payload.ID = vehicle.ID
+	vehicle, dbErr = db.UpdateVehicle(payload)
+	if dbErr != nil {
+		return dbErr
+	}
+
+	return c.JSON(http.StatusOK, vehicle)
+}
+
+// // DeleteVehiclePicture deletes picture
+// func DeleteVehiclePicture(c echo.Context) error {
+// 	accountType := c.Get("account_type").(string)
+// 	vehicleID := c.Param("vehicle_id")
+// 	image := c.QueryParam("image")
+
+// 	if accountType != types.AdminAccount && accountType != types.EmployeeAccount {
+// 		return echo.NewHTTPError(http.StatusForbidden)
+// 	}
+
+// 	db, err := db.Connect(accountType)
+// 	if err != nil {
+// 		return fmt.Errorf("Error connecting to the database: %s", err)
+// 	}
+// 	defer db.Close()
+
+// 	// Get the vehicle to check if it exists
+// 	vehicle, dbErr := db.GetVehicle(vehicleID)
+// 	if dbErr != nil {
+// 		return dbErr
+// 	}
+
+// 	if vehicle == nil {
+// 		return echo.NewHTTPError(http.StatusNotFound)
+// 	}
+
+// 	images := vehicle.Images
+// }
+
 func getQueryParam(t reflect.Kind, param string, c echo.Context) interface{} {
+	p := c.QueryParam(param)
 	switch t {
 	case reflect.Int:
-		r, _ := strconv.Atoi(c.QueryParam(param))
+		r, _ := strconv.Atoi(p)
 		return r
 	case reflect.String:
-		return c.Param(param)
+		return p
+	case reflect.Bool:
+		if p == "true" {
+			return true
+		}
+		return false
 	default:
 		return fmt.Errorf("Unsupported type %s", t)
 	}

@@ -3,7 +3,6 @@ package controllers
 import (
 	"fmt"
 	"net/http"
-	"reflect"
 
 	"github.com/labstack/echo/v4"
 	uuid "github.com/satori/go.uuid"
@@ -42,11 +41,15 @@ func CreateCustomer(c echo.Context) error {
 // GetCustomers returns a list of customers
 func GetCustomers(c echo.Context) error {
 	accountType := c.Get("account_type").(string)
-	perPage := getQueryParam(reflect.Int, "per_page", c).(int)
-	pageNumber := getQueryParam(reflect.Int, "page_number", c).(int)
+	perPage := c.Get("per_page").(int)
+	pageNumber := c.Get("page_number").(int)
 
 	if accountType != types.EmployeeAccount && accountType != types.AdminAccount {
 		return echo.NewHTTPError(http.StatusForbidden)
+	}
+
+	filter := &types.GetCustomersFilter{
+		IsDeleted: getOptionalBool("is_deleted", c),
 	}
 
 	// Establish admin connection
@@ -56,7 +59,7 @@ func GetCustomers(c echo.Context) error {
 	}
 	defer db.Close()
 
-	customers, total, dbErr := db.GetCustomers(&types.GetCustomersFilter{}, perPage, pageNumber)
+	customers, total, dbErr := db.GetCustomers(filter, perPage, pageNumber)
 	if dbErr != nil {
 		return dbErr
 	}
@@ -175,4 +178,43 @@ func UpdateCustomer(c echo.Context) error {
 	}
 
 	return c.JSON(http.StatusOK, customer)
+}
+
+// GetCustomerEnquiries returns enquiries
+func GetCustomerEnquiries(c echo.Context) error {
+	accountType := c.Get("account_type").(string)
+	ownerID := c.Get("owner_id").(string)
+	customerID := c.Param("customer_id")
+	perPage := c.Get("per_page").(int)
+	pageNumber := c.Get("page_number").(int)
+
+	if accountType != types.AdminAccount &&
+		accountType != types.EmployeeAccount &&
+		ownerID != customerID {
+		return echo.NewHTTPError(http.StatusForbidden)
+	}
+
+	filter := &types.GetEnquiriesFilter{
+		Resolved:   getOptionalBool("resolved", c),
+		Type:       getOptionalString("type", c),
+		CustomerID: &customerID,
+	}
+
+	db, err := db.Connect(accountType)
+	if err != nil {
+		return fmt.Errorf("Error connecting to the database: %s", err)
+	}
+	defer db.Close()
+
+	enquiries, total, dbErr := db.GetEnquiries(filter, pageNumber, perPage)
+	if dbErr != nil {
+		return dbErr
+	}
+
+	return c.JSON(http.StatusOK, types.GetEnquiriesResponse{
+		Objects:    enquiries,
+		Total:      total,
+		PerPage:    perPage,
+		PageNumber: pageNumber,
+	})
 }

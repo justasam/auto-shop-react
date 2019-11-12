@@ -28,11 +28,15 @@ func customerAPI() []*swagger.Endpoint {
 				Default:     "10",
 				Minimum:     &[]int64{1}[0], // fugly but that's the only way to take temporary address
 			},
-			"page_number": {
+			"page": {
 				Type:        "integer",
-				Description: "Records per page",
+				Description: "Page number",
 				Default:     "1",
 				Minimum:     &[]int64{1}[0], // fugly but that's the only way to take temporary address
+			},
+			"is_deleted": {
+				Type:        "boolean",
+				Description: "Customer state",
 			},
 		}),
 		endpoint.Tags("Customers"),
@@ -60,11 +64,42 @@ func customerAPI() []*swagger.Endpoint {
 		endpoint.Tags("Customers"),
 	)
 
+	getCustomerEnquiries := endpoint.New("GET", "/customers/{customer_id}/enquiries", "Get customer enquiries",
+		endpoint.Handler(controllers.GetCustomerEnquiries),
+		endpoint.Response(http.StatusOK, types.GetEnquiriesResponse{}, "Successful"),
+		endpoint.Path("customer_id", "string", "uuid", "UUID of a customer"),
+		endpoint.QueryMap(map[string]swagger.Parameter{
+			"per_page": {
+				Type:        "integer",
+				Description: "Records per page",
+				Default:     "10",
+				Minimum:     &[]int64{1}[0], // fugly but that's the only way to take temporary address
+			},
+			"page": {
+				Type:        "integer",
+				Description: "Page number",
+				Default:     "1",
+				Minimum:     &[]int64{1}[0], // fugly but that's the only way to take temporary address
+			},
+			"resolved": {
+				Type:        "boolean",
+				Description: "Equiry resolution",
+			},
+			"type": {
+				Type:        "string",
+				Enum:        []string{"vehicle-purchase", "vehicle-sale", "service"},
+				Description: "Type of the enquiry",
+			},
+		}),
+		endpoint.Tags("Customers"),
+	)
+
 	return []*swagger.Endpoint{
 		createCustomer,
 		getCustomers,
 		getCustomer,
 		updateCustomer,
 		deleteCustomer,
+		getCustomerEnquiries,
 	}
 }

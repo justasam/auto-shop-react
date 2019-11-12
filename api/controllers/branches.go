@@ -6,7 +6,6 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/davecgh/go-spew/spew"
 	"github.com/labstack/echo/v4"
 	uuid "github.com/satori/go.uuid"
 )
@@ -52,7 +51,6 @@ func GetBranchByID(c echo.Context) error {
 func CreateBranch(c echo.Context) error {
 	accountType := c.Get("account_type").(string)
 
-	spew.Dump(accountType)
 	if accountType != types.AdminAccount {
 		return echo.NewHTTPError(http.StatusForbidden, "Branch can only be created by an admin")
 	}

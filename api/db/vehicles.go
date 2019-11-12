@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"strings"
 
+	"github.com/jmoiron/sqlx"
 	uuid "github.com/satori/go.uuid"
 
 	"autoshop/api/types"
@@ -12,8 +13,7 @@ import (
 
 // GetVehicles returns vehicles
 func (c *Client) GetVehicles(filter *types.GetVehiclesFilter, pageNumber, perPage int) ([]types.Vehicle, int, *types.Error) {
-	queryf := `SELECT %s FROM %%s_vehicles v 
-		JOIN %%s_vehicle_pictures vp ON vp.vehicle_id = v.id `
+	queryf := `SELECT %s FROM %%s_vehicles v `
 	queryf, namedParams := applyVehicleFilter(queryf, filter)
 
 	// Select total for pagination
@@ -31,6 +31,10 @@ func (c *Client) GetVehicles(filter *types.GetVehiclesFilter, pageNumber, perPag
 		return nil, 0, c.transformError(err)
 	}
 
+	queryf = `SELECT %s FROM %%s_vehicles v 
+		JOIN %%s_vehicle_pictures vp ON vp.vehicle_id = v.id`
+	queryf, namedParams = applyVehicleFilter(queryf, filter)
+
 	query = fmt.Sprintf(queryf, "v.*, GROUP_CONCAT(vp.file_name) AS vehicle_pictures")
 	query = c.applyView(query)
 	query += " GROUP BY id LIMIT :offset, :limit"
@@ -47,6 +51,10 @@ func (c *Client) GetVehicles(filter *types.GetVehiclesFilter, pageNumber, perPag
 	err = nstmt.Select(&vehicles, namedParams)
 	if err != nil {
 		return nil, 0, c.transformError(err)
+	}
+
+	for i, v := range vehicles {
+		vehicles[i].Images = strings.Split(v.UnsplitImagePaths, ",")
 	}
 
 	return vehicles, total, nil
@@ -281,6 +289,64 @@ func (c *Client) DeleteVehicleMake(name string) *types.Error {
 	}
 
 	return nil
+}
+
+// SellVehicle marks vehicle as sold and enters a sale entry
+func (c *Client) SellVehicle(p types.VehicleSalePost) *types.Error {
+	query := `INSERT INTO %s_vehicle_sales (id, customer_id, sold_for, sold_by_employee_id, vehicle_id)
+		VALUES(?, ?, ?, ?, ?)`
+	var err error
+	c, err = c.Begin()
+	if err != nil {
+		return c.transformError(err)
+	}
+	defer c.End()
+
+	_, err = c.ex.Exec(query, p.ID, p.SoldToCustomerID, p.SoldFor, p.EmployeeID, p.VehicleID)
+	if err != nil {
+		return c.transformError(err)
+	}
+
+	query = `UPDATE %s_vehicles SET is_sold=true WHERE id=?`
+	_, err = c.ex.Exec(query, p.VehicleID)
+	if err != nil {
+		return c.transformError(err)
+	}
+
+	err = c.Commit()
+	if err != nil {
+		return c.transformError(err)
+	}
+
+	return nil
+}
+
+// UpdateVehicle updates a vehicle
+func (c *Client) UpdateVehicle(p types.VehiclePut) (*types.Vehicle, *types.Error) {
+	query := `UPDATE %s_vehicles SET make=:make, model=:model, year=:year,
+		price=:price, milage=:milage, body_type=:body_type, fuel_type=:fuel_type, 
+		doors=:doors, gearbox=:gearbox, seats=:seats, fuel_consumption=:fuel_consumption, 
+		colour=:colour, engine=:engine, description=:description, drivetrain=:drivetrain, 
+		specification=:specification WHERE id=:id`
+	query = c.applyView(query)
+
+	query, args, err := sqlx.Named(query, p)
+	if err != nil {
+		return nil, c.transformError(err)
+	}
+
+	_, err = c.ex.Exec(query, args...)
+	if err != nil {
+		return nil, c.transformError(err)
+	}
+
+	// Get the employee back
+	vehicle, dbErr := c.GetVehicle(p.ID)
+	if dbErr != nil {
+		return nil, dbErr
+	}
+
+	return vehicle, nil
 }
 
 func applyVehicleFilter(query string, filter *types.GetVehiclesFilter) (string, map[string]interface{}) {

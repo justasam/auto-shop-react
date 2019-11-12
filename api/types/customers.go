@@ -50,7 +50,9 @@ func (s Customer) MarshalJSON() ([]byte, error) {
 }
 
 // GetCustomersFilter customers filter
-type GetCustomersFilter struct{}
+type GetCustomersFilter struct {
+	IsDeleted *bool
+}
 
 // GetCustomersResponse represents GET ALL customers
 type GetCustomersResponse struct {
