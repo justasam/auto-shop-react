@@ -32,6 +32,36 @@
   padding: 20px 0;
 }
 
+/* select alt */
+.dropdownalt {
+  display: inline-block;
+  position: relative;
+  justify-items: center;
+  align-content: center;
+}
+.selectalt {
+  margin: 0 10px;
+  background-color: none;
+  padding-right: 25px;
+  background-color: transparent;
+  outline: none;
+  border: none;
+  font-size: 18px;
+}
+.selectalt option {
+  padding-right: 20px;
+}
+.selectalt_icon {
+  position: absolute;
+  right: 10px;
+  top: 0px;
+  pointer-events: none;
+}
+.selectalt_title {
+  font-size: 18px;
+  font-weight: 500;
+}
+
 .button {
   position: relative;
   height: 50px;

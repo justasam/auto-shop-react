@@ -63,6 +63,20 @@ const Dropdown = ({name, options, width=170}) => {
   )
 }
 
+const DropdownAlt = ({name, options, title}) => {
+  return (
+    <div className='dropdownalt'>
+      <span className='textshadow nomp selectalt_title'>{title}</span>
+      <select name={name} className='textshadow nomp select selectalt'>
+        {options.map((opt, i) =>
+          <option value={opt.value} key={i}>{opt.name}</option>
+        )}
+      </select>
+      <ChevronDown size={24} color='#000' height={24} className='selectalt_icon' />
+    </div>
+  )
+}
+
 const Button = ({name, onClick, width=205, className}) => {
   return (
     <button onClick={onClick} style={{
@@ -71,4 +85,4 @@ const Button = ({name, onClick, width=205, className}) => {
   )
 }
 
-export { SearchInput, Dropdown, Button, Input };
+export { SearchInput, Dropdown, Button, Input, DropdownAlt };
