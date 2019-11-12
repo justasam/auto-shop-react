@@ -72,9 +72,10 @@ const ModernArrow = props => {
 //   );
 // }
 
-const Carousel = ({
-  title='BEST SELLERS',
-  items=mockData,
+
+const Carousel = data => ({
+  title='BEST SELLING MAKES',
+  items=data,
 }) => {
   const settings = {
     dots: false,
