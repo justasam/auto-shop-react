@@ -1,0 +1,32 @@
+#banner {
+    width: 100%;
+    height: 80vh;
+    overflow: hide;
+    object-fit: cover;
+    transition: all 1s ease;
+    background-attachment: fixed;
+    background-position: center center;
+    background-size: cover;
+    background-color: gray;
+    height: 100vh;
+    position: relative;
+    transition: all 1s linear;
+    background-attachment: fixed;
+    background-position: center center;
+    background-size: cover;
+    background-image: url('//www.tesla.com/ns_videos/commerce/content/dam/tesla/tesla-shop-marketing-imagery/hero-carousel/wall-connector.jpg');
+}
+
+#banner::after {
+    background-image: linear-gradient(top, rgba(23, 24, 32, .6), rgba(23, 24, 32, .6)), url("//imgur.com/J1xn03S.png");
+    background-image: -moz-linear-gradient(top, rgba(23, 24, 32, .6), rgba(23, 24, 32, .6)), url("//imgur.com/J1xn03S.png");
+    background-image: -ms-linear-gradient(top, rgba(23, 24, 32, .6), rgba(23, 24, 32, .6)), url("//imgur.com/J1xn03Sg");
+    background-image: -webkit-linear-gradient(top, rgba(23, 24, 32, .6), rgba(23, 24, 32, .6)), url("//imgur.com/J1xn03S.png");
+    content: '';
+    display: block;
+    height: 100%;
+    left: 0;
+    position: absolute;
+    top: 0;
+    width: 100%;
+}

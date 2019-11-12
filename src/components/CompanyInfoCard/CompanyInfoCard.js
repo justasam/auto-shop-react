@@ -4,10 +4,10 @@ import './index.css';
 const CompanyInfoCard = props => {
     let fackData = [];
 
-    for (var i = 0; i < 10; i++) {
+    for (var i = 0; i < 9; i++) {
         fackData.push(
             <li className="CompanyInfoCards__item">
-                <div className="card">
+                <div className="CompanyInfoCards__container">
                     <div className="card__image card__image--fence"></div>
                     <div className="card__content">
                         <div className="card__title">Company</div>

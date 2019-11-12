@@ -3,11 +3,21 @@
     flex-wrap: wrap;
     list-style: none;
     padding: 0;
+    align-items: center;
+    justify-content: center;
 }
 
 .CompanyInfoCards button {
     border-radius: 30px;
     outline: none;
+    border: none;
+    color: white;
+    transition: all 1s ease;
+    background-color: rgb(2, 176, 189);
+}
+
+.CompanyInfoCards button:hover {
+    background-color: rgb(0, 215, 231);
 }
 
 .CompanyInfoCards__item {
@@ -30,7 +40,7 @@
     }
 }
 
-.card {
+.CompanyInfoCards__container {
     width: 100%;
     background-color: white;
     display: flex;
@@ -38,7 +48,7 @@
     overflow: hidden;
 }
 
-.card:hover .card__image {
+.CompanyInfoCards__container:hover .card__image {
     -webkit-filter: contrast(100%);
     filter: contrast(100%);
 }
@@ -59,9 +69,9 @@
     background-size: cover;
     border-top-left-radius: 0.25rem;
     border-top-right-radius: 0.25rem;
-    -webkit-filter: contrast(70%);
-    filter: contrast(70%);
-    border-radius: 20px;
+    -webkit-filter: contrast(90%);
+    filter: contrast(90%);
+    border-radius: 10px;
     overflow: hidden;
     position: relative;
     transition: -webkit-filter 0.5s cubic-bezier(0.43, 0.41, 0.22, 0.91);
