@@ -73,7 +73,23 @@ const Carousel = ({
     slidesToScroll: 1,
     nextArrow: <ModernArrow left={false} />,
     prevArrow: <ModernArrow />
+  };
+
+  this.swiping = false;
+  this.carouselRef = React.createRef();
+
+  this.handleMouseDown = event => {
+    event.preventDefault();
   }
+  this.handleMouseUp = () => {
+    this.swiping = this.carouselRef.current.innerSlider.state.swiping;
+  }
+  this.handleClick = event => {
+    if (this.swiping) {
+      event.preventDefault();
+    }
+  }
+
   return (
     <div className='carousel_wrapper' style={{
       margin: 25,
@@ -83,12 +99,12 @@ const Carousel = ({
       <h3>{title}</h3>
       <Slider {...settings} style={{
         padding: '0 100px'
-      }}>
+      }} ref={this.carouselRef}>
         {items.map((item, i) => (
           <div style={{
             border: '2px solid red',
             margin: '0 10px'
-          }} key={i}>
+          }} key={i} onClickCapture={this.handleClick} onMouseUpCapture={this.handleMouseUp} onMouseDownCapture={this.handleMouseDown}>
           <Link  to={item.link}>
             <img style={{
               width: '100%',
