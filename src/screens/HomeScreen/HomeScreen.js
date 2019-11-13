@@ -47,6 +47,15 @@ const HomeScreen = props => {
         );
 
         let data = await response.json();
+        data = data.objects.map(function(item, index) {
+          return{
+            title: item.make + ' ' + item.model,
+            image: item.images[0],
+            link: "",
+            description: item.description,
+          }
+        });
+        console.log(data);
         setRecentlyListedVehicles(data);
     };
 
@@ -59,8 +68,8 @@ const HomeScreen = props => {
       <BlurryImage src="https://www.tesla.com/ns_videos/commerce/content/dam/tesla/tesla-shop-marketing-imagery/hero-carousel/wall-connector.jpg">
         <SearchGroup />
       </BlurryImage>
-      <Carousel data={bestSellingMakes} />
-      {/* <Carousel recentlyListedVehicles/> */}
+      <Carousel items={bestSellingMakes} />
+      {/* <Carousel items={recentlyListedVehicles} /> */}
     </div>
   )
 }

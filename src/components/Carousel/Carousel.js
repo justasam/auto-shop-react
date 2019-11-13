@@ -73,12 +73,10 @@ const ModernArrow = props => {
 // }
 
 
-const Carousel = data => ({
+const Carousel = ({
   title='BEST SELLING MAKES',
-  items=data,
+  items=mockData,
 }) => {
-  console.log(items);
-  console.log(data);
   const settings = {
     dots: false,
     infinite: true,
@@ -91,7 +89,7 @@ const Carousel = data => ({
     <div className='carousel_wrapper' style={{
       margin: 25,
       maxWidth: '100vw',
-      height: 300
+      height: 100
     }}>
       <h3>{title}</h3>
       <Slider {...settings} style={{
