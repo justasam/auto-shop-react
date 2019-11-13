@@ -5,9 +5,6 @@ import { Carousel } from '../../components/Carousel';
 
 import './index.css';
 
-// TODO: REMOVE
-import { DropdownAlt } from '../../components/Inputs';
-
 const HomeScreen = props => {
 
   const [bestSellingMakes, setBestSellingMakes] = useState([])

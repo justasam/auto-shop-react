@@ -1,6 +1,7 @@
 import React from 'react';
 import { HomeScreen } from './screens/HomeScreen';
 import { Parts } from './screens/Parts';
+import { PartsAlt } from './screens/PartsAlt';
 import { Cart } from './screens/Cart';
 import { Branches } from './screens/Branches';
 import { NoMatch } from './screens/NoMatch';
@@ -18,6 +19,7 @@ export const Routes = () => {
       <Switch>
         <Route exact path="/Home" component={HomeScreen} />
         <Route exact path="/Parts" component={Parts} />
+        <Route exact path="/PartsAlt" component={PartsAlt} />
         <Route exact path="/Branches" component={Branches} />
         <Route exact path="/Cart" component={Cart} />
         <Route exact path="/Login" component={Login} />
