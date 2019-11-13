@@ -27,6 +27,7 @@ type GetVehiclesFilter struct {
 	EngineTo        *float64 `json:"engine_to,omitempty"`
 	PerPage         int      `json:"per_page" minimum:"1" default:"10"`
 	PageNumber      int      `json:"page_num" minimum:"1" default:"1"`
+	Listed          *bool    `json:"listed"`
 
 	ListedAtLatest *string
 }
@@ -153,10 +154,10 @@ type VehicleMake struct {
 
 // VehicleSalePost represents post payload for vehicle sale
 type VehicleSalePost struct {
-	SoldFor          string `json:"sold_for" binding:"required"`
-	SoldToCustomerID string `json:"sold_ot" format:"uuid" binding:"required"`
+	SoldFor          float64 `json:"sold_for" binding:"required"`
+	SoldToCustomerID string  `json:"sold_to" format:"uuid" binding:"required"`
 
-	ID         string
-	EmployeeID string
-	VehicleID  string
+	ID         string `json:"-"`
+	EmployeeID string `json:"-"`
+	VehicleID  string `json:"-"`
 }

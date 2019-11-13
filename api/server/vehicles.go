@@ -56,6 +56,7 @@ func vehiclesAPI() []*swagger.Endpoint {
 	sellVehicle := endpoint.New("POST", "/vehicles/{vehicle_id}/sold", "Mark vehicle as sold",
 		endpoint.Handler(controllers.SellVehicle),
 		endpoint.Response(http.StatusCreated, "", "Success"),
+		endpoint.Path("vehicle_id", "string", "uuid", "Vehicle id"),
 		endpoint.Body(types.VehicleSalePost{}, "Vehicle sale payload", true),
 		endpoint.Tags("Vehicles"),
 	)
