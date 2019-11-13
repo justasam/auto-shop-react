@@ -33,7 +33,7 @@ const FormalizeVehiclePurchase = () => {
 
         async function getMakes() {
             const response = await fetch(
-                "/autoshop/vehicles/makes",
+                "/autoshop/api/vehicles/makes",
                 {
                     method: "GET",
                     headers: {
@@ -55,7 +55,7 @@ const FormalizeVehiclePurchase = () => {
 
         getCustomers();
         getMakes();
-    });
+    }, []);
 
 
     let make = React.createRef();
@@ -80,49 +80,54 @@ const FormalizeVehiclePurchase = () => {
     return (
         <div className="vehicle-purchases-form">
             <h2>Formalise Vehicle Purchase</h2>
-            <div className="wrapper" style={{
+            <div style={{
                 display: 'grid',
-                gridTemplateColumns: '1fr 1fr'
+                gridTemplateColumns: '1fr 1fr 1fr'
             }}>
                 <div>
                     <h4>Customer the vehicle was bought from</h4>
                     <Dropdown ref={customerID} options={customers} validate={["isntEMPTY"]} width="300px"/>
                     <h4>Vehicle Make</h4>
-                    <Dropdown ref={make} options={makes} width="300px"/>
+                    <Dropdown ref={make} options={makes} validate={["isntEMPTY"]} width="300px"/>
                     <h4>Vehicle Model</h4>
-                    <Input type="text" ref={model} width="300px"/>
+                    <Input type="text" ref={model} validate={["isntEMPTY"]} width="300px"/>
                     <h4>Vehicle Year</h4>
-                    <Input type="text" ref={year} width="300px"/>
+                    <Input type="text" ref={year} validate={["isntEMPTY"]} width="300px"/>
                     <h4>Vehicle Price</h4>
-                    <Input type="text" ref={price} width="300px"/>
+                    <Input type="text" ref={price} validate={["isntEMPTY", "validFLOAT"]} width="300px"/>
                     <h4>Vehicle Milage</h4>
-                    <Input type="text" ref={milage} width="300px"/>
+                    <Input type="text" ref={milage} validate={["isntEMPTY", "validINT"]} width="300px"/>
                     <h4>Vehicle Body Type</h4>
-                    <Input type="text" ref={bodyType} width="300px"/>
+                    <Input type="text" ref={bodyType} validate={["isntEMPTY"]} width="300px"/>
                     <h4>Vehicle Fuel Type</h4>
-                    <Input type="text" ref={fuelType} width="300px"/>
-                    <h4>Vehicle Doors</h4>
-                    <Input type="text" ref={doors} width="300px"/>
+                    <Input type="text" ref={fuelType} validate={["isntEMPTY"]} width="300px"/>
                 </div>
                 <div>
+                    <h4>Vehicle Doors</h4>
+                    <Input type="text" ref={doors} validate={["isntEMPTY", "isntINT"]}  width="300px"/>
                     <h4>Vehicle Gearbox</h4>
-                    <Input type="text" ref={gearbox} width="300px"/>
+                    <Input type="text" ref={gearbox} validate={["isntEMPTY"]} width="300px"/>
                     <h4>Vehicle Seats</h4>
-                    <Input type="text" ref={seats} width="300px"/>
+                    <Input type="text" ref={seats} validate={["isntEMPTY", "isntINT"]} width="300px"/>
                     <h4>Vehicle Fuel Consumption</h4>
-                    <Input type="text" ref={fuelConsumption} width="300px"/>
+                    <Input type="text" ref={fuelConsumption} validate={["isntEMPTY", "isntFLOAT"]} width="300px"/>
                     <h4>Vehicle Colour</h4>
-                    <Input type="text" ref={colour} width="300px"/>
+                    <Input type="text" ref={colour} validate={["isntEMPTY"]} width="300px"/>
                     <h4>Vehicle Engine</h4>
-                    <Input type="text" ref={engine} width="300px"/>
+                    <Input type="text" ref={engine} validate={["isntEMPTY", "isntFLOAT"]} width="300px"/>
                     <h4>Vehicle Description</h4>
-                    <Input type="text" ref={description} width="300px"/>
+                    <TextArea type="text" ref={description} validate={["isntEMPTY"]} width="300px"/>
                     <h4>Vehicle Drivetrain</h4>
-                    <TextArea type="text" ref={drivetrain} width="300px"/>
+                    <Input type="text" ref={drivetrain} validate={["isntEMPTY"]}width="300px"/>
+                </div>
+                <div>
                     <h4>Vehicle specification</h4>
-                    <Input type="text" ref={specification} width="300px"/>
+                    <TextArea type="text" rows="40" cols="5000" ref={specification} validate={["isntJSON"]} style={{
+                        width: "100%",
+                        boxSizing: "border-box"
+                    }}/>
                     <h4>Vehicle images</h4>
-                    <Input type="file" ref={images} accept="image/jpeg" width="300px" multiple/>
+                    <Input type="file" ref={images} validate={["isntEMPTY"]} accept="image/jpeg" width="300px" multiple/>
                 </div>
             </div>
         </div>

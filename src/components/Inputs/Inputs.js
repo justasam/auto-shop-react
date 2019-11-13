@@ -10,11 +10,17 @@ const validUUID = data => /^[0-9a-f]{8}-[0-9a-f]{4}-[0-5][0-9a-f]{3}-[089ab][0-9
 
 const validEMAIL = data => /^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i.test(data);
 
+const validINT = data => Number(data) === data && data % 1 === 0;
+
+const validFLOAT = data => Number(data) === data && data % 1 !== 0;
+
 const validationFunctions = {
   isntEMPTY: (data) => data !== '',
   isntJSON: data => !validJSON(data),
   isntUUID: data => !validUUID(data),
-  isntEMAIL: data => !validEMAIL(data)
+  isntEMAIL: data => !validEMAIL(data),
+  isntINT: data => !validINT(data),
+  intFLOAT: data => !validFLOAT(data)
 };
 
 const runValidation = (value, validate) => {
