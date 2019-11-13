@@ -61,22 +61,11 @@ const ModernArrow = props => {
   )
 }
 
-// const HoverComponentDefault = ({title, desc, className}) => {
-//   return (
-//     <div className={className} style={{
-//       textAlign: 'center',
-//     }}>
-//       <h4>{title}</h4>
-//       <p>{desc}</p>
-//     </div>
-//   );
-// }
-
-
 const Carousel = ({
   title='BEST SELLING MAKES',
   items=mockData,
 }) => {
+  console.log(items)
   const settings = {
     dots: false,
     infinite: true,

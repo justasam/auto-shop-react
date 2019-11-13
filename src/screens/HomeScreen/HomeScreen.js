@@ -11,7 +11,7 @@ import { DropdownAlt } from '../../components/Inputs';
 const HomeScreen = props => {
 
   const [bestSellingMakes, setBestSellingMakes] = useState([])
-  const [recentlyListedVehicles, setRecentlyListedVehicles] = useState({})
+  const [recentlyListedVehicles, setRecentlyListedVehicles] = useState([])
   useEffect(() => {
     async function getTopSellers() {
         const response = await fetch(
@@ -68,8 +68,8 @@ const HomeScreen = props => {
       <BlurryImage src="https://www.tesla.com/ns_videos/commerce/content/dam/tesla/tesla-shop-marketing-imagery/hero-carousel/wall-connector.jpg">
         <SearchGroup />
       </BlurryImage>
-      <Carousel items={bestSellingMakes} />
-      {/* <Carousel items={recentlyListedVehicles} /> */}
+      <Carousel items={bestSellingMakes}/>
+      <Carousel items={recentlyListedVehicles} title="RECENTLY LISTED VEHICLES"/>
     </div>
   )
 }
