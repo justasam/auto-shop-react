@@ -21,12 +21,12 @@ const Login = ({hidden, toggleHidden}) => {
       <h3>Login</h3>
       <Input type="text" ref={uname} placeholder="Username" width="200px" 
         validate={validateUname}
-        onBlur={() => setValidateUname(['isntEmpty'])} 
+        onBlur={() => setValidateUname(['isntEMPTY'])} 
         onFocus={() => setValidateUname([])}
       />
       <Input type="password" ref={pwd} placeholder="Password" width="200px"
         validate={validatePwd} 
-        onBlur={() => setValidatePwd(['isntEmpty'])} 
+        onBlur={() => setValidatePwd(['isntEMPTY'])} 
         onFocus={() => setValidatePwd([])}
       />
       <Button name="SIGN IN" width="200px" onClick={async () => {

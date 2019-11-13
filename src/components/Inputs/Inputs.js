@@ -2,8 +2,19 @@ import React, { useState } from 'react';
 import { Search, ChevronDown } from 'react-feather';
 import './index.css';
 
+const validJSON = data => /^[\],:{}\s]*$/.test(data.replace(/\\["\\\/bfnrtu]/g, '@').
+  replace(/"[^"\\\n\r]*"|true|false|null|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?/g, ']').
+  replace(/(?:^|:|,)(?:\s*\[)+/g, ''));
+
+const validUUID = data => /^[0-9a-f]{8}-[0-9a-f]{4}-[0-5][0-9a-f]{3}-[089ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(data)
+
+const validEMAIL = data => /^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i.test(data);
+
 const validationFunctions = {
-  isntEmpty: (data) => data !== '',
+  isntEMPTY: (data) => data !== '',
+  isntJSON: data => !validJSON(data),
+  isntUUID: data => !validUUID(data),
+  isntEMAIL: data => !validEMAIL(data)
 };
 
 const runValidation = (value, validate) => {
