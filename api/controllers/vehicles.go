@@ -196,7 +196,12 @@ func GetRecentlyListedVehicles(c echo.Context) error {
 	}
 	defer db.Close()
 
-	recent, _, dbErr := db.GetVehicles(&types.GetVehiclesFilter{ListedAtLatest: &to}, 1, count)
+	isListed := true
+	recent, _, dbErr := db.GetVehicles(
+		&types.GetVehiclesFilter{
+			ListedAtLatest: &to,
+			Listed:         &isListed,
+		}, 1, count)
 	if dbErr != nil {
 		return dbErr
 	}
@@ -286,6 +291,7 @@ func PurchaseVehicle(c echo.Context) error {
 func SellVehicle(c echo.Context) error {
 	accountType := c.Get("account_type").(string)
 	accountOwnerID := c.Get("owner_id").(string)
+	vehicleID := c.Param("vehicle_id")
 
 	if accountType != types.EmployeeAccount && accountType != types.AdminAccount {
 		return echo.NewHTTPError(http.StatusForbidden)
@@ -305,6 +311,7 @@ func SellVehicle(c echo.Context) error {
 
 	payload.ID = uuid.NewV4().String()
 	payload.EmployeeID = accountOwnerID
+	payload.VehicleID = vehicleID
 
 	dbErr := db.SellVehicle(payload)
 	if dbErr != nil {

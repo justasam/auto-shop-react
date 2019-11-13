@@ -65,7 +65,6 @@ const Carousel = ({
   title='BEST SELLING MAKES',
   items=mockData,
 }) => {
-  console.log(items)
   const settings = {
     dots: false,
     infinite: true,
@@ -112,6 +111,14 @@ const Carousel = ({
               objectFit: 'cover'
             }} src={item.image} alt={item.title}></img>
           </Link>
+          <h4>{
+            item.title.length > 0 &&
+            item.title[0].toUpperCase() + item.title.slice(1)
+          }</h4>
+          <h5>{
+            item.description.length > 0 &&
+            item.description[0].toUpperCase() + item.description.slice(1)
+          }</h5>
           </div>
         ))}
       </Slider>

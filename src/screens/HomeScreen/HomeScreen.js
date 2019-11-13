@@ -52,7 +52,6 @@ const HomeScreen = props => {
             description: item.description,
           }
         });
-        console.log(data);
         setRecentlyListedVehicles(data);
     };
 
@@ -65,8 +64,8 @@ const HomeScreen = props => {
       <BlurryImage src="https://www.tesla.com/ns_videos/commerce/content/dam/tesla/tesla-shop-marketing-imagery/hero-carousel/wall-connector.jpg">
         <SearchGroup />
       </BlurryImage>
-      <Carousel items={bestSellingMakes}/>
-      <Carousel items={recentlyListedVehicles} title="RECENTLY LISTED VEHICLES"/>
+      {bestSellingMakes.length > 0 ? <Carousel items={bestSellingMakes}/> : null}
+      {recentlyListedVehicles.length > 0 ? <Carousel items={recentlyListedVehicles} title="RECENTLY LISTED VEHICLES"/> : null}
     </div>
   )
 }

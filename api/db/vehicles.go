@@ -295,6 +295,8 @@ func (c *Client) DeleteVehicleMake(name string) *types.Error {
 func (c *Client) SellVehicle(p types.VehicleSalePost) *types.Error {
 	query := `INSERT INTO %s_vehicle_sales (id, customer_id, sold_for, sold_by_employee_id, vehicle_id)
 		VALUES(?, ?, ?, ?, ?)`
+	query = c.applyView(query)
+
 	var err error
 	c, err = c.Begin()
 	if err != nil {
@@ -308,6 +310,7 @@ func (c *Client) SellVehicle(p types.VehicleSalePost) *types.Error {
 	}
 
 	query = `UPDATE %s_vehicles SET is_sold=true WHERE id=?`
+	query = c.applyView(query)
 	_, err = c.ex.Exec(query, p.VehicleID)
 	if err != nil {
 		return c.transformError(err)
@@ -453,6 +456,11 @@ func applyVehicleFilter(query string, filter *types.GetVehiclesFilter) (string, 
 	if filter.ListedAtLatest != nil {
 		namedParams["created_at"] = *filter.ListedAtLatest
 		subQuery += "AND create_at >= :created_at"
+	}
+
+	if filter.Listed != nil {
+		namedParams["listed"] = *filter.Listed
+		subQuery += "AND listed=:listed"
 	}
 
 	if len(subQuery) > 0 {
