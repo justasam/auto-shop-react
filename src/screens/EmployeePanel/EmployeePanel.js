@@ -8,7 +8,10 @@ const EmployeePanel = () => {
     const [content, setContent] = useState("vehicle-purchases");
     return (
         <div className="sidePanel">
-            <a href="#" onClick={setContent("vehicle-purchase")}>Formalise Vehicle Purchase</a>
+            <button onClick={(e) => {
+                e.preventDefault();
+                setContent("vehicle-purchase")
+            }}>Formalise Vehicle Purchase</button>
             {(() => {
                 switch(content) {
                     case "vehicle-purchase":
