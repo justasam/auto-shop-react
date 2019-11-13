@@ -75,17 +75,17 @@ const Carousel = ({
     prevArrow: <ModernArrow />
   };
 
-  this.swiping = false;
-  this.carouselRef = React.createRef();
+  let swiping = false;
+  let carouselRef = React.createRef();
 
-  this.handleMouseDown = event => {
+  let handleMouseDown = event => {
     event.preventDefault();
   }
-  this.handleMouseUp = () => {
-    this.swiping = this.carouselRef.current.innerSlider.state.swiping;
+  let handleMouseUp = () => {
+    swiping = carouselRef.current.innerSlider.state.swiping;
   }
-  this.handleClick = event => {
-    if (this.swiping) {
+  let handleClick = event => {
+    if (swiping) {
       event.preventDefault();
     }
   }
@@ -99,12 +99,12 @@ const Carousel = ({
       <h3>{title}</h3>
       <Slider {...settings} style={{
         padding: '0 100px'
-      }} ref={this.carouselRef}>
+      }} ref={carouselRef}>
         {items.map((item, i) => (
           <div style={{
             border: '2px solid red',
             margin: '0 10px'
-          }} key={i} onClickCapture={this.handleClick} onMouseUpCapture={this.handleMouseUp} onMouseDownCapture={this.handleMouseDown}>
+          }} key={i} onClickCapture={handleClick} onMouseUpCapture={handleMouseUp} onMouseDownCapture={handleMouseDown}>
           <Link  to={item.link}>
             <img style={{
               width: '100%',
