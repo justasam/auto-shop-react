@@ -352,6 +352,20 @@ func (c *Client) UpdateVehicle(p types.VehiclePut) (*types.Vehicle, *types.Error
 	return vehicle, nil
 }
 
+// GetVehicleMakes returns vehicle makes from the db
+func (c *Client) GetVehicleMakes() ([]types.VehicleMake, *types.Error) {
+	query := `SELECT * FROM %s_vehicle_makes`
+	query = c.applyView(query)
+
+	var makes []types.VehicleMake
+	err := c.db.Select(&makes, query)
+	if err != nil {
+		return nil, c.transformError(err)
+	}
+
+	return makes, nil
+}
+
 func applyVehicleFilter(query string, filter *types.GetVehiclesFilter) (string, map[string]interface{}) {
 	namedParams := map[string]interface{}{}
 	subQuery := ""

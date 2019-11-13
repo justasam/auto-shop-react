@@ -361,6 +361,24 @@ func UpdateVehicle(c echo.Context) error {
 	return c.JSON(http.StatusOK, vehicle)
 }
 
+// GetVehicleMakes returns vehicle makes
+func GetVehicleMakes(c echo.Context) error {
+	accountType := c.Get("account_type").(string)
+
+	db, err := db.Connect(accountType)
+	if err != nil {
+		return fmt.Errorf("Error connecting to the database: %s", err)
+	}
+	defer db.Close()
+
+	makes, dbErr := db.GetVehicleMakes()
+	if dbErr != nil {
+		return dbErr
+	}
+
+	return c.JSON(http.StatusOK, makes)
+}
+
 // // DeleteVehiclePicture deletes picture
 // func DeleteVehiclePicture(c echo.Context) error {
 // 	accountType := c.Get("account_type").(string)
