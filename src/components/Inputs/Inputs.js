@@ -2,7 +2,22 @@ import React, { useState } from 'react';
 import { Search, ChevronDown } from 'react-feather';
 import './index.css';
 
-const useInput = initialValue => {
+const validationFunctions = {
+  isntEmpty: (data) => data !== '',
+};
+
+const runValidation = (value, validate) => {
+  let valid = true;
+  if (validate.length > 0) {
+    validate.map((name) => {
+      if (!valid) return false;
+      valid = validationFunctions[name](value);
+    });
+  }
+  return valid;
+}
+
+const useInput = (initialValue) => {
   const [value, setValue] = useState(initialValue);
 
   return {
@@ -17,8 +32,10 @@ const useInput = initialValue => {
   }
 };
 
-const Input = React.forwardRef(({width=354, placeholder='Placeholder...', type='text', clicked=false}, ref) => {
+const Input = React.forwardRef(({width=354, placeholder='Placeholder...', type='text', validate, ...props}, ref) => {
   const { value, bind } = useInput('');
+
+  let valid = runValidation(value, validate);
 
   return (
     <div style={{
@@ -27,8 +44,8 @@ const Input = React.forwardRef(({width=354, placeholder='Placeholder...', type='
     }}>
       <input type={type} style={{
         borderColor: 'red',
-        borderStyle: clicked && value.length === 0 ? 'solid' : 'none'
-      }} className="input shadow nomp" placeholder={placeholder} {...bind} ref={ref}/>
+        borderStyle: !valid ? 'solid' : 'none'
+      }} className="input shadow nomp" placeholder={placeholder} {...bind} ref={ref} {...props} />
     </div>
   );
 });

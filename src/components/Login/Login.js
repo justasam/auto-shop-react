@@ -10,7 +10,8 @@ const sha256 = (pwd) => {
 }
 
 const Login = ({hidden, toggleHidden}) => {
-  let [ clicked, setClicked ] = useState(false);
+  let [ validateUname, setValidateUname ] = useState([]);
+  let [ validatePwd, setValidatePwd ] = useState([]);
 
   let uname = React.createRef();
   let pwd = React.createRef();
@@ -18,15 +19,22 @@ const Login = ({hidden, toggleHidden}) => {
   return (
     <div className={`login_form shadow ${hidden ? 'hidden' : ''}`}>
       <h3>Login</h3>
-      <Input type="text" clicked={clicked} ref={uname} placeholder="Username" width="200px" />
-      <Input type="password" clicked={clicked} ref={pwd} placeholder="Password" width="200px" />
+      <Input type="text" ref={uname} placeholder="Username" width="200px" 
+        validate={validateUname}
+        onBlur={() => setValidateUname(['isntEmpty'])} 
+        onFocus={() => setValidateUname([])}
+      />
+      <Input type="password" ref={pwd} placeholder="Password" width="200px"
+        validate={validatePwd} 
+        onBlur={() => setValidatePwd(['isntEmpty'])} 
+        onFocus={() => setValidatePwd([])}
+      />
       <Button name="SIGN IN" width="200px" onClick={async () => {
         // TODO: validate form
         let username = uname.current.value;
         let password = pwd.current.value;
 
         if (!username || !password) {
-          setClicked(true);
           return;
         }
 
