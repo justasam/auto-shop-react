@@ -9,6 +9,7 @@ import { NavBar } from './components/NavBar';
 import { Admin } from './screens/Admin';
 import { Login } from './screens/Login';
 import { SwaggerAPI } from './screens/SwaggerAPI';
+import { EmployeePanel } from './screens/EmployeePanel';
 import { Route, Switch, Redirect } from 'react-router-dom';
 
 export const Routes = () => {
@@ -25,6 +26,7 @@ export const Routes = () => {
         <Route exact path="/Login" component={Login} />
         <Route exact path="/Admin" component={Admin} />
         <Route exact path="/api" component={SwaggerAPI} />
+        <Route exact path="/EmployeePanel" component={EmployeePanel} />
         <Route exact path="/">
           <Redirect to="/Home" />
         </Route>

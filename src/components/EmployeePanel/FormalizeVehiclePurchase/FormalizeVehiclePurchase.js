@@ -1,10 +1,9 @@
+
 import React, {useState} from 'react';
-import { Input, Button, Dropdown } from '../Inputs';
+import { Input, Dropdown } from '../../components/Inputs';
 import './index.css';
 
-
-const formalizeVehiclePurchases = () => {
-
+const FormalizeVehiclePurchases = () => {
     const [customers, setCustomers] = useState([])
     const [makes, setMakes] = useState([])
     useEffect(() => {
@@ -123,16 +122,4 @@ const formalizeVehiclePurchases = () => {
     )
 }
 
-const EmployeePanel = () => {
-
-    const [content, setContent] = useState("");
-
-    return (
-        <div className="sidePanel">
-            <a href="#" onClick={setContent(formalizeVehiclePurchases)}>Formalise Vehicle Purchase</a>
-        </div>
-    )
-}
-
-
-export default EmployeePanel
+export default FormalizeVehiclePurchases;
