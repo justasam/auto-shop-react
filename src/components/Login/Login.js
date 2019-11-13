@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import { Input, Button } from '../Inputs';
+import { Input, Button, TextArea } from '../Inputs';
 import forge from 'node-forge';
 import './index.css';
 

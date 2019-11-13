@@ -8,7 +8,7 @@ const validationFunctions = {
 
 const runValidation = (value, validate) => {
   let valid = true;
-  if (validate.length > 0) {
+  if (validate && validate.length > 0) {
     validate.map((name) => {
       if (!valid) return false;
       valid = validationFunctions[name](value);
@@ -25,12 +25,22 @@ const useInput = (initialValue) => {
     setValue,
     bind: {
       value,
-      onChange: event => {
+      onInput: event => {
         setValue(event.target.value);
       }
     }
   }
 };
+
+const TextArea = React.forwardRef(({defaultValue='', validate, ...props}, ref) => {
+  const { value, bind } = useInput(defaultValue);
+
+  let valid = runValidation(value, validate);
+
+  return (
+    <textarea {...bind} ref={ref} {...props}>{value}</textarea>
+  );
+});
 
 const Input = React.forwardRef(({width=354, placeholder='Placeholder...', type='text', validate, ...props}, ref) => {
   const { value, bind } = useInput('');
@@ -102,4 +112,4 @@ const Button = ({name, onClick, width=205, className}) => {
   )
 }
 
-export { SearchInput, Dropdown, Button, Input, DropdownAlt };
+export { SearchInput, Dropdown, Button, Input, DropdownAlt, TextArea };
