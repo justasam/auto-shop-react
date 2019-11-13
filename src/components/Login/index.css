@@ -27,3 +27,9 @@
   color: black;
   border-color: black;
 }
+
+.login_form > button:hover {
+  color: white;
+  border-color: black;
+  background-color: black;
+}
