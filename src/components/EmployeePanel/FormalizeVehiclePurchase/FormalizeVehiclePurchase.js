@@ -102,9 +102,9 @@ const FormalizeVehiclePurchase = () => {
             }}>
                 <div>
                     <h4>Customer the vehicle was bought from</h4>
-                    <Dropdown ref={customerID} options={customers} validate={["isntEMPTY"]} width="300px"/>
+                    <Dropdown ref={customerID} options={customers} width="300px"/>
                     <h4>Vehicle Make</h4>
-                    <Dropdown ref={make} options={makes} validate={["isntEMPTY"]} width="300px"/>
+                    <Dropdown ref={make} options={makes} width="300px"/>
                     <h4>Vehicle Model</h4>
                     <Input type="text" ref={model} validate={validateModel} width="300px"
                         onBlur={() => setValidateModel(["isntEMPTY"])}
@@ -180,16 +180,13 @@ const FormalizeVehiclePurchase = () => {
                 </div>
                 <div>
                     <h4>Vehicle specification</h4>
-                    <TextArea type="text" rows="40" cols="5000" ref={specification} validate={validateSpecification} style={{
-                        width: "100%",
-                        boxSizing: "border-box"
-                    }}
-                        onBlur={() => setValidateSpecification(["isntEMPTY"])}
+                    <TextArea class="vehicle-spec" type="text" rows="40" cols="5000" ref={specification} validate={validateSpecification} 
+                        onBlur={() => setValidateSpecification(["isntEMPTY", "isJSON"])}
                         onFocus={() => setValidateSpecification([])}
                     />
                     <h4>Vehicle images</h4>
                     <Input type="file" ref={images} accept="image/jpeg" width="300px" multiple/>
-                    <Button name="CREATE" width="100px" onclick={async () => {
+                    <Button name="CREATE" width="100px" onClick={async () => {
                         console.log(images)
                         const data = { 
                             body_type: bodyType,

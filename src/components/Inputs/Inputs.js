@@ -2,17 +2,23 @@ import React, { useState } from 'react';
 import { Search, ChevronDown } from 'react-feather';
 import './index.css';
 
-const validJSON = data => /^[\],:{}\s]*$/.test(data.replace(/\\["\\\/bfnrtu]/g, '@').
-  replace(/"[^"\\\n\r]*"|true|false|null|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?/g, ']').
-  replace(/(?:^|:|,)(?:\s*\[)+/g, ''));
-
 const validUUID = data => /^[0-9a-f]{8}-[0-9a-f]{4}-[0-5][0-9a-f]{3}-[089ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(data)
 
 const validEMAIL = data => /^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i.test(data);
 
+const validJSON = data => {
+  try {
+    JSON.parse(data);
+  } catch (e) {
+    return false;
+  }
+
+  return true;
+}
+
 const validationFunctions = {
   isntEMPTY: (data) => data && data.length > 0,
-  isntJSON: data => !validJSON(data),
+  isJSON: data => validJSON(data),
   isntUUID: data => !validUUID(data),
   isntEMAIL: data => !validEMAIL(data),
   isINT: (data) => !!parseInt(data),
@@ -59,15 +65,14 @@ const TextArea = React.forwardRef(({defaultValue='', validate, ...props}, ref) =
 
   return (
     <textarea style={{
-      borderColor: 'red',
-      borderStyle: !valid ? 'solid' : 'none'
-    }} {...bind} ref={ref} {...props}>{value}</textarea>
+        borderColor: 'red',
+        borderStyle: !valid ? 'solid' : 'none'
+      }} {...bind} ref={ref} {...props}>{value}</textarea>
   );
 });
 
 const Input = React.forwardRef(({width=354, placeholder='Placeholder...', type='text', validate, ...props}, ref) => {
   const { value, bind } = useInput('');
-
   let valid = runValidation(value, validate);
 
   return (

@@ -1,5 +1,7 @@
 import React, {useState} from 'react';
 import { FormalizeVehiclePurchase } from '../../components/EmployeePanel/FormalizeVehiclePurchase';
+import { FormalizeVehicleSale } from '../../components/EmployeePanel/FormalizeVehicleSale';
+import { CreateVehicleMake } from '../../components/EmployeePanel/CreateVehicleMake';
 import './index.css';
 
 
@@ -16,12 +18,24 @@ const EmployeePanel = () => {
                     e.preventDefault();
                     setContent("vehicle-purchase")
                 }}>Formalise Vehicle Purchase</button>
+                <button onClick={(e) => {
+                    e.preventDefault();
+                    setContent("vehicle-sale")
+                }}>Formalise Vehicle Sale</button>
+                <button onClick={(e) => {
+                    e.preventDefault();
+                    setContent("create-vehicle-make")
+                }}>Create Vehicle Make</button>
             </div>
             <div>
                 {(() => {
                     switch(content) {
                         case "vehicle-purchase":
                             return <FormalizeVehiclePurchase/>;
+                        case "vehicle-sale":
+                            return <FormalizeVehicleSale/>;
+                        case "create-vehicle-make":
+                            return <CreateVehicleMake/>;
                         default:
                             return null;
                     }
