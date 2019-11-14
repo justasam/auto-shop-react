@@ -1,6 +1,6 @@
 
 import React, {useState, useEffect} from 'react';
-import { Input, Dropdown, TextArea } from '../../../components/Inputs';
+import { Input, Dropdown, TextArea, Button } from '../../../components/Inputs';
 import './index.css';
 
 const FormalizeVehiclePurchase = () => {
@@ -9,7 +9,7 @@ const FormalizeVehiclePurchase = () => {
     useEffect(() => {
         async function getCustomers() {
             const response = await fetch(
-                "/autoshop/api/customers",
+                "/autoshop/api/customers?is_deleted=false",
                 {
                     method: "GET",
                     headers: {
@@ -77,6 +77,22 @@ const FormalizeVehiclePurchase = () => {
     let images = React.createRef();
     let customerID = React.createRef();
 
+    let [validatePrice, setValidatePrice] = useState([]); 
+    let [validateModel, setValidateModel] = useState([]); 
+    let [validateYear, setValidateYear] = useState([]); 
+    let [validateMilage, setValidateMilage] = useState([]); 
+    let [validateBodyType, setValidateBodyType] = useState([]); 
+    let [validateFuelType, setValidateFuelType] = useState([]); 
+    let [validateDoors, setValidateDoors] = useState([]); 
+    let [validateGearbox, setValidateGearbox] = useState([]); 
+    let [validateSeats, setValidateSeats] = useState([]); 
+    let [validateFuelConsumption, setValidateFuelConsumption] = useState([]); 
+    let [validateColour, setValidateColour] = useState([]); 
+    let [validateEngine, setValidateEngine] = useState([]); 
+    let [validateDescription, setValidateDescription] = useState([]); 
+    let [validateDrivetrain, setValidateDrivetrain] = useState([]); 
+    let [validateSpecification, setValidateSpecification] = useState([]); 
+
     return (
         <div className="vehicle-purchases-form">
             <h2>Formalise Vehicle Purchase</h2>
@@ -90,44 +106,111 @@ const FormalizeVehiclePurchase = () => {
                     <h4>Vehicle Make</h4>
                     <Dropdown ref={make} options={makes} validate={["isntEMPTY"]} width="300px"/>
                     <h4>Vehicle Model</h4>
-                    <Input type="text" ref={model} validate={["isntEMPTY"]} width="300px"/>
+                    <Input type="text" ref={model} validate={validateModel} width="300px"
+                        onBlur={() => setValidateModel(["isntEMPTY"])}
+                        onFocus={() => setValidateModel([])}
+                    />
                     <h4>Vehicle Year</h4>
-                    <Input type="text" ref={year} validate={["isntEMPTY"]} width="300px"/>
+                    <Input type="text" ref={year} validate={validateYear} width="300px"
+                        onBlur={() => setValidateYear(["isntEMPTY", "isINT"])}
+                        onFocus={() => setValidateYear([])}
+                    />
                     <h4>Vehicle Price</h4>
-                    <Input type="text" ref={price} validate={["isntEMPTY", "validFLOAT"]} width="300px"/>
+                    <Input type="text" ref={price} validate={validatePrice} width="300px"
+                        onBlur={() => setValidatePrice(["isntEMPTY", "isFLOAT"])}
+                        onFocus={() => setValidatePrice([])}
+                    />
                     <h4>Vehicle Milage</h4>
-                    <Input type="text" ref={milage} validate={["isntEMPTY", "validINT"]} width="300px"/>
+                    <Input type="text" ref={milage} validate={validateMilage} width="300px"
+                        onBlur={() => setValidateMilage(["isntEMPTY", "isINT"])}
+                        onFocus={() => setValidateMilage([])}
+                    />
                     <h4>Vehicle Body Type</h4>
-                    <Input type="text" ref={bodyType} validate={["isntEMPTY"]} width="300px"/>
+                    <Input type="text" ref={bodyType} validate={validateBodyType} width="300px"
+                        onBlur={() => setValidateBodyType(["isntEMPTY"])}
+                        onFocus={() => setValidateBodyType([])}
+                    />
                     <h4>Vehicle Fuel Type</h4>
-                    <Input type="text" ref={fuelType} validate={["isntEMPTY"]} width="300px"/>
+                    <Input type="text" ref={fuelType} validate={validateFuelType} width="300px"
+                        onBlur={() => setValidateFuelType(["isntEMPTY"])}
+                        onFocus={() => setValidateFuelType([])}
+                    />
                 </div>
                 <div>
                     <h4>Vehicle Doors</h4>
-                    <Input type="text" ref={doors} validate={["isntEMPTY", "isntINT"]}  width="300px"/>
+                    <Input type="text" ref={doors} validate={validateDoors}  width="300px"
+                        onBlur={() => setValidateDoors(["isntEMPTY", "isINT"])}
+                        onFocus={() => setValidateDoors([])}
+                    />
                     <h4>Vehicle Gearbox</h4>
-                    <Input type="text" ref={gearbox} validate={["isntEMPTY"]} width="300px"/>
+                    <Input type="text" ref={gearbox} validate={validateGearbox} width="300px"
+                        onBlur={() => setValidateGearbox(["isntEMPTY"])}
+                        onFocus={() => setValidateGearbox([])}
+                    />
                     <h4>Vehicle Seats</h4>
-                    <Input type="text" ref={seats} validate={["isntEMPTY", "isntINT"]} width="300px"/>
+                    <Input type="text" ref={seats} validate={validateSeats} width="300px"
+                        onBlur={() => setValidateSeats(["isntEMPTY", "isINT"])}
+                        onFocus={() => setValidateSeats([])}
+                    />
                     <h4>Vehicle Fuel Consumption</h4>
-                    <Input type="text" ref={fuelConsumption} validate={["isntEMPTY", "isntFLOAT"]} width="300px"/>
+                    <Input type="text" ref={fuelConsumption} validate={validateFuelConsumption} width="300px"
+                        onBlur={() => setValidateFuelConsumption(["isntEMPTY", "isINT"])}
+                        onFocus={() => setValidateFuelConsumption([])}
+                    />
                     <h4>Vehicle Colour</h4>
-                    <Input type="text" ref={colour} validate={["isntEMPTY"]} width="300px"/>
+                    <Input type="text" ref={colour} validate={validateColour} width="300px"
+                        onBlur={() => setValidateColour(["isntEMPTY"])}
+                        onFocus={() => setValidateColour([])}
+                    />
                     <h4>Vehicle Engine</h4>
-                    <Input type="text" ref={engine} validate={["isntEMPTY", "isntFLOAT"]} width="300px"/>
-                    <h4>Vehicle Description</h4>
-                    <TextArea type="text" ref={description} validate={["isntEMPTY"]} width="300px"/>
+                    <Input type="text" ref={engine} validate={validateEngine} width="300px"
+                        onBlur={() => setValidateEngine(["isntEMPTY", "isINT"])}
+                        onFocus={() => setValidateEngine([])}
+                    />
                     <h4>Vehicle Drivetrain</h4>
-                    <Input type="text" ref={drivetrain} validate={["isntEMPTY"]}width="300px"/>
+                    <Input type="text" ref={drivetrain} validate={validateDrivetrain}width="300px"
+                        onBlur={() => setValidateDrivetrain(["isntEMPTY"])}
+                        onFocus={() => setValidateDrivetrain([])}
+                    />
+                    <h4>Vehicle Description</h4>
+                    <TextArea type="text" ref={description} validate={validateDescription} width="300px"
+                        onBlur={() => setValidateDescription(["isntEMPTY"])}
+                        onFocus={() => setValidateDescription([])}
+                    />
                 </div>
                 <div>
                     <h4>Vehicle specification</h4>
-                    <TextArea type="text" rows="40" cols="5000" ref={specification} validate={["isntJSON"]} style={{
+                    <TextArea type="text" rows="40" cols="5000" ref={specification} validate={validateSpecification} style={{
                         width: "100%",
                         boxSizing: "border-box"
-                    }}/>
+                    }}
+                        onBlur={() => setValidateSpecification(["isntEMPTY"])}
+                        onFocus={() => setValidateSpecification([])}
+                    />
                     <h4>Vehicle images</h4>
-                    <Input type="file" ref={images} validate={["isntEMPTY"]} accept="image/jpeg" width="300px" multiple/>
+                    <Input type="file" ref={images} accept="image/jpeg" width="300px" multiple/>
+                    <Button name="CREATE" width="100px" onclick={async () => {
+                        console.log(images)
+                        const data = { 
+                            body_type: bodyType,
+                            fuel_type: fuelType,
+                            fuel_consumption: fuelConsumption,
+                            make, model, year, price, milage,
+                            doors, gearbox, seats, colour, engine,
+                            description, drivetrain, specification,
+                            customerID,
+                        }
+
+                        const response = await fetch("/autoshop/api/vehicles/purchase", {
+                            method: "POST",
+                            body: JSON.stringify(data),
+                            headers: {
+                                "Content-Type": "application/json"
+                            }
+                        });
+                        const resp = await response.json();
+                        console.log(resp)
+                    }}></Button>
                 </div>
             </div>
         </div>
