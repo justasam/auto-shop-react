@@ -102,13 +102,13 @@ const SearchInput = ({width=354}) => {
   )
 }
 
-const Dropdown = ({name, options, width=170}) => {
+const Dropdown = React.forwardRef(({name, options, width=170}, ref) => {
   return (
     <div style={{
       width: width,
       position: 'relative'
     }}>
-      <select name={name} className="input shadow nomp select">
+      <select ref={ref} name={name} className="input shadow nomp select">
         {options.map((opt, i) => 
           <option value={opt.value} key={i}>{opt.name}</option>
         )}
@@ -116,7 +116,7 @@ const Dropdown = ({name, options, width=170}) => {
       <ChevronDown size={30} color='#757575' height={50} className="select_icon" />
     </div>
   )
-}
+});
 
 const DropdownAlt = ({name, options, title}) => {
   return (

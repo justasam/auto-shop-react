@@ -181,22 +181,23 @@ const FormalizeVehiclePurchase = () => {
                 </div>
                 <div>
                     <h4>Vehicle specification</h4>
-                    <TextArea class="vehicle-spec" type="text" rows="40" cols="5000" ref={specification} validate={validateSpecification} 
+                    <TextArea className="vehicle-spec" type="text" rows="40" cols="5000" ref={specification} validate={validateSpecification} 
                         onBlur={() => setValidateSpecification(["isntEMPTY", "isJSON"])}
                         onFocus={() => setValidateSpecification([])}
                     />
                     <h4>Vehicle images</h4>
                     <Input type="file" ref={images} accept="image/jpeg" width="300px" multiple/>
                     <Button name="CREATE" width="100px" onClick={async () => {
-                        console.log(images.current);
-                    
-                        images.delete("length")
-                        images = Object.values(images)
-                        images = images.current.files.map((image) => {
-                            return fileToBase64(image)
-                        });
+                        
+                        // let files = [...images.current.files];
+                        let base64files = [];
+                        for (let file of images.current.files) {
+                            file = await fileToBase64(file);
+                            file = file.split(',')[1];
+                            base64files.push(file);
+                        }
+                        console.log(base64files);
 
-                        console.log(images)
                         const data = { 
                             body_type: bodyType.current.val,
                             fuel_type: fuelType.current.val,
