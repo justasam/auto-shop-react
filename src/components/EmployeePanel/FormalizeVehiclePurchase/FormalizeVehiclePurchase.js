@@ -1,6 +1,7 @@
 
 import React, {useState, useEffect} from 'react';
 import { Input, Dropdown, TextArea, Button } from '../../../components/Inputs';
+import { fileToBase64 } from '../../../utils.js'
 import './index.css';
 
 const FormalizeVehiclePurchase = () => {
@@ -187,15 +188,33 @@ const FormalizeVehiclePurchase = () => {
                     <h4>Vehicle images</h4>
                     <Input type="file" ref={images} accept="image/jpeg" width="300px" multiple/>
                     <Button name="CREATE" width="100px" onClick={async () => {
+                        console.log(images.current);
+                    
+                        images.delete("length")
+                        images = Object.values(images)
+                        images = images.current.files.map((image) => {
+                            return fileToBase64(image)
+                        });
+
                         console.log(images)
                         const data = { 
-                            body_type: bodyType,
-                            fuel_type: fuelType,
-                            fuel_consumption: fuelConsumption,
-                            make, model, year, price, milage,
-                            doors, gearbox, seats, colour, engine,
-                            description, drivetrain, specification,
-                            customerID,
+                            body_type: bodyType.current.val,
+                            fuel_type: fuelType.current.val,
+                            fuel_consumption: fuelConsumption.current.val,
+                            make: make.current.val,
+                            model: model.current.val, 
+                            year: year.current.val,
+                            price: price.current.val,
+                            milage: milage.current.val,
+                            doors: doors.current.val, 
+                            gearbox: gearbox.current.val,
+                            seats: seats.current.val,
+                            colour: colour.current.val,
+                            engine: engine.current.val,
+                            description: description.current.val,
+                            drivetrain: drivetrain.current.val,
+                            specification: specification.current.val,
+                            customer_id: customerID.current.val
                         }
 
                         const response = await fetch("/autoshop/api/vehicles/purchase", {
