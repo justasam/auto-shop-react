@@ -19,6 +19,8 @@ import (
 // GetVehicles returns vehicles
 func GetVehicles(c echo.Context) error {
 	accountType := c.Get("account_type").(string)
+	min := getOptionalBool("min", c)
+
 	var payload types.GetVehiclesFilter
 	err := c.Bind(&payload)
 	if err != nil {
@@ -43,6 +45,27 @@ func GetVehicles(c echo.Context) error {
 	vehicles, total, dbErr := db.GetVehicles(&payload, pageNumb, perPage)
 	if dbErr != nil {
 		return dbErr
+	}
+
+	if min != nil && *min == true {
+		objects := map[string]interface{}{
+			"objects":     []interface{}{},
+			"per_page":    perPage,
+			"page_number": pageNumb,
+			"total":       total,
+		}
+
+		for _, vehicle := range vehicles {
+			objects["objects"] = append(objects["objects"].([]interface{}),
+				map[string]string{
+					"id":    vehicle.ID,
+					"make":  vehicle.Make,
+					"model": vehicle.Model,
+					"year":  vehicle.Year,
+				},
+			)
+		}
+		return c.JSON(http.StatusOK, objects)
 	}
 
 	return c.JSON(http.StatusOK, types.GetVehiclesResponse{
@@ -318,7 +341,7 @@ func SellVehicle(c echo.Context) error {
 		return dbErr
 	}
 
-	return c.JSON(http.StatusOK, "")
+	return c.JSON(http.StatusOK, "success")
 }
 
 // UpdateVehicle updates a vehicle

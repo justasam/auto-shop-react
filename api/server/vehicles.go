@@ -14,6 +14,13 @@ func vehiclesAPI() []*swagger.Endpoint {
 	getVehicles := endpoint.New("POST", "/vehicles/query", "Get Vehicles",
 		endpoint.Handler(controllers.GetVehicles),
 		endpoint.Response(http.StatusOK, types.GetVehiclesResponse{}, "Success"),
+		endpoint.QueryMap(map[string]swagger.Parameter{
+			"min": {
+				Type:        "boolean",
+				Description: "to return minimum information",
+				Default:     "false",
+			},
+		}),
 		endpoint.Body(types.GetVehiclesFilter{}, "Fields to filter vehicles by", true),
 		endpoint.Tags("Vehicles"),
 	)
