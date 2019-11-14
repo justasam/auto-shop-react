@@ -49,9 +49,19 @@ const TextArea = React.forwardRef(({defaultValue='', validate, ...props}, ref) =
   const { value, bind } = useInput(defaultValue);
 
   let valid = runValidation(value, validate);
+  if (props.style) {
+    props.style = {
+      ...props.style,
+      borderColor: 'red',
+      borderStyle: !valid ? 'solid' : 'none'
+    };
+  }
 
   return (
-    <textarea {...bind} ref={ref} {...props}>{value}</textarea>
+    <textarea style={{
+      borderColor: 'red',
+      borderStyle: !valid ? 'solid' : 'none'
+    }} {...bind} ref={ref} {...props}>{value}</textarea>
   );
 });
 
