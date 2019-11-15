@@ -9,6 +9,7 @@ import (
 	"reflect"
 	"strconv"
 
+	"github.com/davecgh/go-spew/spew"
 	"github.com/labstack/echo/v4"
 	uuid "github.com/satori/go.uuid"
 
@@ -250,11 +251,17 @@ func PurchaseVehicle(c echo.Context) error {
 
 	// If spec is present, try to parse it
 	if payload.Specification != nil {
-		var validJSON map[string]interface{}
+		var validJSON json.RawMessage
 		err := json.Unmarshal([]byte(*payload.Specification), &validJSON)
 		if err != nil {
 			return echo.NewHTTPError(http.StatusBadRequest, "Invalid specification")
 		}
+
+		str := string(validJSON)
+		payload.Specification = &str
+	} else {
+		empty := "{}"
+		payload.Specification = &empty
 	}
 
 	db, err := db.Connect(accountType)
@@ -266,21 +273,23 @@ func PurchaseVehicle(c echo.Context) error {
 	payload.ID = uuid.NewV4().String()
 	payload.EmployeeID = accountOwnerID
 
-	if payload.Specification == nil {
-		empty := "{}"
-		payload.Specification = &empty
+	// Create image paths for vehicle
+	for i := 0; i < len(payload.Images); i++ {
+		path := fmt.Sprintf("%s/%s/%d.jpg", vpp, payload.ID, i)
+		payload.ImagePaths = append(payload.ImagePaths, path)
+	}
+
+	spew.Dump(payload.Specification)
+
+	vehicle, dbErr := db.PurchaseVehicle(payload)
+	if dbErr != nil {
+		return fmt.Errorf("Failed to create vehicle: %s", dbErr)
 	}
 
 	// Create folder for vehicle photos
 	err = os.Mkdir(vpp+"/"+payload.ID, os.ModePerm)
 	if err != nil && !os.IsExist(err) {
 		return fmt.Errorf("Failed to create folder to store images: %s", err)
-	}
-
-	// Create image paths for vehicle
-	for i := 0; i < len(payload.Images); i++ {
-		path := fmt.Sprintf("%s/%s/%d.jpg", vpp, payload.ID, i)
-		payload.ImagePaths = append(payload.ImagePaths, path)
 	}
 
 	// Decode and create images on disk
@@ -300,11 +309,6 @@ func PurchaseVehicle(c echo.Context) error {
 		if err != nil {
 			return fmt.Errorf("Failed to write image to file: %s", err)
 		}
-	}
-
-	vehicle, dbErr := db.PurchaseVehicle(payload)
-	if dbErr != nil {
-		return fmt.Errorf("Failed to create vehicle: %s", dbErr)
 	}
 
 	return c.JSON(http.StatusCreated, vehicle)
