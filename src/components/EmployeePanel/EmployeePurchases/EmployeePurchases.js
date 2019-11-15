@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import Paper from '@material-ui/core/Paper';
 import { 
@@ -32,16 +33,16 @@ const RowDetail = ({ row }) => {
                     <td>ID:</td><td>{row.id}</td>
                 </tr>
                 <tr>
-                    <td>Type:</td><td>{row.type}</td>
+                    <td>Purchased For:</td><td>{row.purchased_for}</td>
                 </tr>
                 <tr>
-                    <td>Resolved:</td><td>{row.resolved.toString()}</td>
+                    <td>Purchased From Customer ID:</td><td>{row.purchased_from_customer_id}</td>
                 </tr>
                 <tr>
-                    <td>Created At:</td><td>{row.created_at}</td>
+                    <td>Vehicle ID:</td><td>{row.vehicle_id}</td>
                 </tr>
                 <tr>
-                    <td>Customer ID:</td><td>{row.customer_id}</td>
+                    <td>Purchased By Employee ID:</td><td>{row.purchased_by_employee_id}</td>
                 </tr>
                 <tr>
                     <td>Customer Name:</td><td>{row.customer_name}</td>
@@ -50,41 +51,35 @@ const RowDetail = ({ row }) => {
                     <td>Customer Surname:</td><td>{row.customer_surname}</td>
                 </tr>
                 <tr>
-                    <td>Customer Email:</td><td>{row.customer_email}</td>
+                    <td>Vehicle Make:</td><td>{row.vehicle_make}</td>
                 </tr>
-                {row.resolved_by && <tr><td>Resolved By:</td><td>{row.resolved_by}</td></tr>}
-                {row.resolved_at && <tr><td>Resolved At:</td><td>{row.resolved_at}</td></tr>}
-                {row.employee_name && <tr><td>Employee Name:</td><td>{row.employee_name}</td></tr>}
-                {row.employee_surname && <tr><td>Employee Surname:</td><td>{row.employee_surname}</td></tr>}
-                {row.employee_email && <tr><td>Employee Name:</td><td>{row.employee_email}</td></tr>}
-                {row.vehicle_id && <tr><td>Vehicle ID:</td><td>{row.vehicle_id}</td></tr>}
-                {row.service_id && <tr><td>Employee ID:</td><td>{row.service_id}</td></tr>}
-                {row.description && <tr><td>Description:</td><td>{row.description}</td></tr>}
+                <tr>
+                    <td>Vehicle Model:</td><td>{row.vehicle_model}</td>
+                </tr>
+                <tr>
+                    <td>Vehicle Year:</td><td>{row.vehicle_year}</td>
+                </tr>
             </table>
         </div>
     )
 };
 
-const EmployeeEnquiries = () => {
-  const [columns] = useState([
-    { name: 'id', title: 'ID' },
-    { name: 'type', title: 'Type' },
-    { name: 'created_at', title: 'Created At' },
-    { name: 'resolved', title: 'Resolved' },
-    { name: 'resolved_at', title: 'Resolved At' },
-  ]);
+const EmployeePurchases = () => {
+    const [columns] = useState([
+        { name: 'id', title: 'ID' },
+        { name: 'purchased_for', title: 'Purchased For' },
+        { name: 'purchased_from_customer_id', title: 'Purchased From Customer ID' },
+        { name: 'vehicle_id', title: 'Vehicle ID' },
+    ]);
 
-  const [expandedRowIds, setExpandedRowIds] = useState([]);
-  const [rows, setRows] = useState([])
-  const [pageSizes] = useState([5, 10, 15, 0]);
-  // const [sortingStateColumnExtensions] = useState([
-  //   { columnName: 'gender', sortingEnabled: false },
-  // ]);
+    const [expandedRowIds, setExpandedRowIds] = useState([]);
+    const [rows, setRows] = useState([])
+    const [pageSizes] = useState([5, 10, 15, 0]);
 
-  useEffect(() => {
-        async function getEnquiries() {
-            const enquiriesResp = await fetch(
-                "/autoshop/api/enquiries?per_page=1000", {
+    useEffect(() => {
+        async function getEmployeeSales() {
+            const accountResp = await fetch(
+                "/autoshop/api/auth/user", {
                     method: "GET",
                     headers: { 
                         "Content-Type": "application/json"
@@ -92,20 +87,29 @@ const EmployeeEnquiries = () => {
                 }
             )             
 
-            if (enquiriesResp.status !== 200) {
+            if (accountResp.status !== 200) {
                 return
             }
 
-            let enquiries = await enquiriesResp.json()
-            enquiries = enquiries.objects.map((item) => {
-              item.resolved = item.resolved.toString();
-              return item
-            });
+            let account = await accountResp.json()
+            console.log(account)
 
-            setRows(enquiries);
+            account = account.employee
+            const response = await fetch(
+                "/autoshop/api/employees/" + account.id + "/purchases",
+                {
+                    method: "GET",
+                    headers: {
+                        "Content-Type": "application/json"
+                    }
+                }
+            )
+            let data = await response.json();
+            console.log(data)
+            setRows(data);
         }
-        getEnquiries();
-  }, []);
+        getEmployeeSales();
+    }, []);
 
   return (
     <Paper>
@@ -144,4 +148,4 @@ const EmployeeEnquiries = () => {
   );
 };
 
-export default EmployeeEnquiries;
+export default EmployeePurchases;

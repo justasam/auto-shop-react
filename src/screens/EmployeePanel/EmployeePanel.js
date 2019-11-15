@@ -3,6 +3,7 @@ import { FormalizeVehiclePurchase } from '../../components/EmployeePanel/Formali
 import { FormalizeVehicleSale } from '../../components/EmployeePanel/FormalizeVehicleSale';
 import { CreateVehicleMake } from '../../components/EmployeePanel/CreateVehicleMake';
 import { EmployeeSales } from '../../components/EmployeePanel/EmployeeSales';
+import { EmployeePurchases } from '../../components/EmployeePanel/EmployeePurchases';
 import { EmployeeEnquiries } from '../../components/EmployeePanel/EmployeeEnquiries';
 import './index.css';
 
@@ -83,6 +84,8 @@ const EmployeePanel = () => {
                             return <CreateVehicleMake/>;
                         case "employee-sales":
                             return <EmployeeSales/>;
+                        case "employee-purchases":
+                            return <EmployeePurchases/>;
                         case "list-enquiries":
                             return <EmployeeEnquiries/>;
                         default:

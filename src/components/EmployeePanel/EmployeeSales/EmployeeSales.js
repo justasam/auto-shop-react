@@ -8,6 +8,8 @@ import {
   SearchState,
   PagingState,
   IntegratedPaging,
+  SortingState,
+  IntegratedSorting,
 } from '@devexpress/dx-react-grid';
 import {
   Grid,
@@ -40,33 +42,34 @@ const RowDetail = ({ row }) => {
                     <td>Vehicle ID:</td><td>{row.vehicle_id}</td>
                 </tr>
                 <tr>
-                    <td>Sold By Employee ID:</td><td>{row.sold_employee_id}</td>
+                    <td>Sold By Employee ID:</td><td>{row.sold_by_employee_id}</td>
+                </tr>
+                <tr>
+                    <td>Customer Name:</td><td>{row.customer_name}</td>
                 </tr>
                 <tr>
                     <td>Customer Surname:</td><td>{row.customer_surname}</td>
                 </tr>
                 <tr>
-                    <td>Customer Email:</td><td>{row.customer_email}</td>
+                    <td>Vehicle Make:</td><td>{row.vehicle_make}</td>
                 </tr>
-                {row.resolved_by && <tr><td>Resolved By:</td><td>{row.resolved_by}</td></tr>}
-                {row.employee_name && <tr><td>Employee Name: {row.employee_name}</td></tr>}
-                {row.employee_surname && <tr><td>Employee Surname: {row.employee_surname}</td></tr>}
-                {row.employee_email && <tr><td>Employee Name: {row.employee_email}</td></tr>}
-                {row.vehicle_id && <tr><td>Vehicle ID: {row.vehicle_id}</td></tr>}
-                {row.service_id && <tr><td>Employee ID: {row.service_id}</td></tr>}
-                {row.description && <tr><td>Description: {row.description}</td></tr>}
+                <tr>
+                    <td>Vehicle Model:</td><td>{row.vehicle_model}</td>
+                </tr>
+                <tr>
+                    <td>Vehicle Year:</td><td>{row.vehicle_year}</td>
+                </tr>
             </table>
         </div>
     )
 };
 
-const EmployeeEnquiries = () => {
+const EmployeeSales = () => {
     const [columns] = useState([
         { name: 'id', title: 'ID' },
-        { name: 'type', title: 'Type' },
-        { name: 'resolved', title: 'Resolved' },
-        { name: 'resolved_by', title: 'Resolved By' },
-        { name: 'description', title: 'Description' },
+        { name: 'sold_for', title: 'Sold For' },
+        { name: 'sold_to_customer_id', title: 'Sold To Customer ID' },
+        { name: 'vehicle_id', title: 'Vehicle ID' },
     ]);
 
     const [expandedRowIds, setExpandedRowIds] = useState([]);
@@ -115,6 +118,8 @@ const EmployeeEnquiries = () => {
         columns={columns}
         getRowId={getRowId}
       >
+        <SortingState/>
+        <IntegratedSorting />
         <PagingState
           defaultCurrentPage={0}
           defaultPageSize={5}
@@ -128,7 +133,7 @@ const EmployeeEnquiries = () => {
           onExpandedRowIdsChange={setExpandedRowIds}
         />
         <VirtualTable />
-        <TableHeaderRow/>
+        <TableHeaderRow showSortingControls/>
         <TableRowDetail
           contentComponent={RowDetail}
         />
@@ -143,4 +148,4 @@ const EmployeeEnquiries = () => {
   );
 };
 
-export default EmployeeEnquiries;
+export default EmployeeSales;
