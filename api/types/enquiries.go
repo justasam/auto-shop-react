@@ -34,6 +34,8 @@ type Enquiry struct {
 	EmployeeEmail   *string `db:"employee_email" json:"employee_email,omitempty"`
 	VehicleID       *string `db:"vehicle_id" json:"vehicle_id,omitempty"`
 	ServiceID       *string `db:"service_id" json:"service_id,omitempty"`
+	CreatedAt       string  `db:"created_at" json:"created_at"`
+	ResolvedAt      *string `db:"resolved_at" json:"resolved_at,omitempty"`
 }
 
 // GetEnquiriesResponse represents enquiries GET ALL resp

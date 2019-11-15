@@ -88,12 +88,11 @@ type EmployeeSale struct {
 	SoldToCustomerID string  `db:"customer_id" json:"sold_to_customer_id"`
 	VehicleID        string  `db:"vehicle_id" json:"vehicle_id"`
 	SoldByEmployeeID string  `db:"sold_by_employee_id" json:"sold_by_employee_id"`
-}
-
-// EmployeeSales represents all sales of an employee
-type EmployeeSales struct {
-	Sales []EmployeeSale `json:"sales"`
-	Total float64        `json:"total"`
+	CustomerName     string  `db:"customer_name" json:"customer_name,omitempty"`
+	CustomerSurname  string  `db:"customer_surname" json:"customer_surname,omitempty"`
+	VehicleMake      string  `db:"vehicle_make" json:"vehicle_make,omitempty"`
+	VehicleModel     string  `db:"vehicle_model" json:"vehicle_model,omitempty"`
+	VehicleYear      int     `db:"vehicle_year" json:"vehicle_year,omitempty"`
 }
 
 // EmployeePurchase represents employee purchase
@@ -103,10 +102,9 @@ type EmployeePurchase struct {
 	PurchasedFromCustomerID string  `db:"purchased_from_customer_id" json:"purchased_from_customer_id"`
 	VehicleID               string  `db:"vehicle_id" json:"vehicle_id"`
 	PurchasedByEmployeeID   string  `db:"purchased_by_employee_id" json:"purchased_by_employee_id"`
-}
-
-// EmployeePurchases represents all purchases of an employee
-type EmployeePurchases struct {
-	Purchases []EmployeePurchase `json:"purchases"`
-	Total     float64            `json:"total"`
+	CustomerName            string  `db:"customer_name" json:"customer_name,omitempty"`
+	CustomerSurname         string  `db:"customer_surname" json:"customer_surname,omitempty"`
+	VehicleMake             string  `db:"vehicle_make" json:"vehicle_make,omitempty"`
+	VehicleModel            string  `db:"vehicle_model" json:"vehicle_model,omitempty"`
+	VehicleYear             int     `db:"vehicle_year" json:"vehicle_year,omitempty"`
 }

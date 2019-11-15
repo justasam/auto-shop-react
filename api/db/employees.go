@@ -91,7 +91,7 @@ func (c *Client) GetEmployees(filter *types.GetEmployeesFilter, pageNumber,
 		return nil, 0, c.transformError(err)
 	}
 
-	var employees []types.Employee
+	employees := []types.Employee{}
 	err = nstmt.Select(&employees, namedParams)
 	if err != nil {
 		if err == sql.ErrNoRows {
@@ -181,10 +181,10 @@ func (c *Client) DeleteEmployee(id string) *types.Error {
 
 // GetEmployeesSales returns all employee sales
 func (c *Client) GetEmployeesSales() ([]types.EmployeeSale, *types.Error) {
-	query := `SELECT * FROM %s_vehicle_sales`
+	query := `SELECT * FROM %s_vehicle_sales `
 	query = c.applyView(query)
 
-	var sales []types.EmployeeSale
+	sales := []types.EmployeeSale{}
 	err := c.db.Select(&sales, query)
 	if err != nil {
 		return nil, c.transformError(err)
@@ -198,7 +198,7 @@ func (c *Client) GetEmployeeSales(id string) ([]types.EmployeeSale, *types.Error
 	query := `SELECT * FROM %s_vehicle_sales where sold_by_employee_id=?`
 	query = c.applyView(query)
 
-	var sales []types.EmployeeSale
+	sales := []types.EmployeeSale{}
 	err := c.db.Select(&sales, query, id)
 	if err != nil {
 		return nil, c.transformError(err)
@@ -212,7 +212,7 @@ func (c *Client) GetEmployeePurchases(id string) ([]types.EmployeePurchase, *typ
 	query := `SELECT * FROM %s_vehicle_purchases where purchased_by_employee_id=?`
 	query = c.applyView(query)
 
-	var purchases []types.EmployeePurchase
+	purchases := []types.EmployeePurchase{}
 	err := c.db.Select(&purchases, query, id)
 	if err != nil {
 		return nil, c.transformError(err)
@@ -226,7 +226,7 @@ func (c *Client) GetEmployeesPurchases() ([]types.EmployeePurchase, *types.Error
 	query := `SELECT * FROM %s_vehicle_purchases`
 	query = c.applyView(query)
 
-	var purchases []types.EmployeePurchase
+	purchases := []types.EmployeePurchase{}
 	err := c.db.Select(&purchases, query)
 	if err != nil {
 		return nil, c.transformError(err)

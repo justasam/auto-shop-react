@@ -62,27 +62,27 @@ func employeeAPI() []*swagger.Endpoint {
 
 	getEmployeeSales := endpoint.New("GET", "/employees/{employee_id}/sales", "Get employee's sales",
 		endpoint.Handler(controllers.GetEmployeeSales),
-		endpoint.Response(http.StatusOK, types.EmployeeSales{}, "Successful"),
+		endpoint.Response(http.StatusOK, []types.EmployeeSale{}, "Successful"),
 		endpoint.Path("employee_id", "string", "uuid", "UUID of an employee"),
 		endpoint.Tags("Employees"),
 	)
 
 	getEmployeesSales := endpoint.New("GET", "/employees/sales", "Get employees sales",
 		endpoint.Handler(controllers.GetEmployeesSales),
-		endpoint.Response(http.StatusOK, types.EmployeeSales{}, "Successful"),
+		endpoint.Response(http.StatusOK, []types.EmployeeSale{}, "Successful"),
 		endpoint.Tags("Employees"),
 	)
 
 	getEmployeePurchases := endpoint.New("GET", "/employees/{employee_id}/purchases", "Get employee's purchases",
 		endpoint.Handler(controllers.GetEmployeePurchases),
-		endpoint.Response(http.StatusOK, types.EmployeePurchases{}, "Successful"),
+		endpoint.Response(http.StatusOK, []types.EmployeePurchase{}, "Successful"),
 		endpoint.Path("employee_id", "string", "uuid", "UUID of an employee"),
 		endpoint.Tags("Employees"),
 	)
 
 	getEmployeesPurchases := endpoint.New("GET", "/employees/purchases", "Get employees purchases",
 		endpoint.Handler(controllers.GetEmployeesPurchases),
-		endpoint.Response(http.StatusOK, types.EmployeePurchases{}, "Successful"),
+		endpoint.Response(http.StatusOK, []types.EmployeePurchase{}, "Successful"),
 		endpoint.Tags("Employees"),
 	)
 

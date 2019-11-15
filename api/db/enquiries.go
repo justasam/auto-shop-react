@@ -5,6 +5,7 @@ import (
 	"database/sql"
 	"fmt"
 	"strings"
+	"time"
 )
 
 // GetEnquiries returns enquiries
@@ -38,7 +39,7 @@ func (c *Client) GetEnquiries(filter *types.GetEnquiriesFilter, pageNumber, perP
 		return nil, 0, c.transformError(err)
 	}
 
-	var enquiries []types.Enquiry
+	enquiries := []types.Enquiry{}
 	err = nstmt.Select(&enquiries, namedParams)
 	if err != nil {
 		if err == sql.ErrNoRows {
@@ -89,10 +90,10 @@ func (c *Client) CreateEnquiry(p types.EnquiryPost) (*types.Enquiry, *types.Erro
 
 // MarkEnquiryResolved marks the enquiry as resolved
 func (c *Client) MarkEnquiryResolved(enquiryID, employeeID string) *types.Error {
-	query := `UPDATE %s_enquiries SET resolved=true, resolved_by=? WHERE id=?`
+	query := `UPDATE %s_enquiries SET resolved=true, resolved_by=? resolved_at=? WHERE id=?`
 	query = c.applyView(query)
 
-	_, err := c.ex.Exec(query, employeeID, enquiryID)
+	_, err := c.ex.Exec(query, employeeID, enquiryID, time.Now().Format("2006-01-02"))
 	if err != nil {
 		return c.transformError(err)
 	}

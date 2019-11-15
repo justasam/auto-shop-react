@@ -5,6 +5,7 @@ import (
 	"net/http"
 	"strings"
 
+	"github.com/davecgh/go-spew/spew"
 	"github.com/gorilla/sessions"
 	"github.com/labstack/echo-contrib/session"
 	"github.com/labstack/echo/v4"
@@ -34,6 +35,8 @@ func Login(c echo.Context) error {
 	if dbErr != nil {
 		return dbErr
 	}
+
+	spew.Dump(account)
 
 	// Do not differentiate between found and not found
 	if account == nil {
