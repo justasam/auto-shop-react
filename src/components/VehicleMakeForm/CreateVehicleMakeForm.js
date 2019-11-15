@@ -9,7 +9,7 @@ import {
 import './index.css';
 import VehicleMakeSchema from './schema.js';
 
-const CreateVehicleMakeForm = () => {
+const CreateVehicleMakeForm = ({onSubmit}) => {
     const [makes, setMakes] = useState([])
     useEffect(() => {
         async function getMakes() {

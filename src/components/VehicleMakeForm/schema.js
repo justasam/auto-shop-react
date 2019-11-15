@@ -7,7 +7,7 @@ const schema = {
     pictureUrl: {
       type: 'string',
       uniforms: {
-        component: ImageField
+        component: Image
       }
     }
   },

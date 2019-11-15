@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import { FormalizeVehiclePurchase } from '../../components/EmployeePanel/FormalizeVehiclePurchase';
 import { FormalizeVehicleSale } from '../../components/EmployeePanel/FormalizeVehicleSale';
-import { CreateVehicleMakeForm } from '../../components/VehicleMakeForm/CreateVehicleMakeForm';
+import { CreateVehicleMake } from '../../components/EmployeePanel/CreateVehicleMake';
 import { EmployeeSales } from '../../components/EmployeePanel/EmployeeSales';
 import { EmployeePurchases } from '../../components/EmployeePanel/EmployeePurchases';
 import { EmployeeEnquiries } from '../../components/EmployeePanel/EmployeeEnquiries';
@@ -81,7 +81,7 @@ const EmployeePanel = () => {
                         case "vehicle-sale":
                             return <FormalizeVehicleSale/>;
                         case "create-vehicle-make":
-                            return <CreateVehicleMakeForm/>;
+                            return <CreateVehicleMake/>;
                         case "employee-sales":
                             return <EmployeeSales/>;
                         case "employee-purchases":
