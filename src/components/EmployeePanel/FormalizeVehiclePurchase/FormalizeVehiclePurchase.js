@@ -203,6 +203,11 @@ const FormalizeVehiclePurchase = () => {
                             base64files.push(file);
                         }
 
+                        let spec = JSON.parse(specification.current.value);
+                        console.log(spec)
+                        let stringSpec = JSON.stringify(spec);
+                        console.log(stringSpec)
+
                         const data = { 
                             bought_for: parseFloat(boughtFor.current.value),
                             body_type: bodyType.current.value,
@@ -220,7 +225,7 @@ const FormalizeVehiclePurchase = () => {
                             engine: parseFloat(engine.current.value),
                             description: description.current.value,
                             drivetrain: drivetrain.current.value,
-                            specification: specification.current.value,
+                            specification: stringSpec,
                             images: base64files,
                             customer_id: customerID.current.value
                         }
