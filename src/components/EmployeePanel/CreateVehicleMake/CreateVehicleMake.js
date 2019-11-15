@@ -1,6 +1,7 @@
 
 import React, {useState, useEffect} from 'react';
 import { Input, Button } from '../../../components/Inputs';
+import { fileToBase64 } from '../../../utils.js'
 import './index.css';
 
 const CreateVehicleMake = () => {
@@ -25,7 +26,7 @@ const CreateVehicleMake = () => {
     let name = React.createRef();
     let image = React.createRef();
 
-    let [validateName, setValidateName] = useState([]); 
+    let [validateName, setValidateName] = useState(["isntEMPTY"]); 
 
     return (
         <div className="vehicle-make-form">
@@ -43,9 +44,12 @@ const CreateVehicleMake = () => {
                     <h4>Make Image</h4>
                     <Input type="file" ref={image} accept="image/png" width="300px"/>
                     <Button name="SELL" width="100px" onClick={async () => {
+                        let base64file = await fileToBase64(image.current.files[0]);
+                        base64file = base64file.split(',')[1]
+
                         const data = { 
-                            name,
-                            image
+                            name: name.current.value,
+                            image: base64file
                         }
 
                         const response = await fetch("/autoshop/api/vehicles/makes", {

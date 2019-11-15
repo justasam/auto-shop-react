@@ -77,22 +77,24 @@ const FormalizeVehiclePurchase = () => {
     let specification = React.createRef();
     let images = React.createRef();
     let customerID = React.createRef();
+    let boughtFor = React.createRef();
 
-    let [validatePrice, setValidatePrice] = useState([]); 
-    let [validateModel, setValidateModel] = useState([]); 
-    let [validateYear, setValidateYear] = useState([]); 
-    let [validateMilage, setValidateMilage] = useState([]); 
-    let [validateBodyType, setValidateBodyType] = useState([]); 
-    let [validateFuelType, setValidateFuelType] = useState([]); 
-    let [validateDoors, setValidateDoors] = useState([]); 
-    let [validateGearbox, setValidateGearbox] = useState([]); 
-    let [validateSeats, setValidateSeats] = useState([]); 
-    let [validateFuelConsumption, setValidateFuelConsumption] = useState([]); 
-    let [validateColour, setValidateColour] = useState([]); 
-    let [validateEngine, setValidateEngine] = useState([]); 
-    let [validateDescription, setValidateDescription] = useState([]); 
-    let [validateDrivetrain, setValidateDrivetrain] = useState([]); 
-    let [validateSpecification, setValidateSpecification] = useState([]); 
+    let [validatePrice, setValidatePrice] = useState(["isntEMPTY"]); 
+    let [validateModel, setValidateModel] = useState(["isntEMPTY"]); 
+    let [validateYear, setValidateYear] = useState(["isntEMPTY"]); 
+    let [validateMilage, setValidateMilage] = useState(["isntEMPTY"]); 
+    let [validateBodyType, setValidateBodyType] = useState(["isntEMPTY"]); 
+    let [validateFuelType, setValidateFuelType] = useState(["isntEMPTY"]); 
+    let [validateDoors, setValidateDoors] = useState(["isntEMPTY"]); 
+    let [validateGearbox, setValidateGearbox] = useState(["isntEMPTY"]); 
+    let [validateSeats, setValidateSeats] = useState(["isntEMPTY"]); 
+    let [validateFuelConsumption, setValidateFuelConsumption] = useState(["isntEMPTY"]); 
+    let [validateColour, setValidateColour] = useState(["isntEMPTY"]); 
+    let [validateEngine, setValidateEngine] = useState(["isntEMPTY"]); 
+    let [validateDescription, setValidateDescription] = useState(["isntEMPTY"]); 
+    let [validateDrivetrain, setValidateDrivetrain] = useState(["isntEMPTY"]); 
+    let [validateSpecification, setValidateSpecification] = useState(["isntEMPTY"]); 
+    let [validateBoughtFor, setValidateBoughtFor] = useState(["isntEMPTY"]); 
 
     return (
         <div className="vehicle-purchases-form">
@@ -106,6 +108,11 @@ const FormalizeVehiclePurchase = () => {
                     <Dropdown ref={customerID} options={customers} width="300px"/>
                     <h4>Vehicle Make</h4>
                     <Dropdown ref={make} options={makes} width="300px"/>
+                    <h4>Bought For</h4>
+                    <Input type="text" ref={boughtFor} validate={validateBoughtFor} width="300px"
+                        onBlur={() => setValidateBoughtFor(["isntEMPTY", "isINT"])}
+                        onFocus={() => setValidateBoughtFor([])}
+                    />
                     <h4>Vehicle Model</h4>
                     <Input type="text" ref={model} validate={validateModel} width="300px"
                         onBlur={() => setValidateModel(["isntEMPTY"])}
@@ -197,24 +204,25 @@ const FormalizeVehiclePurchase = () => {
                         }
 
                         const data = { 
-                            body_type: bodyType.current.val,
-                            fuel_type: fuelType.current.val,
-                            fuel_consumption: fuelConsumption.current.val,
-                            make: make.current.val,
-                            model: model.current.val, 
-                            year: year.current.val,
-                            price: price.current.val,
-                            milage: milage.current.val,
-                            doors: doors.current.val, 
-                            gearbox: gearbox.current.val,
-                            seats: seats.current.val,
-                            colour: colour.current.val,
-                            engine: engine.current.val,
-                            description: description.current.val,
-                            drivetrain: drivetrain.current.val,
-                            specification: specification.current.val,
+                            bought_for: parseFloat(boughtFor.current.value),
+                            body_type: bodyType.current.value,
+                            fuel_type: fuelType.current.value,
+                            fuel_consumption: parseFloat(fuelConsumption.current.value),
+                            make: make.current.value,
+                            model: model.current.value, 
+                            year: year.current.value,
+                            price: parseInt(price.current.value),
+                            milage: parseInt(milage.current.value),
+                            doors: parseInt(doors.current.value), 
+                            gearbox: gearbox.current.value,
+                            seats: parseInt(seats.current.value),
+                            colour: colour.current.value,
+                            engine: parseFloat(engine.current.value),
+                            description: description.current.value,
+                            drivetrain: drivetrain.current.value,
+                            specification: specification.current.value,
                             images: base64files,
-                            customer_id: customerID.current.val
+                            customer_id: customerID.current.value
                         }
 
                         const response = await fetch("/autoshop/api/vehicles/purchase", {
