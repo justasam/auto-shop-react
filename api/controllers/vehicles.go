@@ -249,9 +249,9 @@ func PurchaseVehicle(c echo.Context) error {
 	}
 
 	// If spec is present, try to parse it
-	if payload.Specificaction != nil {
+	if payload.Specification != nil {
 		var validJSON map[string]interface{}
-		err := json.Unmarshal([]byte(*payload.Specificaction), &validJSON)
+		err := json.Unmarshal([]byte(*payload.Specification), &validJSON)
 		if err != nil {
 			return echo.NewHTTPError(http.StatusBadRequest, "Invalid specification")
 		}
@@ -266,9 +266,9 @@ func PurchaseVehicle(c echo.Context) error {
 	payload.ID = uuid.NewV4().String()
 	payload.EmployeeID = accountOwnerID
 
-	if payload.Specificaction == nil {
+	if payload.Specification == nil {
 		empty := "{}"
-		payload.Specificaction = &empty
+		payload.Specification = &empty
 	}
 
 	// Create folder for vehicle photos

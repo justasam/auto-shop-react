@@ -87,7 +87,7 @@ type VehiclePost struct {
 	Engine          float64 `db:"engine" json:"engine" binding:"required" minimum:"0"`
 	Description     string  `db:"description" json:"description" binding:"required"`
 	Drivetrain      string  `db:"drivetrain" json:"drivetrain" binding:"required" min_length:"1"`
-	Specificaction  *string `db:"specification" json:"specificaction,omitempty"`
+	Specification   *string `db:"specification" json:"specification,omitempty"`
 
 	Images     []string `json:"images" binding:"required" min_items:"1"`
 	CustomerID string   `json:"customer_id" binding:"required"`
@@ -113,7 +113,7 @@ type VehiclePut struct {
 	Engine          float64 `db:"engine" json:"engine" binding:"required" minimum:"0"`
 	Description     string  `db:"description" json:"description" binding:"required"`
 	Drivetrain      string  `db:"drivetrain" json:"drivetrain" binding:"required" min_length:"1"`
-	Specificaction  *string `db:"specification" json:"specificaction,omitempty"`
+	Specificaction  *string `db:"specification" json:"specification,omitempty"`
 
 	ID string `db:"id" json:"-"`
 }
@@ -122,7 +122,7 @@ type VehiclePut struct {
 type VehiclePurchaseEntryPost struct {
 	ID                      string  `db:"id"`
 	VehicleID               string  `db:"vehicle_id" json:"vehicle_id" format:"uuid" binding:"required"`
-	BoughtFor               float64 `db:"bought_for" json:"bought_for" minimum:"0" binding:"required"`
+	PurchasedFor            float64 `db:"purchased_for" json:"purchased_for" minimum:"0" binding:"required"`
 	PruchasedFromCustomerID string  `db:"purchased_from_customer_id" json:"purchased_from_customer_id" format:"uuid" binding:"required"`
 	PurchasedByEmployeeID   string  `db:"purchased_by_employee_id"`
 }
@@ -131,9 +131,14 @@ type VehiclePurchaseEntryPost struct {
 type VehiclePurchaseEntry struct {
 	ID                      string  `db:"id" json:"id"`
 	VehicleID               string  `db:"vehicle_id" json:"vehicle_id"`
-	BoughtFor               float64 `db:"bought_for" json:"bought_for"`
+	PurchasedFor            float64 `db:"purchased_for" json:"purchased_for"`
 	PruchasedFromCustomerID string  `db:"purchased_from_customer_id" json:"purchased_from_customer_id"`
 	PurchasedByEmployeeID   string  `db:"purchased_by_employee_id" json:"purchased_by_employee_id"`
+	CustomerName            string  `db:"customer_name" json:"customer_name,omitempty"`
+	CustomerSurname         string  `db:"customer_surname" json:"customer_surname,omitempty"`
+	VehicleMake             string  `db:"vehicle_make" json:"vehicle_make,omitempty"`
+	VehicleModel            string  `db:"vehicle_model" json:"vehicle_model,omitempty"`
+	VehicleYear             int     `db:"vehicle_year" json:"vehicle_year,omitempty"`
 }
 
 // VehicleMakePost payload for make creation

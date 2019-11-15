@@ -93,7 +93,7 @@ func (c *Client) CreateVehicle(p types.VehiclePost) (*types.Vehicle, *types.Erro
 
 	_, err := c.ex.Exec(query, p.ID, p.Make, p.Model, p.Year, p.Price,
 		p.Milage, p.BodyType, p.FuelType, p.Doors, p.Gearbox, p.Seats,
-		p.FuelConsumption, p.Colour, p.Engine, p.Description, p.Specificaction,
+		p.FuelConsumption, p.Colour, p.Engine, p.Description, p.Specification,
 		p.Drivetrain)
 	if err != nil {
 		return nil, c.transformError(err)
@@ -151,12 +151,12 @@ func (c *Client) GetVehiclePurchaseEntry(vehicleID string) (*types.VehiclePurcha
 // CreateVehiclePurchaseEntry creates a new vehicle purchase entry
 func (c *Client) CreateVehiclePurchaseEntry(p *types.VehiclePurchaseEntryPost) (*types.VehiclePurchaseEntry, *types.Error) {
 	query := `INSERT INTO %s_vehicle_purchases 
-		(id, purchased_from_customer_id, bought_for, vehicle_id, purchased_by_employee_id)
+		(id, purchased_from_customer_id, purchased_for, vehicle_id, purchased_by_employee_id)
 		VALUES (?, ?, ?, ?, ?)`
 	query = c.applyView(query)
 
 	_, err := c.ex.Exec(query, p.ID, p.PruchasedFromCustomerID,
-		p.BoughtFor, p.VehicleID, p.PurchasedByEmployeeID)
+		p.PurchasedFor, p.VehicleID, p.PurchasedByEmployeeID)
 	if err != nil {
 		return nil, c.transformError(err)
 	}
@@ -194,7 +194,7 @@ func (c *Client) PurchaseVehicle(p types.VehiclePost) (*types.Vehicle, *types.Er
 	entry := &types.VehiclePurchaseEntryPost{
 		ID:                      uuid.NewV4().String(),
 		VehicleID:               p.ID,
-		BoughtFor:               p.BoughtFor,
+		PurchasedFor:            p.BoughtFor,
 		PruchasedFromCustomerID: p.CustomerID,
 		PurchasedByEmployeeID:   p.EmployeeID,
 	}
