@@ -189,14 +189,12 @@ const FormalizeVehiclePurchase = () => {
                     <Input type="file" ref={images} accept="image/jpeg" width="300px" multiple/>
                     <Button name="CREATE" width="100px" onClick={async () => {
                         
-                        // let files = [...images.current.files];
                         let base64files = [];
                         for (let file of images.current.files) {
                             file = await fileToBase64(file);
                             file = file.split(',')[1];
                             base64files.push(file);
                         }
-                        console.log(base64files);
 
                         const data = { 
                             body_type: bodyType.current.val,
@@ -215,6 +213,7 @@ const FormalizeVehiclePurchase = () => {
                             description: description.current.val,
                             drivetrain: drivetrain.current.val,
                             specification: specification.current.val,
+                            images: base64files,
                             customer_id: customerID.current.val
                         }
 

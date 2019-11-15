@@ -34,12 +34,14 @@ const Login = ({hidden, toggleHidden}) => {
         let username = uname.current.value;
         let password = pwd.current.value;
 
+        console.log(password)
         if (!username || !password) {
           return;
         }
 
         password = sha256(password);
 
+        console.log(password);
         const data = { username, password };
 
         try {
