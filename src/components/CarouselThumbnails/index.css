@@ -1,0 +1,22 @@
+.slick-slide li {
+  box-sizing: border-box;
+  height: 70px;
+}
+
+.slick-slider.slick-dots.slick-thumb.slick-initialized {
+  position: relative;
+}
+
+li.slick-active {
+  border: 3px solid rgba(180,59,57,0.7)
+}
+
+.slick-current {
+  margin-left: 0;
+  padding: 0;
+}
+
+.slick-slide {
+  padding-top: 0;
+  padding-bottom: 0;
+}
