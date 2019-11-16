@@ -7,7 +7,7 @@ import { Branches } from './screens/Branches';
 import { NoMatch } from './screens/NoMatch';
 import { NavBar } from './components/NavBar';
 import { Admin } from './screens/Admin';
-import { Login } from './screens/Login';
+import { Reg } from './screens/Reg';
 import { SwaggerAPI } from './screens/SwaggerAPI';
 import { EmployeePanel } from './screens/EmployeePanel';
 import { Route, Switch, Redirect } from 'react-router-dom';
@@ -23,7 +23,7 @@ export const Routes = () => {
         <Route exact path="/PartsAlt" component={PartsAlt} />
         <Route exact path="/Branches" component={Branches} />
         <Route exact path="/Cart" component={Cart} />
-        <Route exact path="/Login" component={Login} />
+        <Route exact path="/Reg" component={Reg} />
         <Route exact path="/Admin" component={Admin} />
         <Route exact path="/api" component={SwaggerAPI} />
         <Route exact path="/EmployeePanel" component={EmployeePanel} />

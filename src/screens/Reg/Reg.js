@@ -3,7 +3,7 @@ import { LoginForm } from '../../components/LoginForm';
 
 import './index.css';
 
-const Login = props => {
+const Reg = props => {
   return (
     <div id="banner">
         <LoginForm />
@@ -11,4 +11,4 @@ const Login = props => {
   )
 }
 
-export default Login;
+export default Reg;

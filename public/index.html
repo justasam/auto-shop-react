@@ -27,6 +27,8 @@
     <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css">
     <!--    Google Map Js    -->
     <script src="//maps.googleapis.com/maps/api/js?key=AIzaSyCnwknJIl-Jo-e5LGZoNE9ho8_M8mUWbKg&libraries=places&callback=initAutocomplete"></script>
+    <link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/8.11.8/sweetalert2.min.css">
+    <script src="//cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/8.11.8/sweetalert2.min.js"></script>
 </head>
 
 <body>
@@ -83,6 +85,116 @@
             }
         })(marker, i));
     }
+</script>
+
+<script type="text/javascript">
+    /*
+    /   DashboardCard
+    */
+    // saerch table
+    document.querySelectorAll('aside.card').forEach((elem) => {
+        let input = elem.querySelector('input[type="search"]');
+        let table = elem.querySelector('table');
+
+        if (input && table) {
+            input.addEventListener('keyup', (e) => {
+                var filter, tr, td, i, txtValue;
+
+                filter = input.value.toUpperCase();
+                tr = table.getElementsByTagName("tr");
+                for (i = 0; i < tr.length; i++) {
+                    td = tr[i].getElementsByTagName("td")[0];
+                    if (td) {
+                        txtValue = td.textContent || td.innerText;
+                        if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                            tr[i].style.display = "";
+                        } else {
+                            tr[i].style.display = "none";
+                        }
+                    }
+                }
+            });
+        }
+    });
+
+    // popup form
+    document.querySelectorAll('.popupForm').forEach((elem) => {
+        // popup form close
+        elem.querySelector('.close').addEventListener("click", (e) => {
+            elem.classList.add('hidden');
+        });
+    });
+
+    document.addEventListener("DOMContentLoaded", () => {
+        // tabs
+        document.querySelectorAll('ul[data-tabs]').forEach((elem) => {
+            var tabLinks = new Array();
+            var contentDivs = new Array();
+
+            var tabListItems = elem.childNodes;
+            for (var i = 0; i < tabListItems.length; i++) {
+                if (tabListItems[i].nodeName == "LI") {
+                    var tabLink = getFirstChildWithTagName(tabListItems[i], 'A');
+                    var id = getHash(tabLink.getAttribute('href'));
+                    var hasId = document.getElementById(id);
+
+                    if (hasId) {
+                        tabLinks[id] = tabLink;
+                        contentDivs[id] = document.getElementById(id);
+                    }
+                }
+            }
+
+            for (var id in tabLinks) {
+                tabLinks[id].onclick = showTab;
+                tabLinks[id].onfocus = function() {
+                    this.blur()
+                };
+
+                if (id == 0) {
+                    tabLinks[id].closest('li').classList.add('selected');
+                }
+            }
+
+            var tabs = 0;
+            for (var id in contentDivs) {
+                if (tabs !== 0){
+                    contentDivs[id].classList.add('hidden');
+                }
+
+                contentDivs[id].setAttribute("style", "transition: all 1s;");
+                tabs ++;
+            }
+
+            function showTab() {
+                var selectedId = getHash(this.getAttribute('href'));
+
+                for (var id in contentDivs) {
+                    if (id == selectedId) {
+                        tabLinks[id].closest('li').classList.add('selected');
+                        contentDivs[id].classList.remove('hidden');
+                    }
+                    else {
+                        tabLinks[id].closest('li').classList.remove('selected');
+                        contentDivs[id].classList.add('hidden');
+                    }
+                }
+
+                return false;
+            }
+
+            function getFirstChildWithTagName(element, tagName) {
+                for (var i = 0; i < element.childNodes.length; i++) {
+                    if (element.childNodes[i].nodeName == tagName) return element.childNodes[i];
+                }
+            }
+
+            function getHash(url) {
+                var hashPos = url.lastIndexOf('#');
+                return url.substring(hashPos + 1);
+            }
+        });
+    });
 </script>
 
 </html>

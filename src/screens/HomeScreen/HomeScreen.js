@@ -34,7 +34,7 @@ const HomeScreen = props => {
     async function getRecentlyListedVehicles() {
         const response = await fetch(
           "/autoshop/api/vehicles/query",
-          { 
+          {
             method: "POST",
             headers: {
               'Content-Type': 'application/json'

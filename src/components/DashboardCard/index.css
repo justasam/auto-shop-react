@@ -1,3 +1,17 @@
+.hidden {
+    position: absolute;
+    visibility: hidden;
+    opacity: 0;
+    -webkit-transition: max-height 1s ease;
+    -moz-transition: max-height 1s ease;
+    -ms-transition: max-height 1s ease;
+    -o-transition: max-height 1s ease;
+    transition: max-height 1s ease;
+    overflow: hidden;
+    max-height: 0;
+    max-width: 0;
+}
+
 .DashboardCard {
     width: 100%;
     position: relative;
@@ -159,10 +173,13 @@
     background-color: #262c43;
     visibility: visible;
     overflow: hidden;
-    max-height: 200px;
     transition: all .4s ease-in-out;
 }
 
+.navList .subList a {
+    color: #D3D3D3;
+    text-decoration: none;
+}
 .navList .subList__item {
     padding: 8px;
     text-transform: capitalize;
@@ -225,6 +242,7 @@
     grid-auto-rows: 94px;
     grid-gap: 30px;
     margin: 20px;
+    padding: 0;
 }
 
 .status {
@@ -236,6 +254,11 @@
     transform: translateY(0);
     transition: all .5s;
     border-radius: 10px;
+}
+
+.status a {
+    display: contents;
+    text-decoration: none;
 }
 
 .status-icon {
@@ -291,6 +314,7 @@
     background-color: #fff;
     margin-bottom: 20px;
     border-radius: 10px;
+    overflow: hidden;
     -webkit-column-break-inside: avoid;
 }
 
@@ -456,6 +480,15 @@
     cursor: pointer;
 }
 
+.main__cards input {
+    margin: 1em;
+    height: 2em;
+    border-radius: 30px;
+    text-align: center;
+    outline: none;
+    background-color: rgb(233, 233, 233);
+}
+
 @media only screen and (min-width: 46.875em) {
     .DashboardCard {
         display: grid;
@@ -488,4 +521,99 @@
     .main__cards {
         column-count: 2;
     }
+}
+
+/*
+/   filter table
+*/
+.main__cards input {
+    margin: 1em;
+    height: 2em;
+    border-radius: 30px;
+    text-align: center;
+    outline: none;
+    background-color: rgb(233, 233, 233);
+}
+
+#tableFilterTable {
+    padding: 1em;
+}
+
+#tableFilterTable tr {
+    line-height: 2.5em;
+}
+
+#tableFilterTable tr th button {
+    border-radius: 50%;
+    background-color: rgb(230, 230, 230);
+    height: 35px;
+    width: 35px;
+    outline: none;
+    box-shadow: 3px 4px 6px rgba(97, 97, 97, 0.7);
+}
+
+/*
+/   popup form
+*/
+aside.popupForm {
+    position: fixed;
+    top: 10vh;
+    padding: 1em;
+    text-align: justify;
+    left: 0;
+    right: 0;
+    margin: 0 auto;
+    background-color: #fbfbfb;
+    width: 90vw;
+    max-width: 800px;
+    text-align: center;
+    border-radius: 20px;
+    z-index: 2;
+    border: 2px black solid;
+    box-shadow: 15px 10px 30px #888888;
+}
+
+aside.popupForm.hidden {
+    display: none;
+}
+
+aside.popupForm .title {
+    font-weight: bold;
+    margin: .8em;
+}
+
+aside.popupForm input {
+    width: 100%;
+    color: #3c3c3c;
+    text-align: center;
+    font-size: 1.2em;
+    border-radius: 0;
+    line-height: 1em;
+    background-color: #fbfbfb;
+    padding: 10px 13px;
+    margin-bottom: 10px;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -ms-box-sizing: border-box;
+    box-sizing: border-box;
+    border: 3px solid rgba(0, 0, 0, 0);
+    border-radius: 50px;
+}
+
+aside.popupForm input:focus {
+    box-shadow: 0;
+    border: 3px solid #3498db;
+    color: #3498db;
+    outline: none;
+}
+
+aside.popupForm .close {
+    height: 40px;
+    width: 40px;
+    border-radius: 50%;
+    position: absolute;
+    right: 1em;
+    top: 1em;
+    box-shadow: none;
+    border: none;
 }
