@@ -45,6 +45,12 @@ func employeeAPI() []*swagger.Endpoint {
 		endpoint.Tags("Employees"),
 	)
 
+	getEmployeesPositions := endpoint.New("GET", "/employees/positions", "Get employees positions",
+		endpoint.Handler(controllers.GetEmployeesPositions),
+		endpoint.Response(http.StatusOK, []types.EmployeePosition{}, "Successful"),
+		endpoint.Tags("Employees"),
+	)
+
 	updateEmployee := endpoint.New("PUT", "/employees/{employee_id}", "Update employee",
 		endpoint.Handler(controllers.UpdateEmployee),
 		endpoint.Response(http.StatusOK, types.Employee{}, "Successful"),
@@ -96,5 +102,6 @@ func employeeAPI() []*swagger.Endpoint {
 		getEmployeesSales,
 		getEmployeesPurchases,
 		getEmployeePurchases,
+		getEmployeesPositions,
 	}
 }
