@@ -120,14 +120,13 @@ const EmployeeEnquiries = () => {
                       }
 
                       const resp = await response.json();
-
-                      let deltaRows = rows
+                      let deltaRows = rows.slice(0);
                       console.log(deltaRows)
                       deltaRows.forEach(function(r, i) {
                         if (r.id == row.id) {
-                          rows[i].resolved_by = resp.resolved_by;
-                          rows[i].resolved = resp.resolved.toString();
-                          rows[i].resolved_at = resp.resolved_at;
+                          deltaRows[i].resolved_by = resp.resolved_by;
+                          deltaRows[i].resolved = resp.resolved.toString();
+                          deltaRows[i].resolved_at = resp.resolved_at;
                         }
                       })
 
