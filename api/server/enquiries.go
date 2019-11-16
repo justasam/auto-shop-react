@@ -66,7 +66,7 @@ func enquiriesAPI() []*swagger.Endpoint {
 
 	markEnquiryResolved := endpoint.New("POST", "/enquiries/{enquiry_id}/resolved", "Mark enquiry resolved",
 		endpoint.Handler(controllers.MarkEnquiryResolved),
-		endpoint.Response(http.StatusNoContent, "", "Successful"),
+		endpoint.Response(http.StatusOK, types.Enquiry{}, "Successful"),
 		endpoint.Path("enquiry_id", "string", "uuid", "UUID of an enquiry"),
 		endpoint.Body(types.MarkEnquiryResolved{}, "Body not allowed", false),
 		endpoint.Tags("Enquiries"),

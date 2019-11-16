@@ -181,12 +181,12 @@ func MarkEnquiryResolved(c echo.Context) error {
 	}
 	defer db.Close()
 
-	dbErr := db.MarkEnquiryResolved(enquiryID, ownerID)
+	enquiry, dbErr := db.MarkEnquiryResolved(enquiryID, ownerID)
 	if dbErr != nil {
 		return dbErr
 	}
 
-	return c.NoContent(http.StatusNoContent)
+	return c.JSON(http.StatusOK, enquiry)
 }
 
 // DeleteEnquiry deletes enquiry from the db
