@@ -1,7 +1,8 @@
 import React, {useState} from 'react';
 import { VehiclePurchaseFormalizationForm } from '../../components/VehiclePurchaseFormalizationForm';
 import { VehicleSaleFormalizationForm } from '../../components/VehicleSaleFormalizationForm';
-import { CreateVehicleMake } from '../../components/EmployeePanel/CreateVehicleMake';
+import { VehicleMakeCreationForm } from '../../components/VehicleMakeCreationForm';
+import { EmployeesTable } from '../../components/EmployeePanel/EmployeesTable'
 import { EmployeeSales } from '../../components/EmployeePanel/EmployeeSales';
 import { EmployeePurchases } from '../../components/EmployeePanel/EmployeePurchases';
 import { EmployeeEnquiries } from '../../components/EmployeePanel/EmployeeEnquiries';
@@ -70,6 +71,16 @@ const EmployeePanel = () => {
                                 <span class="navList__subheading-title">Enquiry List</span>
                             </div>
                         </li>
+                        <li class="navList__heading">Employees<i class="fas fa-social"></i></li>
+                        <li>
+                            <div class="navList__subheading row row--align-v-center" onClick={(e) => {
+                                e.preventDefault();
+                                setContent("employees-table")
+                            }}>
+                                <span class="navList__subheading-icon"><i class="fas fa-list"></i></span>
+                                <span class="navList__subheading-title">Employees List</span>
+                            </div>
+                        </li>
                     </ul>
                 </div>
             </aside>
@@ -81,13 +92,15 @@ const EmployeePanel = () => {
                         case "vehicle-sale":
                             return <VehicleSaleFormalizationForm/>;
                         case "create-vehicle-make":
-                            return <CreateVehicleMake/>;
+                            return <VehicleMakeCreationForm/>;
                         case "employee-sales":
                             return <EmployeeSales/>;
                         case "employee-purchases":
                             return <EmployeePurchases/>;
                         case "list-enquiries":
                             return <EmployeeEnquiries/>;
+                        case "employees-table":
+                            return <EmployeesTable/>;
                         default:
                             return null;
                     }
