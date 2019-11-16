@@ -85,13 +85,12 @@ const FormalizeVehicleSale = () => {
                     />
                     <Button name="SELL" width="100px" onClick={async () => {
                         const data = { 
-                            vehicle_id: vehicleID,
-                            customer_id: customerID,
+                            sold_to: customerID.current.value,
                             sold_for: soldFor
                         }
 
                         let url = "/autoshop/api/vehicles/"+vehicleID+"/sold"
-                        const response = await fetch("/autoshop/api/vehicles/p", {
+                        const response = await fetch(url, {
                             method: "POST",
                             body: JSON.stringify(data),
                             headers: {
