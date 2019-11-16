@@ -1,5 +1,6 @@
 import React from 'react';
 import { ProductCardAlt } from '../../components/ProductCardAlt';
+import { ProductCardPopup } from '../../components/ProductCardPopup';
 import { DropdownAlt } from '../../components/Inputs';
 import './index.css';
 
@@ -44,6 +45,7 @@ const PartsAlt = props => {
           <ProductCardAlt title='Part Title' price='145$' image='https://picsum.photos/565' />
         </div>
       </div>
+      <ProductCardPopup />
     </div>
   )
 }
