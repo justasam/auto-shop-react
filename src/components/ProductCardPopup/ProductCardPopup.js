@@ -18,6 +18,7 @@ const ProductCardPopup = () => {
       <div style={{
         display: 'grid',
         gridTemplateColumns: '1fr 1fr',
+        gridTemplateRows: '600px 1fr',
         gap: 20,
         width: '1000px',
         maxWidth: '80vw',
@@ -47,6 +48,10 @@ const ProductCardPopup = () => {
           <p>XDRIVE18D XLINE 2.0 5dr</p>
           <h1>$11,800</h1>
         </div>
+        <div style={{
+          border: '2px solid red',
+          gridColumn: 'span 2'
+        }}></div>
       </div>
     </div>
   )

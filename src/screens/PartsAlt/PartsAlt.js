@@ -1,10 +1,12 @@
 import React from 'react';
+import { withRouter } from 'react-router-dom';
 import { ProductCardAlt } from '../../components/ProductCardAlt';
 import { ProductCardPopup } from '../../components/ProductCardPopup';
 import { DropdownAlt } from '../../components/Inputs';
 import './index.css';
 
-const PartsAlt = props => {
+const PartsAlt = withRouter(props => {
+  console.log(props, props.location);
   return (
     <div>
       <h3 style={{
@@ -13,16 +15,16 @@ const PartsAlt = props => {
       }}>PartsAlt</h3>
       <div className='parts_alt_filters'>
         <DropdownAlt title='MODEL:' name='model' options={[
-          {value: 'golf_3', name: 'Golf 3'},
-          {value: 'loremipsum', name: 'lorem'}
+          { value: 'golf_3', name: 'Golf 3' },
+          { value: 'loremipsum', name: 'lorem' }
         ]} />
         <DropdownAlt title='PRICE MIN:' name='model' options={[
-          {value: '50', name: '50$'},
-          {value: 'loremipsum', name: 'lorem'}
+          { value: '50', name: '50$' },
+          { value: 'loremipsum', name: 'lorem' }
         ]} />
         <DropdownAlt title='PRICE MAX:' name='model' options={[
-          {value: '200', name: '200$'},
-          {value: 'loremipsum', name: 'lorem'}
+          { value: '200', name: '200$' },
+          { value: 'loremipsum', name: 'lorem' }
         ]} />
       </div>
       <div style={{
@@ -35,19 +37,13 @@ const PartsAlt = props => {
         maxWidth: '100vw',
         overflow: 'hidden'
       }} className='parts_alt_wrapper'>
-        <div>
-          <ProductCardAlt title='Part Title' price='145$' image='https://picsum.photos/565' />
-        </div>
-        <div>
-          <ProductCardAlt title='Part Title' price='145$' image='https://picsum.photos/565' />
-        </div>
-        <div>
-          <ProductCardAlt title='Part Title' price='145$' image='https://picsum.photos/565' />
-        </div>
+        <ProductCardAlt id='1' title='Part Title' price='145$' image='https://picsum.photos/565' />
+        <ProductCardAlt id='2' title='Part Title' price='145$' image='https://picsum.photos/565' />
+        <ProductCardAlt id='3' title='Part Title' price='145$' image='https://picsum.photos/565' />
       </div>
-      <ProductCardPopup />
+      {props.location.hash ? <ProductCardPopup id={props.location.hash.split('#')[1]} /> : null}
     </div>
   )
-}
+});
 
 export default PartsAlt;
