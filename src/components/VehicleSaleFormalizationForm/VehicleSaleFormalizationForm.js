@@ -94,7 +94,11 @@ const VehicleSaleFormalizationForm = () =>{
 
   return (
     <div>
-      <form onSubmit={handleSubmit(onSubmit)}>
+      <form onSubmit={handleSubmit(onSubmit)} 
+      style={{
+        maxWidth: "400px",
+        margin:"20px auto 20px auto"
+        }}>
         <div style={{
           display: 'grid',
           gridTemplateColumns: '1fr',

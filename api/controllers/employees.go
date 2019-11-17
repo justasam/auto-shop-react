@@ -3,8 +3,8 @@ package controllers
 import (
 	"fmt"
 	"net/http"
-	"reflect"
 
+	"github.com/davecgh/go-spew/spew"
 	"github.com/labstack/echo/v4"
 	uuid "github.com/satori/go.uuid"
 
@@ -52,8 +52,8 @@ func CreateEmployee(c echo.Context) error {
 // GetEmployees returns a list of employees
 func GetEmployees(c echo.Context) error {
 	accountType := c.Get("account_type").(string)
-	perPage := getQueryParam(reflect.Int, "per_page", c).(int)
-	pageNumber := getQueryParam(reflect.Int, "page_number", c).(int)
+	perPage := c.Get("per_page").(int)
+	pageNumber := c.Get("page_number").(int)
 
 	db, err := db.Connect(accountType)
 	if err != nil {
@@ -195,11 +195,16 @@ func UpdateEmployee(c echo.Context) error {
 		payload.Position = &employee.Position
 	}
 
+	payload.AccountID = employee.AccountID
+	payload.ID = employee.ID
+
+	spew.Dump(payload)
 	employee, dbErr = db.UpdateEmployee(employeeID, payload)
 	if dbErr != nil {
 		return dbErr
 	}
 
+	spew.Dump(employee)
 	return c.JSON(http.StatusOK, employee)
 }
 
@@ -296,4 +301,26 @@ func GetEmployeesPurchases(c echo.Context) error {
 	}
 
 	return c.JSON(http.StatusOK, purchases)
+}
+
+// GetEmployeesPositions returns all positions
+func GetEmployeesPositions(c echo.Context) error {
+	accountType := c.Get("account_type").(string)
+
+	if accountType != types.AdminAccount && accountType != types.EmployeeAccount {
+		return echo.NewHTTPError(http.StatusForbidden)
+	}
+
+	db, err := db.Connect(accountType)
+	if err != nil {
+		return fmt.Errorf("Error connecting to the database: %s", err)
+	}
+	defer db.Close()
+
+	positions, dbErr := db.GetEmployeesPositions()
+	if dbErr != nil {
+		return dbErr
+	}
+
+	return c.JSON(http.StatusOK, positions)
 }

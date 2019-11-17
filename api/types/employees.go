@@ -32,7 +32,7 @@ type GetEmployeesFilter struct {
 
 // EmployeePut represents payload for updating employee
 type EmployeePut struct {
-	ID          string
+	ID          string  `json:"-"`
 	Name        string  `json:"name" binding:"required"`
 	Surname     string  `json:"surname" binding:"required"`
 	DateOfBirth string  `json:"date_of_birth" binding:"required"`
@@ -41,7 +41,7 @@ type EmployeePut struct {
 	Email       string  `json:"email" binding:"required"`
 	PhoneNumber string  `json:"phone_number" binding:"required"`
 	BranchID    *string `json:"branch_id,omitempty" format:"uuid"`
-	AccountID   string
+	AccountID   string  `db:"account_id" json:"-"`
 }
 
 // Employee represents employee
@@ -56,7 +56,7 @@ type Employee struct {
 	PhoneNumber string `db:"phone_number" json:"phone_number,omitempty"`
 	BranchID    string `db:"branch_id" json:"branch_id,omitempty"`
 	AccountID   string `db:"account_id" json:"account_id,omitempty"`
-	IsDeleted   bool   `db:"is_deleted" json:"is_deleted,omitempty"`
+	IsDeleted   bool   `db:"is_deleted" json:"is_deleted"`
 }
 
 // MarshalJSON implements json.Marshaler
@@ -107,4 +107,10 @@ type EmployeePurchase struct {
 	VehicleMake             string  `db:"vehicle_make" json:"vehicle_make,omitempty"`
 	VehicleModel            string  `db:"vehicle_model" json:"vehicle_model,omitempty"`
 	VehicleYear             int     `db:"vehicle_year" json:"vehicle_year,omitempty"`
+}
+
+// EmployeePosition represents employee position
+type EmployeePosition struct {
+	ID   string `db:"id" json:"id"`
+	Name string `db:"name" json:"name"`
 }

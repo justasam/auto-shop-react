@@ -1,6 +1,8 @@
 package db
 
 import (
+	"database/sql"
+
 	"github.com/jmoiron/sqlx"
 
 	"autoshop/api/types"
@@ -11,7 +13,7 @@ func (c *Client) GetBranches() ([]types.Branch, *types.Error) {
 	query := `SELECT * FROM %s_branches`
 	query = c.applyView(query)
 
-	var branches []types.Branch
+	branches := []types.Branch{}
 	err := c.db.Select(&branches, query)
 	if err != nil {
 		return nil, c.transformError(err)
@@ -28,6 +30,9 @@ func (c *Client) GetBranchByID(id string) (*types.Branch, *types.Error) {
 	var branch types.Branch
 	err := c.db.Get(&branch, query, id)
 	if err != nil {
+		if err == sql.ErrNoRows {
+			return nil, nil
+		}
 		return nil, c.transformError(err)
 	}
 

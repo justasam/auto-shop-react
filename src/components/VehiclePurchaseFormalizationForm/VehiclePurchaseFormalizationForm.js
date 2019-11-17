@@ -1,6 +1,5 @@
 import React, {useEffect, useState} from "react";
 import useForm from "react-hook-form";
-import { Input } from '../Inputs';
 import { fileToBase64 } from '../../utils.js'
 import VehiclePurchaseSchema from "./schema.js"
 import "./index.css";
@@ -93,7 +92,7 @@ const VehiclePurchaseFormalizationForm = () =>{
 
   return (
     <div>
-      <form onSubmit={handleSubmit(onSubmit)}>
+      <form onSubmit={handleSubmit(onSubmit)} style={{maxWidth:"650px"}}>
         <div style={{
           display: 'grid',
           gridTemplateColumns: '1fr 1fr',

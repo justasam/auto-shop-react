@@ -7,6 +7,7 @@ import (
 
 	"autoshop/api/types"
 
+	"github.com/davecgh/go-spew/spew"
 	"github.com/jmoiron/sqlx"
 )
 
@@ -134,6 +135,7 @@ func (c *Client) UpdateEmployee(id string, p types.EmployeePut) (*types.Employee
 		return nil, c.transformError(err)
 	}
 
+	spew.Dump(query, args)
 	_, err = c.ex.Exec(query, args...)
 	if err != nil {
 		return nil, c.transformError(err)
@@ -254,4 +256,18 @@ func applyEmployeeFilter(query string, filter types.GetEmployeesFilter) (string,
 	}
 
 	return query, namedParams
+}
+
+// GetEmployeesPositions returns all employee positions
+func (c *Client) GetEmployeesPositions() ([]types.EmployeePosition, *types.Error) {
+	query := `SELECT * FROM %s_employee_positions`
+	query = c.applyView(query)
+
+	positions := []types.EmployeePosition{}
+	err := c.db.Select(&positions, query)
+	if err != nil {
+		return nil, c.transformError(err)
+	}
+
+	return positions, nil
 }
