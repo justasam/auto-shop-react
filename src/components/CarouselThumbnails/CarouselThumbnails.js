@@ -66,7 +66,7 @@ const CarouselThumbnails = ({
     dotsClass: 'slick-dots slick-thumb',
     appendDots: dots => (
       <Slider
-        slidesToShow={7}
+        slidesToShow={Math.min(items.length, 7)}
         draggable={false}
         style={{
           height: 70
