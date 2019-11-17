@@ -1,5 +1,6 @@
 .product_card_alt {
   position: relative;
+  max-width: 100%;
 }
 
 .product_card_alt:hover::after {
@@ -10,6 +11,16 @@
   content: 'MORE INFO';
   text-align: center;
   font-size: 24px;
-  background-color: rgba(255,255,255,.4);
+  background-color: rgba(255, 255, 255, .4);
   pointer-events: none;
+}
+
+/* description */
+.product_card_alt p {
+  display: block;
+  max-height: 200px;
+  max-width: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }

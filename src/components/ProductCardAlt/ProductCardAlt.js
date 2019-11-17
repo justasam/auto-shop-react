@@ -2,12 +2,12 @@ import React from 'react';
 import { Link, withRouter } from 'react-router-dom';
 import './index.css';
 
-const ProductCardAlt = withRouter(({id, image, title, price, location}) => {
+const ProductCardAlt = withRouter(({image, title, price, index, description, location}) => {
   return (
     <div className='product_card_alt'>
       <Link to={{
         search: location.search,
-        hash: id
+        hash: index
       }}>
         <img src={image} style={{
           objectFit: 'cover',
@@ -16,7 +16,8 @@ const ProductCardAlt = withRouter(({id, image, title, price, location}) => {
         }} />
       </Link>
       <h3>{title}</h3>
-      <h3>{price}</h3>
+      <p>{description}</p>
+      <h3>£ {price}</h3>
     </div>
   )
 })

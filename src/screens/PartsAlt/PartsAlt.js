@@ -29,15 +29,15 @@ const mockJSON = {
       "listed": false,
       "is_sold": false,
       "images": [
-        "./vehicle_pictures/141cb874-2f76-4dc2-80e3-bd84c62364d6/0.jpg",
-        "./vehicle_pictures/141cb874-2f76-4dc2-80e3-bd84c62364d6/1.jpg",
-        "./vehicle_pictures/141cb874-2f76-4dc2-80e3-bd84c62364d6/2.jpg",
-        "./vehicle_pictures/141cb874-2f76-4dc2-80e3-bd84c62364d6/3.jpg",
-        "./vehicle_pictures/141cb874-2f76-4dc2-80e3-bd84c62364d6/4.jpg",
-        "./vehicle_pictures/141cb874-2f76-4dc2-80e3-bd84c62364d6/5.jpg",
-        "./vehicle_pictures/141cb874-2f76-4dc2-80e3-bd84c62364d6/6.jpg",
-        "./vehicle_pictures/141cb874-2f76-4dc2-80e3-bd84c62364d6/7.jpg",
-        "./vehicle_pictures/141cb874-2f76-4dc2-80e3-bd84c62364d6/8.jpg"
+        "http://3.10.219.57/vehicle_pictures/141cb874-2f76-4dc2-80e3-bd84c62364d6/0.jpg",
+        "http://3.10.219.57/vehicle_pictures/141cb874-2f76-4dc2-80e3-bd84c62364d6/1.jpg",
+        "http://3.10.219.57/vehicle_pictures/141cb874-2f76-4dc2-80e3-bd84c62364d6/2.jpg",
+        "http://3.10.219.57/vehicle_pictures/141cb874-2f76-4dc2-80e3-bd84c62364d6/3.jpg",
+        "http://3.10.219.57/vehicle_pictures/141cb874-2f76-4dc2-80e3-bd84c62364d6/4.jpg",
+        "http://3.10.219.57/vehicle_pictures/141cb874-2f76-4dc2-80e3-bd84c62364d6/5.jpg",
+        "http://3.10.219.57/vehicle_pictures/141cb874-2f76-4dc2-80e3-bd84c62364d6/6.jpg",
+        "http://3.10.219.57/vehicle_pictures/141cb874-2f76-4dc2-80e3-bd84c62364d6/7.jpg",
+        "http://3.10.219.57/vehicle_pictures/141cb874-2f76-4dc2-80e3-bd84c62364d6/8.jpg"
       ],
       "created_at": "2019-11-15T19:20:56Z"
     },
@@ -62,10 +62,10 @@ const mockJSON = {
       "listed": false,
       "is_sold": false,
       "images": [
-        "./vehicle_pictures/2cd5c0d9-6f05-4e58-ab67-433ea97aa9ff/0.jpg",
-        "./vehicle_pictures/2cd5c0d9-6f05-4e58-ab67-433ea97aa9ff/1.jpg",
-        "./vehicle_pictures/2cd5c0d9-6f05-4e58-ab67-433ea97aa9ff/2.jpg",
-        "./vehicle_pictures/2cd5c0d9-6f05-4e58-ab67-433ea97aa9ff/3.jpg"
+        "http://3.10.219.57/vehicle_pictures/2cd5c0d9-6f05-4e58-ab67-433ea97aa9ff/0.jpg",
+        "http://3.10.219.57/vehicle_pictures/2cd5c0d9-6f05-4e58-ab67-433ea97aa9ff/1.jpg",
+        "http://3.10.219.57/vehicle_pictures/2cd5c0d9-6f05-4e58-ab67-433ea97aa9ff/2.jpg",
+        "http://3.10.219.57/vehicle_pictures/2cd5c0d9-6f05-4e58-ab67-433ea97aa9ff/3.jpg"
       ],
       "created_at": "2019-11-11T19:39:08Z"
     },
@@ -90,7 +90,7 @@ const mockJSON = {
       "listed": false,
       "is_sold": false,
       "images": [
-        "/vehicle_pictures/5c52864b-2003-4208-a28e-5973f5433842/0.jpg"
+        "http://3.10.219.57/vehicle_pictures/5c52864b-2003-4208-a28e-5973f5433842/0.jpg"
       ],
       "created_at": "2019-11-07T11:34:07Z"
     },
@@ -115,15 +115,15 @@ const mockJSON = {
       "listed": false,
       "is_sold": false,
       "images": [
-        "./vehicle_pictures/69577acf-4ea4-4e49-9e98-0a07eccf03ad/0.jpg",
-        "./vehicle_pictures/69577acf-4ea4-4e49-9e98-0a07eccf03ad/1.jpg",
-        "./vehicle_pictures/69577acf-4ea4-4e49-9e98-0a07eccf03ad/2.jpg",
-        "./vehicle_pictures/69577acf-4ea4-4e49-9e98-0a07eccf03ad/3.jpg",
-        "./vehicle_pictures/69577acf-4ea4-4e49-9e98-0a07eccf03ad/4.jpg",
-        "./vehicle_pictures/69577acf-4ea4-4e49-9e98-0a07eccf03ad/5.jpg",
-        "./vehicle_pictures/69577acf-4ea4-4e49-9e98-0a07eccf03ad/6.jpg",
-        "./vehicle_pictures/69577acf-4ea4-4e49-9e98-0a07eccf03ad/7.jpg",
-        "./vehicle_pictures/69577acf-4ea4-4e49-9e98-0a07eccf03ad/8.jpg"
+        "http://3.10.219.57/vehicle_pictures/69577acf-4ea4-4e49-9e98-0a07eccf03ad/0.jpg",
+        "http://3.10.219.57/vehicle_pictures/69577acf-4ea4-4e49-9e98-0a07eccf03ad/1.jpg",
+        "http://3.10.219.57/vehicle_pictures/69577acf-4ea4-4e49-9e98-0a07eccf03ad/2.jpg",
+        "http://3.10.219.57/vehicle_pictures/69577acf-4ea4-4e49-9e98-0a07eccf03ad/3.jpg",
+        "http://3.10.219.57/vehicle_pictures/69577acf-4ea4-4e49-9e98-0a07eccf03ad/4.jpg",
+        "http://3.10.219.57/vehicle_pictures/69577acf-4ea4-4e49-9e98-0a07eccf03ad/5.jpg",
+        "http://3.10.219.57/vehicle_pictures/69577acf-4ea4-4e49-9e98-0a07eccf03ad/6.jpg",
+        "http://3.10.219.57/vehicle_pictures/69577acf-4ea4-4e49-9e98-0a07eccf03ad/7.jpg",
+        "http://3.10.219.57/vehicle_pictures/69577acf-4ea4-4e49-9e98-0a07eccf03ad/8.jpg"
       ],
       "created_at": "2019-11-15T19:24:56Z"
     },
@@ -148,12 +148,12 @@ const mockJSON = {
       "listed": false,
       "is_sold": false,
       "images": [
-        "./vehicle_pictures/9030c19e-63f9-48b8-80b6-5af0e31bbba7/0.jpg",
-        "./vehicle_pictures/9030c19e-63f9-48b8-80b6-5af0e31bbba7/1.jpg",
-        "./vehicle_pictures/9030c19e-63f9-48b8-80b6-5af0e31bbba7/2.jpg",
-        "./vehicle_pictures/9030c19e-63f9-48b8-80b6-5af0e31bbba7/3.jpg",
-        "./vehicle_pictures/9030c19e-63f9-48b8-80b6-5af0e31bbba7/4.jpg",
-        "./vehicle_pictures/9030c19e-63f9-48b8-80b6-5af0e31bbba7/5.jpg"
+        "http://3.10.219.57/vehicle_pictures/9030c19e-63f9-48b8-80b6-5af0e31bbba7/0.jpg",
+        "http://3.10.219.57/vehicle_pictures/9030c19e-63f9-48b8-80b6-5af0e31bbba7/1.jpg",
+        "http://3.10.219.57/vehicle_pictures/9030c19e-63f9-48b8-80b6-5af0e31bbba7/2.jpg",
+        "http://3.10.219.57/vehicle_pictures/9030c19e-63f9-48b8-80b6-5af0e31bbba7/3.jpg",
+        "http://3.10.219.57/vehicle_pictures/9030c19e-63f9-48b8-80b6-5af0e31bbba7/4.jpg",
+        "http://3.10.219.57/vehicle_pictures/9030c19e-63f9-48b8-80b6-5af0e31bbba7/5.jpg"
       ],
       "created_at": "2019-11-15T19:16:13Z"
     },
@@ -178,14 +178,14 @@ const mockJSON = {
       "listed": false,
       "is_sold": false,
       "images": [
-        "./vehicle_pictures/ae313a64-62d8-4dd9-a933-b3dcf03a3529/0.jpg",
-        "./vehicle_pictures/ae313a64-62d8-4dd9-a933-b3dcf03a3529/1.jpg",
-        "./vehicle_pictures/ae313a64-62d8-4dd9-a933-b3dcf03a3529/2.jpg",
-        "./vehicle_pictures/ae313a64-62d8-4dd9-a933-b3dcf03a3529/3.jpg",
-        "./vehicle_pictures/ae313a64-62d8-4dd9-a933-b3dcf03a3529/4.jpg",
-        "./vehicle_pictures/ae313a64-62d8-4dd9-a933-b3dcf03a3529/5.jpg",
-        "./vehicle_pictures/ae313a64-62d8-4dd9-a933-b3dcf03a3529/6.jpg",
-        "./vehicle_pictures/ae313a64-62d8-4dd9-a933-b3dcf03a3529/7.jpg"
+        "http://3.10.219.57/vehicle_pictures/ae313a64-62d8-4dd9-a933-b3dcf03a3529/0.jpg",
+        "http://3.10.219.57/vehicle_pictures/ae313a64-62d8-4dd9-a933-b3dcf03a3529/1.jpg",
+        "http://3.10.219.57/vehicle_pictures/ae313a64-62d8-4dd9-a933-b3dcf03a3529/2.jpg",
+        "http://3.10.219.57/vehicle_pictures/ae313a64-62d8-4dd9-a933-b3dcf03a3529/3.jpg",
+        "http://3.10.219.57/vehicle_pictures/ae313a64-62d8-4dd9-a933-b3dcf03a3529/4.jpg",
+        "http://3.10.219.57/vehicle_pictures/ae313a64-62d8-4dd9-a933-b3dcf03a3529/5.jpg",
+        "http://3.10.219.57/vehicle_pictures/ae313a64-62d8-4dd9-a933-b3dcf03a3529/6.jpg",
+        "http://3.10.219.57/vehicle_pictures/ae313a64-62d8-4dd9-a933-b3dcf03a3529/7.jpg"
       ],
       "created_at": "2019-11-15T19:09:53Z"
     },
@@ -210,10 +210,10 @@ const mockJSON = {
       "listed": false,
       "is_sold": false,
       "images": [
-        "./vehicle_pictures/af8ab371-7950-4347-9034-d46997407e79/0.jpg",
-        "./vehicle_pictures/af8ab371-7950-4347-9034-d46997407e79/1.jpg",
-        "./vehicle_pictures/af8ab371-7950-4347-9034-d46997407e79/2.jpg",
-        "./vehicle_pictures/af8ab371-7950-4347-9034-d46997407e79/3.jpg"
+        "http://3.10.219.57/vehicle_pictures/af8ab371-7950-4347-9034-d46997407e79/0.jpg",
+        "http://3.10.219.57/vehicle_pictures/af8ab371-7950-4347-9034-d46997407e79/1.jpg",
+        "http://3.10.219.57/vehicle_pictures/af8ab371-7950-4347-9034-d46997407e79/2.jpg",
+        "http://3.10.219.57/vehicle_pictures/af8ab371-7950-4347-9034-d46997407e79/3.jpg"
       ],
       "created_at": "2019-11-11T17:46:58Z"
     },
@@ -238,15 +238,15 @@ const mockJSON = {
       "listed": false,
       "is_sold": false,
       "images": [
-        "./vehicle_pictures/eedaac95-dac1-489d-a2a0-d6526431a62e/0.jpg",
-        "./vehicle_pictures/eedaac95-dac1-489d-a2a0-d6526431a62e/1.jpg",
-        "./vehicle_pictures/eedaac95-dac1-489d-a2a0-d6526431a62e/2.jpg",
-        "./vehicle_pictures/eedaac95-dac1-489d-a2a0-d6526431a62e/3.jpg",
-        "./vehicle_pictures/eedaac95-dac1-489d-a2a0-d6526431a62e/4.jpg",
-        "./vehicle_pictures/eedaac95-dac1-489d-a2a0-d6526431a62e/5.jpg",
-        "./vehicle_pictures/eedaac95-dac1-489d-a2a0-d6526431a62e/6.jpg",
-        "./vehicle_pictures/eedaac95-dac1-489d-a2a0-d6526431a62e/7.jpg",
-        "./vehicle_pictures/eedaac95-dac1-489d-a2a0-d6526431a62e/8.jpg"
+        "http://3.10.219.57/vehicle_pictures/eedaac95-dac1-489d-a2a0-d6526431a62e/0.jpg",
+        "http://3.10.219.57/vehicle_pictures/eedaac95-dac1-489d-a2a0-d6526431a62e/1.jpg",
+        "http://3.10.219.57/vehicle_pictures/eedaac95-dac1-489d-a2a0-d6526431a62e/2.jpg",
+        "http://3.10.219.57/vehicle_pictures/eedaac95-dac1-489d-a2a0-d6526431a62e/3.jpg",
+        "http://3.10.219.57/vehicle_pictures/eedaac95-dac1-489d-a2a0-d6526431a62e/4.jpg",
+        "http://3.10.219.57/vehicle_pictures/eedaac95-dac1-489d-a2a0-d6526431a62e/5.jpg",
+        "http://3.10.219.57/vehicle_pictures/eedaac95-dac1-489d-a2a0-d6526431a62e/6.jpg",
+        "http://3.10.219.57/vehicle_pictures/eedaac95-dac1-489d-a2a0-d6526431a62e/7.jpg",
+        "http://3.10.219.57/vehicle_pictures/eedaac95-dac1-489d-a2a0-d6526431a62e/8.jpg"
       ],
       "created_at": "2019-11-07T11:34:07Z"
     },
@@ -271,19 +271,19 @@ const mockJSON = {
       "listed": false,
       "is_sold": false,
       "images": [
-        "./vehicle_pictures/f2d39050-7b6d-47b0-a819-51ec15d456f8/0.jpg",
-        "./vehicle_pictures/f2d39050-7b6d-47b0-a819-51ec15d456f8/1.jpg",
-        "./vehicle_pictures/f2d39050-7b6d-47b0-a819-51ec15d456f8/10.jpg",
-        "./vehicle_pictures/f2d39050-7b6d-47b0-a819-51ec15d456f8/11.jpg",
-        "./vehicle_pictures/f2d39050-7b6d-47b0-a819-51ec15d456f8/12.jpg",
-        "./vehicle_pictures/f2d39050-7b6d-47b0-a819-51ec15d456f8/2.jpg",
-        "./vehicle_pictures/f2d39050-7b6d-47b0-a819-51ec15d456f8/3.jpg",
-        "./vehicle_pictures/f2d39050-7b6d-47b0-a819-51ec15d456f8/4.jpg",
-        "./vehicle_pictures/f2d39050-7b6d-47b0-a819-51ec15d456f8/5.jpg",
-        "./vehicle_pictures/f2d39050-7b6d-47b0-a819-51ec15d456f8/6.jpg",
-        "./vehicle_pictures/f2d39050-7b6d-47b0-a819-51ec15d456f8/7.jpg",
-        "./vehicle_pictures/f2d39050-7b6d-47b0-a819-51ec15d456f8/8.jpg",
-        "./vehicle_pictures/f2d39050-7b6d-47b0-a819-51ec15d456f8/9.jpg"
+        "http://3.10.219.57/vehicle_pictures/f2d39050-7b6d-47b0-a819-51ec15d456f8/0.jpg",
+        "http://3.10.219.57/vehicle_pictures/f2d39050-7b6d-47b0-a819-51ec15d456f8/1.jpg",
+        "http://3.10.219.57/vehicle_pictures/f2d39050-7b6d-47b0-a819-51ec15d456f8/10.jpg",
+        "http://3.10.219.57/vehicle_pictures/f2d39050-7b6d-47b0-a819-51ec15d456f8/11.jpg",
+        "http://3.10.219.57/vehicle_pictures/f2d39050-7b6d-47b0-a819-51ec15d456f8/12.jpg",
+        "http://3.10.219.57/vehicle_pictures/f2d39050-7b6d-47b0-a819-51ec15d456f8/2.jpg",
+        "http://3.10.219.57/vehicle_pictures/f2d39050-7b6d-47b0-a819-51ec15d456f8/3.jpg",
+        "http://3.10.219.57/vehicle_pictures/f2d39050-7b6d-47b0-a819-51ec15d456f8/4.jpg",
+        "http://3.10.219.57/vehicle_pictures/f2d39050-7b6d-47b0-a819-51ec15d456f8/5.jpg",
+        "http://3.10.219.57/vehicle_pictures/f2d39050-7b6d-47b0-a819-51ec15d456f8/6.jpg",
+        "http://3.10.219.57/vehicle_pictures/f2d39050-7b6d-47b0-a819-51ec15d456f8/7.jpg",
+        "http://3.10.219.57/vehicle_pictures/f2d39050-7b6d-47b0-a819-51ec15d456f8/8.jpg",
+        "http://3.10.219.57/vehicle_pictures/f2d39050-7b6d-47b0-a819-51ec15d456f8/9.jpg"
       ],
       "created_at": "2019-11-15T18:37:28Z"
     }
@@ -300,17 +300,21 @@ const getPageFromSearch = search => {
   return parseInt(splitSearch[1].split('&')[0]);
 }
 
-const getSearchFromPage = page => `?p=${page}`
+const getSearchFromPage = page => `?p=${page}`;
+
+const PerPage = 10;
 
 const PartsAlt = withRouter(props => {
   let [parts, setParts] = useState([]);
 
   let page = getPageFromSearch(props.location.search);
 
-  let [pagesMax, setPagesMax] = useState(5);
+  let [pagesMax, setPagesMax] = useState(1);
   useEffect(() => {
     console.log('getData');
     let getData = async () => {
+      console.log(mockJSON.total / PerPage);
+      setPagesMax(Math.ceil(mockJSON.total / PerPage));
       setParts(mockJSON.objects);
     };
 
@@ -356,12 +360,12 @@ const PartsAlt = withRouter(props => {
           <h3>Page {page}</h3>
           <Link to={{
             search: getSearchFromPage(page - 1)
-          }} className={`link ${page === 1 ? 'disabled' : ''}`}>
+          }} className={`link ${page <= 1 ? 'disabled' : ''}`}>
             <ChevronLeft />
           </Link>
           <Link to={{
             search: getSearchFromPage(page + 1)
-          }} className={`link ${page === pagesMax ? 'disabled' : ''}`}>
+          }} className={`link ${page >= pagesMax ? 'disabled' : ''}`}>
             <ChevronRight />
           </Link>
         </div>
@@ -376,11 +380,25 @@ const PartsAlt = withRouter(props => {
         maxWidth: '100vw',
         overflow: 'hidden'
       }} className='parts_alt_wrapper'>
-        <ProductCardAlt id='1' title='Part Title' price='145$' image='https://images.unsplash.com/photo-1518837695005-2083093ee35b?ixlib=rb-1.2.1&w=1000&q=80' />
-        <ProductCardAlt id='2' title='Part Title' price='145$' image='https://images.unsplash.com/photo-1518837695005-2083093ee35b?ixlib=rb-1.2.1&w=1000&q=80' />
-        <ProductCardAlt id='3' title='Part Title' price='145$' image='https://images.unsplash.com/photo-1518837695005-2083093ee35b?ixlib=rb-1.2.1&w=1000&q=80' />
+        {parts.length > 0 ?
+          parts.map((part, i) =>
+            <ProductCardAlt
+              index={i + ''}
+              id={part.id}
+              title={`${part.make.toUpperCase()} - ${part.model} (${part.year})`}
+              description={part.description}
+              price={part.price}
+              image={part.images[0]}
+            />
+          )
+          : <p style={{
+            textAlign: 'center'
+          }}>Loading...</p>}
       </div>
-      {props.location.hash ? <ProductCardPopup id={props.location.hash.split('#')[1]} /> : null}
+      {props.location.hash && parts.length > 0 ?
+        <ProductCardPopup
+          data={parts[parseInt(props.location.hash.split('#')[1])]}
+        /> : null}
     </div>
   )
 });

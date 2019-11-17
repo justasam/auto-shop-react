@@ -7,7 +7,7 @@ import { CarouselThumbnails } from '../CarouselThumbnails';
 
 
 
-const ProductCardPopup = () => {
+const ProductCardPopup = ({data}) => {
   return (
     <div style={{
       position: 'fixed',
@@ -52,17 +52,19 @@ const ProductCardPopup = () => {
             maxWidth: '100%',
             overflow: 'hidden',
             paddingBottom: 50
-          }} />
+          }} items={data.images}/>
         </div>
         <div>
-          <h2>BMW X1 (2014)</h2>
-          <p>XDRIVE18D XLINE 2.0 5dr</p>
-          <h1>$11,800</h1>
+          <h2>{data.make.toUpperCase()} - {data.model} ({data.year})</h2>
+          <p>{data.description}</p>
+          <h1>£ {data.price}</h1>
         </div>
         <div style={{
           border: '2px solid red',
           gridColumn: 'span 2'
-        }}></div>
+        }}>
+          <p>{data.specificaction}</p>
+        </div>
       </div>
     </div>
   )
