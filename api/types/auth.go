@@ -20,6 +20,9 @@ type LoginPost struct {
 	Password string `json:"password" binding:"required"`
 }
 
+// LogOutPost Dummy payload for log out
+type LogOutPost struct{}
+
 // LoggedUser returns currentlt logged in user
 type LoggedUser struct {
 	Employee *Employee `json:"employee,omitempty"`

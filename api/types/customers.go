@@ -32,7 +32,7 @@ type Customer struct {
 	Email       string `db:"email" json:"email"`
 	PhoneNumber string `db:"phone_number" json:"phone_number"`
 	AccountID   string `db:"account_id" json:"account_id"`
-	IsDeleted   bool   `db:"is_deleted" json:"is_deleted,omitempty"`
+	IsDeleted   bool   `db:"is_deleted" json:"is_deleted"`
 }
 
 // MarshalJSON implements json.Marshaler

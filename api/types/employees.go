@@ -93,6 +93,8 @@ type EmployeeSale struct {
 	VehicleMake      string  `db:"vehicle_make" json:"vehicle_make,omitempty"`
 	VehicleModel     string  `db:"vehicle_model" json:"vehicle_model,omitempty"`
 	VehicleYear      int     `db:"vehicle_year" json:"vehicle_year,omitempty"`
+	BranchID         string  `db:"branch_id" json:"branch_id,omitempty"`
+	CreatedAt        string  `db:"created_at" json:"created_at,omitempty"`
 }
 
 // EmployeePurchase represents employee purchase
@@ -107,6 +109,8 @@ type EmployeePurchase struct {
 	VehicleMake             string  `db:"vehicle_make" json:"vehicle_make,omitempty"`
 	VehicleModel            string  `db:"vehicle_model" json:"vehicle_model,omitempty"`
 	VehicleYear             int     `db:"vehicle_year" json:"vehicle_year,omitempty"`
+	BranchID                string  `db:"branch_id" json:"branch_id,omitempty"`
+	CreatedAt               string  `db:"created_at" json:"created_at,omitempty"`
 }
 
 // EmployeePosition represents employee position

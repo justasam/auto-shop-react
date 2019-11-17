@@ -151,39 +151,44 @@ func (c *Client) UpdateEmployee(id string, p types.EmployeePut) (*types.Employee
 }
 
 // DeleteEmployee deletes employee
-func (c *Client) DeleteEmployee(id string) *types.Error {
+func (c *Client) DeleteEmployee(id string) (*types.Employee, *types.Error) {
 	query := `UPDATE %s_employees SET is_deleted=true, account_id='' WHERE id=?`
 	query = c.applyView(query)
 
 	var err error
 	c, err = c.Begin()
 	if err != nil {
-		return c.transformError(err)
+		return nil, c.transformError(err)
 	}
 	defer c.End()
 
 	_, err = c.ex.Exec(query, id)
 	if err != nil {
-		return c.transformError(err)
+		return nil, c.transformError(err)
 	}
 
 	// Also delete employee's account
 	dbErr := c.DeleteOwnerAccount(id)
 	if dbErr != nil {
-		return dbErr
+		return nil, dbErr
 	}
 
 	err = c.Commit()
 	if err != nil {
-		return c.transformError(err)
+		return nil, c.transformError(err)
 	}
 
-	return nil
+	// Get the employee back
+	employee, dbErr := c.GetEmployeeByID(id)
+	if dbErr != nil {
+		return nil, dbErr
+	}
+	return employee, nil
 }
 
 // GetEmployeesSales returns all employee sales
 func (c *Client) GetEmployeesSales() ([]types.EmployeeSale, *types.Error) {
-	query := `SELECT * FROM %s_vehicle_sales `
+	query := `SELECT * FROM %s_vehicle_sales`
 	query = c.applyView(query)
 
 	sales := []types.EmployeeSale{}

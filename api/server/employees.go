@@ -61,7 +61,7 @@ func employeeAPI() []*swagger.Endpoint {
 
 	deleteEmployee := endpoint.New("DELETE", "/employees/{employee_id}", "Delete employee",
 		endpoint.Handler(controllers.DeleteEmployee),
-		endpoint.Response(http.StatusNoContent, "", "Successful"),
+		endpoint.Response(http.StatusNoContent, types.Employee{}, "Successful"),
 		endpoint.Path("employee_id", "string", "uuid", "UUID of an employee"),
 		endpoint.Tags("Employees"),
 	)

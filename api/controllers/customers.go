@@ -128,12 +128,12 @@ func DeleteCustomer(c echo.Context) error {
 		return echo.NewHTTPError(http.StatusBadRequest, "Customer already deleted")
 	}
 
-	dbErr = db.DeleteCustomer(customerID)
+	customer, dbErr = db.DeleteCustomer(customerID)
 	if dbErr != nil {
 		return dbErr
 	}
 
-	return c.JSON(http.StatusNoContent, "")
+	return c.JSON(http.StatusOK, customer)
 }
 
 // UpdateCustomer updates customer

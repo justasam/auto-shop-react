@@ -26,7 +26,7 @@ type GetVehiclesFilter struct {
 	EngineFrom      *float64 `json:"engine_from,omitempty"`
 	EngineTo        *float64 `json:"engine_to,omitempty"`
 	PerPage         int      `json:"per_page" minimum:"1" default:"10"`
-	PageNumber      int      `json:"page_num" minimum:"1" default:"1"`
+	PageNumber      int      `json:"page_number" minimum:"1" default:"1"`
 	Listed          *bool    `json:"listed"`
 
 	ListedAtLatest *string
