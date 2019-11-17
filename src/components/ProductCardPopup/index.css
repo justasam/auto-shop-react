@@ -1,0 +1,8 @@
+.close_icon {
+  transition: 0.5s fill;
+}
+
+.close_icon:hover {
+  fill: black;
+  color: rgb(238, 238, 238);
+}

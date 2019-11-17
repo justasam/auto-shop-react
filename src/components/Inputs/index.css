@@ -38,6 +38,7 @@
   position: relative;
   justify-items: center;
   align-content: center;
+  flex-shrink: 0;
 }
 .selectalt {
   margin: 0 10px;

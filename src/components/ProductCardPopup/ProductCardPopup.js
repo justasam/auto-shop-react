@@ -1,6 +1,8 @@
 import React from 'react';
 import './index.css';
 
+import { XCircle } from 'react-feather';
+
 import { CarouselThumbnails } from '../CarouselThumbnails';
 
 
@@ -32,6 +34,15 @@ const ProductCardPopup = () => {
         padding: 20,
         borderRadius: 4
       }} className='shadow'>
+        <XCircle size={40} style={{
+          position: 'absolute',
+          zIndex: 9999,
+          right: 10,
+          top: 10,
+          cursor: 'pointer'
+        }} className='close_icon' onClick={() => {
+          window.location.hash = '';
+        }} />
         <div style={{
           position: 'relative'
         }}>

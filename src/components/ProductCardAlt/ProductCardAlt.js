@@ -4,8 +4,11 @@ import './index.css';
 
 const ProductCardAlt = withRouter(({id, image, title, price, location}) => {
   return (
-    <div className='product-card-alt'>
-      <Link to={`${location.pathname}#${id}`}>
+    <div className='product_card_alt'>
+      <Link to={{
+        search: location.search,
+        hash: id
+      }}>
         <img src={image} style={{
           objectFit: 'cover',
           maxWidth: '100%',

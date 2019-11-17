@@ -1,0 +1,15 @@
+.product_card_alt {
+  position: relative;
+}
+
+.product_card_alt:hover::after {
+  position: absolute;
+  top: 40%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  content: 'MORE INFO';
+  text-align: center;
+  font-size: 24px;
+  background-color: rgba(255,255,255,.4);
+  pointer-events: none;
+}

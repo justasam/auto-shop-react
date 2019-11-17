@@ -57,7 +57,7 @@ const CarouselThumbnails = ({
   ...props
 }) => {
   const settings = {
-    customPaging: (i) => <a><img src={items[i]} style={{
+    customPaging: (i) => <a key={i}><img src={items[i]} style={{
       width: '100%',
       height: '100%',
       objectFit: 'cover'
