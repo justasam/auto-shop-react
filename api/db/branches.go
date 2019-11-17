@@ -41,8 +41,8 @@ func (c *Client) GetBranchByID(id string) (*types.Branch, *types.Error) {
 
 // CreateBranch creates a new branch in the db
 func (c *Client) CreateBranch(p types.BranchPost) (*types.Branch, *types.Error) {
-	query := `INSERT INTO %s_branches (id, name, address)
-		VALUES (:id, :name, :address)`
+	query := `INSERT INTO %s_branches (id, name, address, manager_id)
+		VALUES (:id, :name, :address, :manager_id)`
 	query = c.applyView(query)
 
 	query, args, err := sqlx.Named(query, p)
@@ -57,6 +57,49 @@ func (c *Client) CreateBranch(p types.BranchPost) (*types.Branch, *types.Error) 
 
 	// Get the branch back
 	branch, dbErr := c.GetBranchByID(p.ID)
+	if dbErr != nil {
+		return nil, dbErr
+	}
+
+	return branch, nil
+}
+
+// UpdateBranch updates branch in the db
+func (c *Client) UpdateBranch(p types.BranchPut) (*types.Branch, *types.Error) {
+	query := `UPDATE %s_branches set id=:id, name=:name, address=:address, manager_id=:manager_id`
+	query = c.applyView(query)
+
+	query, args, err := sqlx.Named(query, p)
+	if err != nil {
+		return nil, c.transformError(err)
+	}
+
+	_, err = c.ex.Exec(query, args...)
+	if err != nil {
+		return nil, c.transformError(err)
+	}
+
+	// Get the branch back
+	branch, dbErr := c.GetBranchByID(p.ID)
+	if dbErr != nil {
+		return nil, dbErr
+	}
+
+	return branch, nil
+}
+
+// DeleteBranch deletes branch from DB
+func (c *Client) DeleteBranch(id string) (*types.Branch, *types.Error) {
+	query := `DELETE FROM %s_branches WHERE id=?`
+	query = c.applyView(query)
+
+	_, err := c.ex.Exec(query, id)
+	if err != nil {
+		return nil, c.transformError(err)
+	}
+
+	// Get the branch back
+	branch, dbErr := c.GetBranchByID(id)
 	if dbErr != nil {
 		return nil, dbErr
 	}

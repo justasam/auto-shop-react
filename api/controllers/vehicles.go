@@ -9,7 +9,6 @@ import (
 	"reflect"
 	"strconv"
 
-	"github.com/davecgh/go-spew/spew"
 	"github.com/labstack/echo/v4"
 	uuid "github.com/satori/go.uuid"
 
@@ -279,8 +278,6 @@ func PurchaseVehicle(c echo.Context) error {
 		payload.ImagePaths = append(payload.ImagePaths, path)
 	}
 
-	spew.Dump(payload.Specification)
-
 	vehicle, dbErr := db.PurchaseVehicle(payload)
 	if dbErr != nil {
 		return fmt.Errorf("Failed to create vehicle: %s", dbErr)
@@ -336,11 +333,21 @@ func SellVehicle(c echo.Context) error {
 	}
 	defer db.Close()
 
+	// Check if the vehicle exists
+	vehicle, dbErr := db.GetVehicle(vehicleID)
+	if dbErr != nil {
+		return dbErr
+	}
+
+	if vehicle == nil {
+		return echo.NewHTTPError(http.StatusNotFound)
+	}
+
 	payload.ID = uuid.NewV4().String()
 	payload.EmployeeID = accountOwnerID
 	payload.VehicleID = vehicleID
 
-	dbErr := db.SellVehicle(payload)
+	dbErr = db.SellVehicle(payload)
 	if dbErr != nil {
 		return dbErr
 	}

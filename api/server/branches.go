@@ -31,9 +31,26 @@ func branchesAPI() []*swagger.Endpoint {
 		endpoint.Tags("Branches"),
 	)
 
+	updateBranch := endpoint.New("PUT", "/branches/{branch_id}", "Updates a branch",
+		endpoint.Handler(controllers.UpdateBranch),
+		endpoint.Response(http.StatusOK, types.Branch{}, "Success"),
+		endpoint.Path("branch_id", "string", "uuid", "UUID of a branch"),
+		endpoint.Body(types.BranchPut{}, "Branch update payload", true),
+		endpoint.Tags("Branches"),
+	)
+
+	deleteBranch := endpoint.New("DELETE", "/branches/{branch_id}", "Delete branch",
+		endpoint.Handler(controllers.DeleteBranch),
+		endpoint.Response(http.StatusOK, types.Branch{}, "Successful"),
+		endpoint.Path("branch_id", "string", "uuid", "UUID of a branch"),
+		endpoint.Tags("Branches"),
+	)
+
 	return []*swagger.Endpoint{
 		getBranches,
 		getCurrentAccount,
 		createBranch,
+		updateBranch,
+		deleteBranch,
 	}
 }

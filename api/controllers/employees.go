@@ -137,12 +137,12 @@ func DeleteEmployee(c echo.Context) error {
 		return echo.NewHTTPError(http.StatusBadRequest, "Employee already deleted")
 	}
 
-	dbErr = db.DeleteEmployee(employeeID)
+	employee, dbErr = db.DeleteEmployee(employeeID)
 	if dbErr != nil {
 		return dbErr
 	}
 
-	return c.JSON(http.StatusNoContent, "")
+	return c.JSON(http.StatusOK, employee)
 }
 
 // UpdateEmployee updates employee
@@ -151,7 +151,7 @@ func UpdateEmployee(c echo.Context) error {
 	accountOwnerID := c.Get("owner_id").(string)
 	employeeID := c.Param("employee_id")
 
-	if accountType != types.AdminAccount || employeeID != accountOwnerID {
+	if accountType != types.AdminAccount && employeeID != accountOwnerID {
 		return echo.NewHTTPError(http.StatusForbidden)
 	}
 

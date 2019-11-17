@@ -5,7 +5,6 @@ import (
 	"net/http"
 	"strings"
 
-	"github.com/davecgh/go-spew/spew"
 	"github.com/gorilla/sessions"
 	"github.com/labstack/echo-contrib/session"
 	"github.com/labstack/echo/v4"
@@ -35,8 +34,6 @@ func Login(c echo.Context) error {
 	if dbErr != nil {
 		return dbErr
 	}
-
-	spew.Dump(account)
 
 	// Do not differentiate between found and not found
 	if account == nil {
@@ -75,6 +72,19 @@ func Login(c echo.Context) error {
 	c.Response().Header().Set("X-Autoshop-Account-Username", sess.Values["username"].(string))
 
 	return c.JSON(http.StatusOK, account)
+}
+
+// LogOut deletes sessions
+func LogOut(c echo.Context) error {
+	sess, _ := session.Get("session", c)
+
+	sess.Options.MaxAge = -1
+	err := sess.Save(c.Request(), c.Response())
+	if err != nil {
+		return fmt.Errorf("Failed to save session: %s", err)
+	}
+
+	return c.NoContent(http.StatusOK)
 }
 
 // GetLoggedInUser returns currently logged in user or employee

@@ -18,6 +18,13 @@ func authAPI() []*swagger.Endpoint {
 		endpoint.Tags("Auth"),
 	)
 
+	logOut := endpoint.New("POST", "/auth/logout", "Logout",
+		endpoint.Handler(controllers.LogOut),
+		endpoint.Response(http.StatusOK, "", "Successful login"),
+		endpoint.Body(types.LogOutPost{}, "Login payload", true),
+		endpoint.Tags("Auth"),
+	)
+
 	currentEntity := endpoint.New("GET", "/auth/user",
 		"Get currently logged user (either customer or employee)",
 		endpoint.Handler(controllers.GetLoggedInUser),
@@ -28,5 +35,6 @@ func authAPI() []*swagger.Endpoint {
 	return []*swagger.Endpoint{
 		login,
 		currentEntity,
+		logOut,
 	}
 }

@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"net/http"
 
+	"github.com/davecgh/go-spew/spew"
 	"github.com/labstack/echo/v4"
 	uuid "github.com/satori/go.uuid"
 )
@@ -76,4 +77,79 @@ func CreateBranch(c echo.Context) error {
 	}
 
 	return c.JSON(http.StatusCreated, branch)
+}
+
+// UpdateBranch updates branch
+func UpdateBranch(c echo.Context) error {
+	accountType := c.Get("account_type").(string)
+	branchID := c.Param("branch_id")
+
+	if accountType != types.AdminAccount {
+		return echo.NewHTTPError(http.StatusForbidden)
+	}
+
+	var payload types.BranchPut
+	err := c.Bind(&payload)
+	if err != nil {
+		return echo.NewHTTPError(http.StatusBadRequest, validatorError(err))
+	}
+
+	// Establish admin connection
+	db, err := db.Connect(types.AdminAccount)
+	if err != nil {
+		return fmt.Errorf("Error connecting to the database: %s", err)
+	}
+	defer db.Close()
+
+	branch, dbErr := db.GetBranchByID(branchID)
+	if dbErr != nil {
+		return dbErr
+	}
+
+	if branch == nil {
+		return echo.NewHTTPError(http.StatusNotFound)
+	}
+
+	payload.ID = branchID
+	branch, dbErr = db.UpdateBranch(payload)
+	if dbErr != nil {
+		return dbErr
+	}
+
+	return c.JSON(http.StatusOK, branch)
+}
+
+// DeleteBranch deletes branch from the db
+func DeleteBranch(c echo.Context) error {
+	accountType := c.Get("account_type").(string)
+	branchID := c.Param("branch_id")
+
+	if accountType != types.AdminAccount {
+		return echo.NewHTTPError(http.StatusForbidden)
+	}
+
+	// Establish admin connection
+	db, err := db.Connect(types.AdminAccount)
+	if err != nil {
+		return fmt.Errorf("Error connecting to the database: %s", err)
+	}
+	defer db.Close()
+
+	branch, dbErr := db.GetBranchByID(branchID)
+	if dbErr != nil {
+		return dbErr
+	}
+
+	spew.Dump((branch))
+
+	if branch == nil {
+		return echo.NewHTTPError(http.StatusNotFound)
+	}
+
+	branch, dbErr = db.DeleteBranch(branchID)
+	if dbErr != nil {
+		return dbErr
+	}
+
+	return c.JSON(http.StatusOK, branch)
 }

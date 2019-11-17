@@ -59,7 +59,7 @@ func customerAPI() []*swagger.Endpoint {
 
 	deleteCustomer := endpoint.New("DELETE", "/customers/{customer_id}", "Delete customer",
 		endpoint.Handler(controllers.DeleteCustomer),
-		endpoint.Response(http.StatusNoContent, "", "Successful"),
+		endpoint.Response(http.StatusOK, types.Customer{}, "Successful"),
 		endpoint.Path("customer_id", "string", "uuid", "UUID of a customer"),
 		endpoint.Tags("Customers"),
 	)

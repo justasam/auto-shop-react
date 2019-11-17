@@ -122,34 +122,40 @@ func (c *Client) GetCustomerByID(id string) (*types.Customer, *types.Error) {
 }
 
 // DeleteCustomer deletes customer from db
-func (c *Client) DeleteCustomer(id string) *types.Error {
+func (c *Client) DeleteCustomer(id string) (*types.Customer, *types.Error) {
 	query := `UPDATE %s_customers SET is_deleted=true, account_id='' WHERE id=?`
 	query = c.applyView(query)
 
 	var err error
 	c, err = c.Begin()
 	if err != nil {
-		return c.transformError(err)
+		return nil, c.transformError(err)
 	}
 	defer c.End()
 
 	_, err = c.ex.Exec(query, id)
 	if err != nil {
-		return c.transformError(err)
+		return nil, c.transformError(err)
 	}
 
 	// Also delete customers account
 	dbErr := c.DeleteOwnerAccount(id)
 	if dbErr != nil {
-		return dbErr
+		return nil, dbErr
 	}
 
 	err = c.Commit()
 	if err != nil {
-		return c.transformError(err)
+		return nil, c.transformError(err)
 	}
 
-	return nil
+	// Get the employee back
+	customer, dbErr := c.GetCustomerByID(id)
+	if dbErr != nil {
+		return nil, dbErr
+	}
+
+	return customer, nil
 }
 
 // UpdateCustomer updates customer
