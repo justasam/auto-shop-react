@@ -94,7 +94,7 @@
     // saerch table
     document.querySelectorAll('aside.card').forEach((elem) => {
         let input = elem.querySelector('input[type="search"]');
-        let table = elem.querySelector('table');
+        let table = elem.querySelector('table');console.log(elem);
 
         if (input && table) {
             input.addEventListener('keyup', (e) => {

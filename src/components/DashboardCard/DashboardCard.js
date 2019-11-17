@@ -201,18 +201,12 @@ const DashboardCard = props => {
     }, []);
 
     return (
-<<<<<<< HEAD
-=======
         <article className="DashboardCard">
             <aside className="sidenav">
                 <div className="row row--align-v-center row--align-h-center">
                     <ul className="navList">
-                        <li className="navList__heading">Customer <i className="fas fa-users"></i></li>
+                        <li className="navList__heading">Dashboard <i className="fas fa-users"></i></li>
                         <li>
-                            <div className="navList__subheading row row--align-v-center">
-                                <span className="navList__subheading-icon"><i className="fas fa-briefcase-medical"></i></span>
-                                <span className="navList__subheading-title">---</span>
-                            </div>
                             <ul className="subList subList" data-tabs>
                                 <li className="subList__item">
                                     <a href="#dashboard">Dashboard</a>
@@ -234,45 +228,9 @@ const DashboardCard = props => {
                                 </li>
                             </ul>
                         </li>
-                        <li>
-                            <div className="navList__subheading row row--align-v-center">
-                                <span className="navList__subheading-icon"><i className="fas fa-plane-departure"></i></span>
-                                <span className="navList__subheading-title">---</span>
-                            </div>
-                            <ul className="subList subList--hidden">
-                                <li className="subList__item">---</li>
-                                <li className="subList__item">---</li>
-                                <li className="subList__item">---</li>
-                            </ul>
-                        </li>
-                        <li>
-                            <div className="navList__subheading row row--align-v-center">
-                                <span className="navList__subheading-icon"><i className="far fa-angry"></i></span>
-                                <span className="navList__subheading-title">---</span>
-                            </div>
-                            <ul className="subList subList--hidden">
-                                <li className="subList__item">---</li>
-                                <li className="subList__item">---</li>
-                                <li className="subList__item">---</li>
-                            </ul>
-                        </li>
-
-                        <li className="navList__heading">Employee <i className="fas fa-users"></i></li>
-                        <li>
-                            <div className="navList__subheading row row--align-v-center">
-                                <span className="navList__subheading-icon"><i className="fas fa-envelope"></i></span>
-                                <span className="navList__subheading-title">inbox</span>
-                            </div>
-                            <ul className="subList subList--hidden">
-                                <li className="subList__item">primary</li>
-                                <li className="subList__item">social</li>
-                                <li className="subList__item">promotional</li>
-                            </ul>
-                        </li>
                     </ul>
                 </div>
             </aside>
->>>>>>> Add tabs and table filter functions with vanilla js / Remove login form on LoginForm component
 
             <section className="main">
                 <aside id="dashboard">
@@ -323,10 +281,8 @@ const DashboardCard = props => {
                             </div>
                         </li>
                     </ul>
-                </aside>
 
-                <aside id="branches">
-                    <div className="main__cards">
+                    <div className="sec__cards">
                         <aside className="card">
                             <div className="card__header">
                                 <div className="card__header-title text-light">Events</div>
@@ -365,7 +321,7 @@ const DashboardCard = props => {
                                 </div>
                             </div>
                             <div className="card">
-                                <input type="search" id="tableFilterInput" placeholder="Search for names.." title="Type in a name" />
+                                <input type="search" placeholder="Search for names.." title="Type in a name" />
 
                                 <table id="tableFilterTable">
                                     <tr>
@@ -401,18 +357,225 @@ const DashboardCard = props => {
                             </div>
                         </aside>
                     </div>
-<<<<<<< HEAD
-                </div>
-            </main>
-=======
+                </aside>
+
+                <aside id="branches">
+                    <div className="main__cards">
+                        <aside className="card">
+                            <div className="card__header">
+                                <div className="card__header-title text-light">Branches ({branchesData.length})</div>
+                                <div className="settings">
+                                    <div className="settings__block"><i class="fas fa-plus"></i></div>
+                                </div>
+                            </div>
+                            <input type="search" placeholder="Search for names.." title="Type in a name" />
+
+                            <table className="rwd-table">
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Name</th>
+                                    <th>Address</th>
+                                </tr>
+                                <tr>
+                                    <td>aaaa</td>
+                                    <td>aaaa</td>
+                                    <td>aaaa</td>
+                                </tr>
+                                <tr>
+                                    <td>bbb</td>
+                                    <td>bbb</td>
+                                    <td>bbb</td>
+                                </tr>
+                            </table>
+                        </aside>
+                    </div>
                 </aside>
 
                 <aside id="customers">
+                    <div className="main__cards">
+                        <aside className="card">
+                            <div className="card__header">
+                                <div className="card__header-title text-light">Customers ({customersData.total})</div>
+                                <div className="settings">
+                                    <div className="settings__block"><i class="fas fa-plus"></i></div>
+                                </div>
+                            </div>
+                            <input type="search" placeholder="Search for names.." title="Type in a name" />
 
+                            <table className="rwd-table">
+                                <tr>
+                                    <th>ID</th>
+                                    <th>account_id</th>
+                                    <th>Name</th>
+                                    <th>Surname</th>
+                                    <th>Username</th>
+                                    <th>Phone number</th>
+                                    <th>Address</th>
+                                    <th>Date of birth</th>
+                                    <th>last_seen_at</th>
+                                </tr>
+                                <tr>
+                                    <td>aaaa</td>
+                                    <td>aaaa</td>
+                                    <td>aaaa</td>
+                                    <td>aaaa</td>
+                                    <td>aaaa</td>
+                                    <td>aaaa</td>
+                                    <td>aaaa</td>
+                                    <td>aaaa</td>
+                                </tr>
+                                <tr>
+                                    <td>bbb</td>
+                                    <td>bbb</td>
+                                    <td>bbb</td>
+                                    <td>bbb</td>
+                                    <td>bbb</td>
+                                    <td>bbb</td>
+                                    <td>bbb</td>
+                                    <td>bbb</td>
+                                </tr>
+                            </table>
+                        </aside>
+                    </div>
+                </aside>
+
+                <aside id="employees">
+                    <div className="main__cards">
+                        <aside className="card">
+                            <div className="card__header">
+                                <div className="card__header-title text-light">Employees ({employeesData.total})</div>
+                                <div className="settings">
+                                    <div className="settings__block"><i class="fas fa-plus"></i></div>
+                                </div>
+                            </div>
+                            <input type="search" placeholder="Search for names.." title="Type in a name" />
+
+                            <table className="rwd-table">
+                                <tr>
+                                    <th>ID</th>
+                                    <th>account_id</th>
+                                    <th>branch_id</th>
+                                    <th>Name</th>
+                                    <th>Surname</th>
+                                    <th>Username</th>
+                                    <th>Phone number</th>
+                                    <th>Address</th>
+                                    <th>Date of birth</th>
+                                    <th>position</th>
+                                </tr>
+                                <tr>
+                                    <td>aaaa</td>
+                                    <td>aaaa</td>
+                                    <td>aaaa</td>
+                                    <td>aaaa</td>
+                                    <td>aaaa</td>
+                                    <td>aaaa</td>
+                                    <td>aaaa</td>
+                                    <td>aaaa</td>
+                                </tr>
+                                <tr>
+                                    <td>bbb</td>
+                                    <td>bbb</td>
+                                    <td>bbb</td>
+                                    <td>bbb</td>
+                                    <td>bbb</td>
+                                    <td>bbb</td>
+                                    <td>bbb</td>
+                                    <td>bbb</td>
+                                </tr>
+                            </table>
+                        </aside>
+                    </div>
+                </aside>
+
+                <aside id="enquiries">
+                    <div className="main__cards">
+                        <aside className="card">
+                            <div className="card__header">
+                                <div className="card__header-title text-light">Enquiries ({enquiriesData.total})</div>
+                                <div className="settings">
+                                    <div className="settings__block"><i class="fas fa-plus"></i></div>
+                                </div>
+                            </div>
+                            <input type="search" placeholder="Search for names.." title="Type in a name" />
+
+                            <table className="rwd-table">
+                                <tr>
+                                    <th>ID</th>
+                                    <th>type</th>
+                                    <th>description</th>
+                                    <th>resolved</th>
+                                    <th>customer_id</th>
+                                    <th>customer_name</th>
+                                    <th>customer_surname</th>
+                                    <th>customer_email</th>
+                                    <th>resolved_by</th>
+                                    <th>employee_name</th>
+                                    <th>employee_surname</th>
+                                    <th>employee_email</th>
+                                </tr>
+                                <tr>
+                                    <td>aaaa</td>
+                                    <td>aaaa</td>
+                                    <td>aaaa</td>
+                                    <td>aaaa</td>
+                                    <td>aaaa</td>
+                                    <td>aaaa</td>
+                                    <td>aaaa</td>
+                                    <td>aaaa</td>
+                                </tr>
+                                <tr>
+                                    <td>bbb</td>
+                                    <td>bbb</td>
+                                    <td>bbb</td>
+                                    <td>bbb</td>
+                                    <td>bbb</td>
+                                    <td>bbb</td>
+                                    <td>bbb</td>
+                                    <td>bbb</td>
+                                </tr>
+                            </table>
+                        </aside>
+                    </div>
+                </aside>
+
+                <aside id="vehicles">
+                    <div className="main__cards">
+                        <aside className="card">
+                            <div className="card__header">
+                                <div className="card__header-title text-light">Vehicles ({vehiclesData.length})</div>
+                                <div className="settings">
+                                    <div className="settings__block"><i class="fas fa-plus"></i></div>
+                                </div>
+                            </div>
+                            <input type="search" placeholder="Search for names.." title="Type in a name" />
+
+                            <table className="rwd-table">
+                                <tr>
+                                    <th>ID</th>
+                                    <th>name</th>
+                                    <th>image_path</th>
+                                    <th>count</th>
+                                </tr>
+                                <tr>
+                                    <td>aaaa</td>
+                                    <td>aaaa</td>
+                                    <td>aaaa</td>
+                                    <td>aaaa</td>
+                                </tr>
+                                <tr>
+                                    <td>bbb</td>
+                                    <td>bbb</td>
+                                    <td>bbb</td>
+                                    <td>bbb</td>
+                                </tr>
+                            </table>
+                        </aside>
+                    </div>
                 </aside>
             </section>
 
-            <aside className="popupForm">
+            <aside className="popupForm hidden">
                 <button className="close"><i class="fas fa-times"></i></button>
                 <form>
                     <div className="title">title</div>
@@ -420,7 +583,6 @@ const DashboardCard = props => {
                 </form>
             </aside>
         </article>
->>>>>>> Add tabs and table filter functions with vanilla js / Remove login form on LoginForm component
     )
 }
 

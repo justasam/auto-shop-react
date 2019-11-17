@@ -214,6 +214,13 @@
     margin: 20px;
 }
 
+.sec__cards {
+    display: block;
+    column-count: 1;
+    column-gap: 20px;
+    margin: 20px;
+}
+
 .quickview {
     display: grid;
     grid-auto-flow: column;
@@ -480,15 +487,6 @@
     cursor: pointer;
 }
 
-.main__cards input {
-    margin: 1em;
-    height: 2em;
-    border-radius: 30px;
-    text-align: center;
-    outline: none;
-    background-color: rgb(233, 233, 233);
-}
-
 @media only screen and (min-width: 46.875em) {
     .DashboardCard {
         display: grid;
@@ -519,6 +517,10 @@
 
 @media only screen and (min-width: 65.625em) {
     .main__cards {
+        column-count: 1;
+    }
+
+    .sec__cards {
         column-count: 2;
     }
 }
@@ -526,8 +528,9 @@
 /*
 /   filter table
 */
-.main__cards input {
-    margin: 1em;
+.main__cards input, .sec__cards input {
+    margin: 1em 0;
+    width: 100%;
     height: 2em;
     border-radius: 30px;
     text-align: center;
@@ -582,6 +585,10 @@ aside.popupForm .title {
     margin: .8em;
 }
 
+aside.popupForm form {
+    max-width: 100%;
+}
+
 aside.popupForm input {
     width: 100%;
     color: #3c3c3c;
@@ -589,7 +596,7 @@ aside.popupForm input {
     font-size: 1.2em;
     border-radius: 0;
     line-height: 1em;
-    background-color: #fbfbfb;
+    background-color: #e4e4e4;
     padding: 10px 13px;
     margin-bottom: 10px;
     -webkit-box-sizing: border-box;
@@ -610,10 +617,99 @@ aside.popupForm input:focus {
 aside.popupForm .close {
     height: 40px;
     width: 40px;
+    margin: 0;
+    padding: 0;
     border-radius: 50%;
     position: absolute;
     right: 1em;
     top: 1em;
     box-shadow: none;
     border: none;
+}
+
+/*
+/   rwd table
+*/
+
+.rwd-table {
+    width: 100%%;
+    min-width: 300px;
+}
+
+.rwd-table tr {
+    border-top: 1px solid #ddd;
+    border-bottom: 1px solid #ddd;
+}
+
+.rwd-table th {
+    display: none;
+}
+
+.rwd-table td {
+    display: block;
+}
+
+.rwd-table td:first-child {
+    padding-top: .5em;
+}
+
+.rwd-table td:last-child {
+    padding-bottom: .5em;
+}
+
+.rwd-table td:before {
+    content: attr(data-th) ": ";
+    font-weight: bold;
+    width: 6.5em;
+    display: inline-block;
+}
+
+@media (min-width: 480px) {
+    .rwd-table td:before {
+        display: none;
+    }
+}
+
+.rwd-table th, .rwd-table td {
+    text-align: left;
+}
+
+@media (min-width: 480px) {
+    .rwd-table th, .rwd-table td {
+        display: table-cell;
+        padding: .25em .5em;
+    }
+
+    .rwd-table th:first-child, .rwd-table td:first-child {
+        padding-left: 0;
+    }
+
+    .rwd-table th:last-child, .rwd-table td:last-child {
+        padding-right: 0;
+    }
+}
+
+.rwd-table {
+    background: #34495E;
+    color: #fff;
+    border-radius: .4em;
+    overflow: hidden;
+}
+
+.rwd-table tr {
+    border-color: #46637f;
+}
+
+.rwd-table th, .rwd-table td {
+    margin: .5em 1em;
+}
+
+@media (min-width: 480px) {
+    .rwd-table th, .rwd-table td {
+        padding: 1em !important;
+    }
+}
+
+.rwd-table th, .rwd-table td:before {
+    color: #dd5;
 }
