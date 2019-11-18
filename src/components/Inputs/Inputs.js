@@ -123,7 +123,7 @@ const DropdownAlt = ({name, options, title, value, onChange}) => {
   return (
     <div className='dropdownalt'>
       <span className='textshadow nomp selectalt_title'>{title}</span>
-      <Select name={name} className='textshadow nomp select selectalt'
+      <Select name={name}
         options={options}
         value={value}
         onChange={onChange}

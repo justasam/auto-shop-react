@@ -5,46 +5,19 @@ import { ProductCardPopup } from '../../components/ProductCardPopup';
 import { DropdownAlt } from '../../components/Inputs';
 import { ChevronLeft, ChevronRight } from 'react-feather';
 import './index.css';
+import Filters from '../../filters';
+const qs = require('query-string');
 
-const getPageFromSearch = search => {
-  if (!search) return 1;
-  let splitSearch = search.split('p=')
-  if (splitSearch.length !== 2) return 1;
-  return parseInt(splitSearch[1].split('&')[0]);
-}
-
-const getSearchFromPage = page => `?p=${page}`;
-
-function parseQuery(queryString) {
-  if (queryString === '') return {};
-  var query = {};
-  var pairs = (queryString[0] === '?' ? queryString.substr(1) : queryString).split('&');
-  for (var i = 0; i < pairs.length; i++) {
-    var pair = pairs[i].split('=');
-    query[decodeURIComponent(pair[0])] = decodeURIComponent(pair[1] || '');
-  }
-  return query;
-}
-
-function setQuery(name, val, query) {
-  if (val === 'any') {
-    delete query[name];
-  } else {
-    query[name] = val;
-  }
-  var esc = encodeURIComponent;
-  return Object.keys(query)
-    .map(k => esc(k) + '=' + esc(query[k]))
-    .join('&');
-}
 
 const PerPage = 9;
 
 const PartsAlt = withRouter(props => {
   let [parts, setParts] = useState([]);
+  let [loading, setLoading] = useState(true);
+
   console.log(props.location.search);
 
-  let query = parseQuery(props.location.search);
+  let query = qs.parse(props.location.search,  {parseNumbers: true});
   query.page_number = query.page_number || 1;
   query.per_page = PerPage;
   // delete query[''];
@@ -65,6 +38,7 @@ const PartsAlt = withRouter(props => {
       const jsonRes = await res.json();
       setPagesMax(Math.ceil(jsonRes.total / PerPage));
       setParts(jsonRes.objects);
+      setLoading(false);
     };
 
     getData();
@@ -77,28 +51,41 @@ const PartsAlt = withRouter(props => {
         fontSize: 22
       }}>PartsAlt</h3>
       <div className='parts_alt_filters'>
-        <DropdownAlt title='MODEL:' name='model' value={
-          query.model || 'any'
-        } onChange={
-          (value) => window.location.query = setQuery('model', value, query)
+        {
+          Filters.map(({title, filters, isMultiple}, i) => {
+            <DropdownAlt name={title} options={filters} isMulti={isMultiple || false}
+            key={i}
+              value={
+                query[title] ? filters.find((filter) => filter.value === query[title]) : filters[0]
+              }
+              onChange={
+                (selectedOption) => {
+                  console.log('dropdown', selectedOption);
+                  if (selectedOption.value === 'any') {
+                    delete query[title];
+                    props.history.push({
+                      search: qs.stringify(query)
+                    });
+                  }
+                  else {
+                    props.history.push({
+                      search: qs.stringify({...query, [title]: selectedOption.value})
+                    });
+                  }
+                }
+              }
+            />
+          })
         }
-          options={[
-            { value: 'any', label: 'Any' },
-            { value: 'volkswagen', label: 'Volkswagen' },
-            { value: 'renault', label: 'Renault' },
-            { value: 'ford', label: 'Ford' },
-            { value: 'bmw', label: 'BMW' },
-            { value: 'mazda', label: 'MAZDA' },
-          ]} />
         <div className='parts_alt_pagination'>
           <h3>Page {query.page_number}</h3>
           <Link to={{
-            search: setQuery('page_number', query.page_number - 1, query)
+            search: qs.stringify({...query, page_number: query.page_number - 1})
           }} className={`link ${query.page_number <= 1 ? 'disabled' : ''}`}>
             <ChevronLeft />
           </Link>
           <Link to={{
-            search: setQuery('page_number', query.page_number + 1, query)
+            search: qs.stringify({...query, page_number: query.page_number + 1})
           }} className={`link ${query.page_number >= pagesMax ? 'disabled' : ''}`}>
             <ChevronRight />
           </Link>
@@ -125,9 +112,13 @@ const PartsAlt = withRouter(props => {
               image={part.images[0]}
             />
           )
-          : <p style={{
+          : loading ? <p style={{
             textAlign: 'center'
-          }}>Loading...</p>}
+          }}>Loading...</p> :
+            <p style={{
+              textAlign: 'center'
+            }}>No results.</p>
+          }
       </div>
       {props.location.hash && parts.length > 0 ?
         <ProductCardPopup
