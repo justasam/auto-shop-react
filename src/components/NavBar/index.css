@@ -4,7 +4,7 @@
   top: 0;
   left: 0;
   width: 100vw;
-  height: 52px;
+  height: 4vh;
   z-index: 2; /* make sure it always on the top ! */
 }
 

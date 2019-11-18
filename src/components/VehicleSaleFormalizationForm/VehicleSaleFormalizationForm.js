@@ -2,6 +2,7 @@ import React, {useEffect, useState} from "react";
 import useForm from "react-hook-form";
 import * as yup from "yup";
 import { useAlert } from "react-alert";
+import HashLoader from 'react-spinners/HashLoader'
 import "./index.css";
 
 const VehicleSaleSchema = yup.object().shape({
@@ -45,6 +46,7 @@ const VehicleSaleFormalizationForm = () =>{
 
   const [customers, setCustomers] = useState([])
   const [vehicles, setVehicles] = useState([])
+  const [loading, setLoading] = useState(true)
   useEffect(() => {
       async function getCustomers() {
           const response = await fetch(
@@ -95,10 +97,21 @@ const VehicleSaleFormalizationForm = () =>{
 
       getCustomers();
       getVehicles();
+      setLoading(false);
   }, []);
 
   return (
-    <div>
+    <div style={{height: "100%"}}>
+      {
+        loading ?
+          <HashLoader
+            sizeUnit={"px"}
+            size={150}
+            css={{height: "100%", margin: "0 auto"}}
+            color={'#394263'} 
+            loading={loading}
+          />
+        :
       <form className="custom-form" onSubmit={handleSubmit(onSubmit)} 
       style={{
         maxWidth: "400px",
@@ -135,6 +148,7 @@ const VehicleSaleFormalizationForm = () =>{
         </div>
         <input type="submit" />
       </form>
+      }
     </div>
   );
 }

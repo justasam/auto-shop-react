@@ -1,1 +1,0 @@
-export { default as FormalizeVehiclePurchase } from "./FormalizeVehiclePurchase"

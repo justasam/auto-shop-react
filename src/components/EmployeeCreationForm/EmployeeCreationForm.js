@@ -3,6 +3,7 @@ import useForm from "react-hook-form";
 import forge from 'node-forge';
 import * as yup from "yup";
 import { useAlert } from "react-alert";
+import HashLoader from 'react-spinners/HashLoader'
 import "./index.css";
 
 const sha256 = (pwd) => {
@@ -61,6 +62,8 @@ const EmployeeCreationForm = () =>{
 
   const [branches, setBranches] = useState([])
   const [positions, setPositions] = useState([])
+  const [loadingBranches, setLoadingBranches] = useState(true)
+  const [loadingPositions, setLoadingPositions] = useState(true)
   useEffect(() => {
       async function getBranches() {
           const response = await fetch(
@@ -82,6 +85,7 @@ const EmployeeCreationForm = () =>{
               }
           });
 
+          setLoadingBranches(false);
           setBranches(data);
       }
       getBranches();
@@ -106,13 +110,24 @@ const EmployeeCreationForm = () =>{
               }
           });
 
+          setLoadingBranches(false);
           setPositions(data);
       }
       getPositions();
   }, {});
 
   return (
-    <div>
+    <div style={{height: "100%"}}>
+      {
+        loadingBranches || loadingPositions ?
+          <HashLoader
+            sizeUnit={"px"}
+            size={150}
+            css={{height: "100%", margin: "0 auto"}}
+            color={'#394263'} 
+            loading={loadingBranches || loadingPositions}
+          />
+        :
       <form className="custom-form" onSubmit={handleSubmit(onSubmit)} style={{
         maxWidth:"650px",
         margin: "20px auto 20px auto"
@@ -183,6 +198,7 @@ const EmployeeCreationForm = () =>{
           <input type="submit" />
         </div>
       </form>
+      }
     </div>
   );
 }

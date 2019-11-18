@@ -1,6 +1,7 @@
 import React,  { useState, useEffect} from 'react';
 import useForm from "react-hook-form";
 import {useAlert} from "react-alert";
+import HashLoader from 'react-spinners/HashLoader'
 import * as yup from "yup";
 import './index.css';
 
@@ -29,6 +30,7 @@ const CustomerUpdateForm = ({customer_id}) => {
   });
   const alert = useAlert();
 
+  const [loading, setLoading] = useState(true)
   const onSubmit = async data => {
     const response = await fetch("/autoshop/api/customers/" + customer_id, {
         method: "PUT",
@@ -65,6 +67,7 @@ const CustomerUpdateForm = ({customer_id}) => {
         return
       }
 
+      setLoading(false);
       for(let key in customer) {
           setValue(key, customer[key]);
       }
@@ -73,7 +76,17 @@ const CustomerUpdateForm = ({customer_id}) => {
   }, {});
 
   return (
-    <div>
+    <div style={{height: "100%"}}>
+      {
+        loading ?
+          <HashLoader
+            sizeUnit={"px"}
+            size={150}
+            css={{height: "100%", margin: "0 auto"}}
+            color={'#394263'} 
+            loading={loading}
+          />
+        :
       <form className="custom-form" onSubmit={handleSubmit(onSubmit)} style={{
           maxWidth:"650px",
           margin: "20px auto 20px auto"
@@ -116,6 +129,7 @@ const CustomerUpdateForm = ({customer_id}) => {
         </div>
         <input type="submit" />
       </form>
+      }
     </div>
   )
 }

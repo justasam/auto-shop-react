@@ -4,6 +4,7 @@ import Paper from '@material-ui/core/Paper';
 import Popup from "reactjs-popup";
 import {CustomerCard} from '../../CustomerCard'
 import {EmployeeCard} from '../../EmployeeCard'
+import HashLoader from 'react-spinners/HashLoader'
 import { 
   RowDetailState,
   FilteringState,
@@ -113,6 +114,7 @@ const EmployeePurchases = () => {
     const [rows, setRows] = useState([])
     const [pageSizes] = useState([5, 10, 15, 0]);
 
+    const [loading, setLoading] = useState(true)
     useEffect(() => {
         async function getEmployeeSales() {
             const accountResp = await fetch(
@@ -143,45 +145,59 @@ const EmployeePurchases = () => {
             )
             let data = await response.json();
             console.log(data)
+            setLoading(false);
             setRows(data);
         }
         getEmployeeSales();
     }, []);
 
   return (
-    <Paper>
+    <div style={{height: "100%"}}>
+    {
+      loading ?
+        <HashLoader
+          sizeUnit={"px"}
+          size={150}
+          css={{height: "100%", margin: "0 auto"}}
+          color={'#394263'} 
+          loading={loading}
+        />
+      :
+      <Paper>
       <Grid
-        rows={rows}
-        columns={columns}
-        getRowId={getRowId}
+          rows={rows}
+          columns={columns}
+          getRowId={getRowId}
       >
-        <SortingState/>
-        <IntegratedSorting />
-        <PagingState
+          <SortingState/>
+          <IntegratedSorting />
+          <PagingState
           defaultCurrentPage={0}
           defaultPageSize={5}
-        />
-        <IntegratedPaging />
-        <SearchState />
-        <FilteringState defaultFilters={[]} />
-        <IntegratedFiltering />
-        <RowDetailState
+          />
+          <IntegratedPaging />
+          <SearchState />
+          <FilteringState defaultFilters={[]} />
+          <IntegratedFiltering />
+          <RowDetailState
           expandedRowIds={expandedRowIds}
           onExpandedRowIdsChange={setExpandedRowIds}
-        />
-        <VirtualTable height="100%"/>
-        <TableHeaderRow showSortingControls/>
-        <TableRowDetail
+          />
+          <VirtualTable height="100%"/>
+          <TableHeaderRow showSortingControls/>
+          <TableRowDetail
           contentComponent={RowDetail}
-        />
-        <TableFilterRow />
-        <Toolbar />
-        <SearchPanel />
-        <PagingPanel
+          />
+          <TableFilterRow />
+          <Toolbar />
+          <SearchPanel />
+          <PagingPanel
           pageSizes={pageSizes}
-        />
+          />
       </Grid>
-    </Paper>
+      </Paper>
+    }
+    </div>
   );
 };
 

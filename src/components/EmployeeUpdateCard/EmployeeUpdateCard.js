@@ -2,6 +2,7 @@ import React,  { useState, useEffect} from 'react';
 import useForm from "react-hook-form";
 import * as yup from "yup";
 import { useAlert } from "react-alert";
+import HashLoader from 'react-spinners/HashLoader'
 import './index.css';
 
 const EmployeeUpdateSchema = yup.object().shape({
@@ -30,6 +31,7 @@ const EmployeeUpdateCard = ({employee, setEmployeeData}) => {
     validationSchema: EmployeeUpdateSchema
   });
 
+  const [loading, setLoading] = useState(true)
   const alert = useAlert();
   const onSubmit = async data => {
     const response = await fetch("/autoshop/api/employees/" + employee.id, {
@@ -103,6 +105,7 @@ const EmployeeUpdateCard = ({employee, setEmployeeData}) => {
       }
       getPositions();
       
+      setLoading(false);
       for(let key in employee) {
         setValue(key, employee[key]);
       }
@@ -110,7 +113,17 @@ const EmployeeUpdateCard = ({employee, setEmployeeData}) => {
 
 
   return (
-    <div>
+    <div style={{height: "100%"}}>
+      {
+        loading ?
+          <HashLoader
+            sizeUnit={"px"}
+            size={150}
+            css={{height: "100%", margin: "0 auto"}}
+            color={'#394263'} 
+            loading={loading}
+          />
+        :
       <form className="custom-form"  onSubmit={handleSubmit(onSubmit)} style={{maxWidth:"650px"}}>
         <div style={{
           display: 'grid',
@@ -168,6 +181,7 @@ const EmployeeUpdateCard = ({employee, setEmployeeData}) => {
         </div>
         <input type="submit" />
       </form>
+      }
     </div>
   )
 }

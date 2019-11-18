@@ -1,6 +1,7 @@
 import React,  { useState, useEffect} from 'react';
 import useForm from "react-hook-form";
 import {useAlert} from "react-alert";
+import HashLoader from 'react-spinners/HashLoader'
 import * as yup from "yup";
 import './index.css';
 
@@ -48,7 +49,7 @@ const EmployeeUpdateForm = ({employee_id}) => {
     alert.success("Success");
   };
 
-
+  const [loading, setLoading] = useState(true)
   useEffect(() => {
     async function getEmployee(){
       const response = await fetch("/autoshop/api/employees/" + employee_id, {
@@ -65,6 +66,7 @@ const EmployeeUpdateForm = ({employee_id}) => {
         return
       }
 
+      setLoading(false);
       for(let key in employee) {
           setValue(key, employee[key]);
       }
@@ -73,11 +75,21 @@ const EmployeeUpdateForm = ({employee_id}) => {
   }, {});
 
   return (
-    <div>
+    <div style={{height: "100%"}}>
+      {
+        loading ?
+          <HashLoader
+            sizeUnit={"px"}
+            size={150}
+            css={{height: "100%", margin: "0 auto"}}
+            color={'#394263'} 
+            loading={loading}
+          />
+        :
       <form className="custom-form" onSubmit={handleSubmit(onSubmit)} style={{
           maxWidth:"650px",
           margin: "20px auto 20px auto"
-        }}>
+      }}>
         <div style={{
           display: 'grid',
           gridTemplateColumns: '1fr 1fr',
@@ -113,9 +125,10 @@ const EmployeeUpdateForm = ({employee_id}) => {
             <input type="input" name="phone_number" ref={register} />
             {errors.phone_number && <p>{errors.phone_number.message}</p>}
           </div>
-        </div>
         <input type="submit" />
+        </div>
       </form>
+      }
     </div>
   )
 }

@@ -1,7 +1,9 @@
 import React,  { useState, useEffect} from 'react';
+import HashLoader from 'react-spinners/HashLoader'
 import './index.css';
 
 const EmployeeCard = ({employee_id}) => {
+  const [loading, setLoading] = useState(true)
   const [employeeDetails, setEmployeeDetails] = useState({})
   useEffect(() => {
       async function getEmployee() {
@@ -20,14 +22,24 @@ const EmployeeCard = ({employee_id}) => {
         }
         let employee = await employeeResp.json()
         console.log(employee)
+        setLoading(false);
         setEmployeeDetails(employee)
-        
       }
       getEmployee();
   }, {});
 
   return (
-    <div>
+    <div style={{height: "100%"}}>
+      {
+        loading ?
+          <HashLoader
+            sizeUnit={"px"}
+            size={150}
+            css={{height: "100%", margin: "0 auto"}}
+            color={'#394263'} 
+            loading={loading}
+          />
+        :
       <table class="inner-table" style={{width:"100%"}}>
         <tr>
             <td>ID:</td><td>{employeeDetails.id}</td>
@@ -57,6 +69,7 @@ const EmployeeCard = ({employee_id}) => {
             <td>Account ID:</td><td>{employeeDetails.account_id}</td>
         </tr>
       </table>
+      }
     </div>
   )
 }

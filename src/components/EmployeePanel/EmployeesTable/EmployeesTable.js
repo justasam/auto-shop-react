@@ -4,6 +4,7 @@ import Popup from "reactjs-popup";
 import {BranchCard} from '../../BranchCard'
 import {EmployeeUpdateCard} from '../../EmployeeUpdateCard'
 import { useAlert } from "react-alert";
+import HashLoader from 'react-spinners/HashLoader'
 import { 
   RowDetailState,
   FilteringState,
@@ -152,6 +153,7 @@ const EmployeesTable = () => {
     { name: 'is_deleted', title: 'Is Deleted' },
   ]);
 
+  const [loading, setLoading] = useState(true)
   useEffect(() => {
         async function getEmployees() {
             const employeesResp = await fetch(
@@ -174,46 +176,59 @@ const EmployeesTable = () => {
               item.is_deleted = item.is_deleted.toString();
               return item
             });
-
+            setLoading(false);
             setRows(employees);
         }
         getEmployees();
   }, []);
 
   return (
-    <Paper>
-      <Grid
-        rows={rows}
-        columns={columns}
-        getRowId={getRowId}
-      >
-        <SortingState/>
-        <IntegratedSorting />
-        <PagingState
-          defaultCurrentPage={0}
-          defaultPageSize={5}
+    <div style={{height: "100%"}}>
+    {
+      loading ?
+        <HashLoader
+          sizeUnit={"px"}
+          size={150}
+          css={{height: "100%", margin: "0 auto"}}
+          color={'#394263'} 
+          loading={loading}
         />
-        <IntegratedPaging />
-        <SearchState />
-        <FilteringState defaultFilters={[]} />
-        <IntegratedFiltering />
-        <RowDetailState
-          expandedRowIds={expandedRowIds}
-          onExpandedRowIdsChange={setExpandedRowIds}
-        />
-        <VirtualTable height="100%"/>
-        <TableHeaderRow showSortingControls/>
-        <TableRowDetail
-          contentComponent={RowDetail}
-        />
-        <TableFilterRow />
-        <Toolbar />
-        <SearchPanel />
-        <PagingPanel
-          pageSizes={pageSizes}
-        />
-      </Grid>
-    </Paper>
+      :
+      <Paper>
+        <Grid
+          rows={rows}
+          columns={columns}
+          getRowId={getRowId}
+        >
+          <SortingState/>
+          <IntegratedSorting />
+          <PagingState
+            defaultCurrentPage={0}
+            defaultPageSize={5}
+          />
+          <IntegratedPaging />
+          <SearchState />
+          <FilteringState defaultFilters={[]} />
+          <IntegratedFiltering />
+          <RowDetailState
+            expandedRowIds={expandedRowIds}
+            onExpandedRowIdsChange={setExpandedRowIds}
+          />
+          <VirtualTable height="100%"/>
+          <TableHeaderRow showSortingControls/>
+          <TableRowDetail
+            contentComponent={RowDetail}
+          />
+          <TableFilterRow />
+          <Toolbar />
+          <SearchPanel />
+          <PagingPanel
+            pageSizes={pageSizes}
+          />
+        </Grid>
+      </Paper>
+    }
+    </div>
   );
 };
 

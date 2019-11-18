@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Paper from '@material-ui/core/Paper';
+import HashLoader from 'react-spinners/HashLoader'
 import {useAlert} from "react-alert";
 import { 
   RowDetailState,
@@ -71,6 +72,7 @@ const CustomerPurchases = () => {
     const [rows, setRows] = useState([])
     const [pageSizes] = useState([5, 10, 15, 0]);
     const alert = useAlert();
+    const [loading, setLoading] = useState(true)
     useEffect(() => {
         async function getCustomerPurchases() {
             const userResp = await fetch(
@@ -108,45 +110,59 @@ const CustomerPurchases = () => {
             }
 
             console.log(data)
+            setLoading(false);
             setRows(data);
         }
         getCustomerPurchases();
     }, []);
 
   return (
-    <Paper>
-      <Grid
-        rows={rows}
-        columns={columns}
-        getRowId={getRowId}
-      >
-        <SortingState/>
-        <IntegratedSorting />
-        <PagingState
-          defaultCurrentPage={0}
-          defaultPageSize={5}
-        />
-        <IntegratedPaging />
-        <SearchState />
-        <FilteringState defaultFilters={[]} />
-        <IntegratedFiltering />
-        <RowDetailState
-          expandedRowIds={expandedRowIds}
-          onExpandedRowIdsChange={setExpandedRowIds}
-        />
-        <VirtualTable height="100%"/>
-        <TableHeaderRow showSortingControls/>
-        <TableRowDetail
-          contentComponent={RowDetail}
-        />
-        <TableFilterRow />
-        <Toolbar />
-        <SearchPanel />
-        <PagingPanel
-          pageSizes={pageSizes}
-        />
-      </Grid>
-    </Paper>
+    <div style={{height: "100%"}}>
+      {
+        loading ?
+          <HashLoader
+            sizeUnit={"px"}
+            size={150}
+            css={{height: "100%", margin: "0 auto"}}
+            color={'#394263'} 
+            loading={loading}
+          />
+        :
+        <Paper>
+          <Grid
+            rows={rows}
+            columns={columns}
+            getRowId={getRowId}
+          >
+            <SortingState/>
+            <IntegratedSorting />
+            <PagingState
+              defaultCurrentPage={0}
+              defaultPageSize={5}
+            />
+            <IntegratedPaging />
+            <SearchState />
+            <FilteringState defaultFilters={[]} />
+            <IntegratedFiltering />
+            <RowDetailState
+              expandedRowIds={expandedRowIds}
+              onExpandedRowIdsChange={setExpandedRowIds}
+            />
+            <VirtualTable height="100%"/>
+            <TableHeaderRow showSortingControls/>
+            <TableRowDetail
+              contentComponent={RowDetail}
+            />
+            <TableFilterRow />
+            <Toolbar />
+            <SearchPanel />
+            <PagingPanel
+              pageSizes={pageSizes}
+            />
+          </Grid>
+        </Paper>
+      }
+    </div>
   );
 };
 

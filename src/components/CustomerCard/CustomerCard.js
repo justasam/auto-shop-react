@@ -1,8 +1,10 @@
 import React,  { useState, useEffect} from 'react';
+import HashLoader from 'react-spinners/HashLoader'
 import './index.css';
 
 const CustomerCard = ({customer_id}) => {
   const [customerDetails, setCustomerDetails] = useState({})
+  const [loading, setLoading] = useState(true)
   useEffect(() => {
       async function getCustomer() {
         const customerResp = await fetch(
@@ -20,13 +22,24 @@ const CustomerCard = ({customer_id}) => {
         }
         let customer = await customerResp.json()
         console.log(customer)
+        setLoading(false);
         setCustomerDetails(customer)
       }
       getCustomer();
   }, {});
 
   return (
-    <div>
+    <div style={{height: "100%"}}>
+      {
+        loading ?
+          <HashLoader
+            sizeUnit={"px"}
+            size={150}
+            css={{height: "100%", margin: "0 auto"}}
+            color={'#394263'} 
+            loading={loading}
+          />
+        :
       <table class="inner-table" style={{width:"100%"}}>
         <tr>
             <td>ID:</td><td>{customerDetails.id}</td>
@@ -50,6 +63,7 @@ const CustomerCard = ({customer_id}) => {
             <td>Account ID:</td><td>{customerDetails.account_id}</td>
         </tr>
       </table>
+      }
     </div>
   )
 }

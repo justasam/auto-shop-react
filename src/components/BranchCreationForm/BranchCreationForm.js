@@ -2,6 +2,7 @@ import React, {useState, useEffect } from "react";
 import useForm from "react-hook-form";
 import * as yup from "yup";
 import { useAlert } from "react-alert";
+import HashLoader from 'react-spinners/HashLoader'
 import "./index.css";
 
 const BranchSchema = yup.object().shape({
@@ -35,6 +36,7 @@ const BranchCreationForm = () =>{
     alert.success("Success");
   };
 
+  const [loading, setLoading] = useState(true)
   const [employees, setEmployees] = useState([])
   useEffect(() => {
       async function getEmployees() {
@@ -56,6 +58,7 @@ const BranchCreationForm = () =>{
                   name: item.name + " " + item.surname
               }
           });
+          setLoading(false);
 
           setEmployees(data);
       }
@@ -63,7 +66,17 @@ const BranchCreationForm = () =>{
   }, {});
 
   return (
-    <div>
+    <div style={{height: "100%"}}>
+      {
+        loading ?
+          <HashLoader
+            sizeUnit={"px"}
+            size={150}
+            css={{height: "100%", margin: "0 auto"}}
+            color={'#394263'} 
+            loading={loading}
+          />
+        :
       <form className="custom-form" onSubmit={handleSubmit(onSubmit)} style={{
         maxWidth: "400px",
         margin: "20px auto 20px auto"
@@ -95,6 +108,7 @@ const BranchCreationForm = () =>{
         </div>
         <input type="submit" />
       </form>
+      }
     </div>
   );
 }

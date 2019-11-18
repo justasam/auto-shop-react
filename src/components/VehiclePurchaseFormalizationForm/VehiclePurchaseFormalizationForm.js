@@ -3,6 +3,7 @@ import useForm from "react-hook-form";
 import { fileToBase64 } from '../../utils.js'
 import VehiclePurchaseSchema from "./schema.js"
 import { useAlert } from "react-alert";
+import HashLoader from 'react-spinners/HashLoader'
 import "./index.css";
 
 
@@ -41,6 +42,8 @@ const VehiclePurchaseFormalizationForm = () =>{
 
   const [customers, setCustomers] = useState([])
   const [makes, setMakes] = useState([])
+  const [loadingCust, setLoadingCust] = useState(true)
+  const [loadingMakes, setLoadingMakes] = useState(true)
   useEffect(() => {
       async function getCustomers() {
           const response = await fetch(
@@ -63,6 +66,7 @@ const VehiclePurchaseFormalizationForm = () =>{
               }
           });
 
+          setLoadingCust(false);
           setCustomers(data);
       }
 
@@ -85,6 +89,7 @@ const VehiclePurchaseFormalizationForm = () =>{
               }
           });
 
+          setLoadingMakes(false);
           setMakes(data);
       }
 
@@ -93,7 +98,17 @@ const VehiclePurchaseFormalizationForm = () =>{
   }, []);
 
   return (
-    <div>
+    <div style={{height: "100%"}}>
+      {
+        loadingMakes || loadingCust ?
+          <HashLoader
+            sizeUnit={"px"}
+            size={150}
+            css={{height: "100%", margin: "0 auto"}}
+            color={'#394263'} 
+            loading={loadingMakes || loadingCust}
+          />
+        :
       <form className="custom-form" onSubmit={handleSubmit(onSubmit)} style={{
         maxWidth:"650px",
         margin: "20px auto 20px auto"
@@ -209,6 +224,7 @@ const VehiclePurchaseFormalizationForm = () =>{
         </div>
         <input type="submit" />
       </form>
+      }
     </div>
   );
 }

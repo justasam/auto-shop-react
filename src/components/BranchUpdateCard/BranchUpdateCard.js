@@ -2,6 +2,7 @@ import React,  { useState, useEffect} from 'react';
 import useForm from "react-hook-form";
 import * as yup from "yup";
 import { useAlert } from "react-alert";
+import HashLoader from 'react-spinners/HashLoader'
 import './index.css';
 
 const BranchUpdateSchema = yup.object().shape({
@@ -16,6 +17,7 @@ const BranchUpdateCard = ({branch, setBranchData}) => {
   });
 
   const alert = useAlert();
+  const [loading, setLoading] = useState(true)
   const onSubmit = async data => {
     console.log(JSON.stringify(data));
     const response = await fetch("/autoshop/api/branches/" + branch.id, {
@@ -61,6 +63,7 @@ const BranchUpdateCard = ({branch, setBranchData}) => {
               }
           });
 
+          setLoading(false);
           setEmployees(data);
       }
       getEmployees();
@@ -71,7 +74,17 @@ const BranchUpdateCard = ({branch, setBranchData}) => {
   }, {});
 
   return (
-    <div>
+    <div style={{height: "100%"}}>
+      {
+        loading ?
+          <HashLoader
+            sizeUnit={"px"}
+            size={150}
+            css={{height: "100%", margin: "0 auto"}}
+            color={'#394263'} 
+            loading={loading}
+          />
+        :
       <form className="custom-form" onSubmit={handleSubmit(onSubmit)} style={{maxWidth:"650px"}}>
         <div style={{
           display: 'grid',
@@ -100,6 +113,7 @@ const BranchUpdateCard = ({branch, setBranchData}) => {
         </div>
         <input type="submit" />
       </form>
+      }
     </div>
   )
 }
