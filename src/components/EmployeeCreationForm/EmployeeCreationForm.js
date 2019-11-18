@@ -110,7 +110,7 @@ const EmployeeCreationForm = () =>{
               }
           });
 
-          setLoadingBranches(false);
+          setLoadingPositions(false);
           setPositions(data);
       }
       getPositions();

@@ -89,6 +89,19 @@ func vehiclesAPI() []*swagger.Endpoint {
 		endpoint.Tags("Vehicles"),
 	)
 
+	listVehicle := endpoint.New("POST", "/vehicles/{vehicle_id}/list", "Set vehicle to listed",
+		endpoint.Handler(controllers.ListVehicle),
+		endpoint.Response(http.StatusOK, types.Vehicle{}, "Success"),
+		endpoint.Path("vehicle_id", "string", "uuid", "Vehicle id"),
+		endpoint.Tags("Vehicles"),
+	)
+
+	deListVehicle := endpoint.New("POST", "/vehicles/{vehicle_id}/delist", "Set vehicle to delisted",
+		endpoint.Handler(controllers.DeListVehicle),
+		endpoint.Response(http.StatusOK, types.Vehicle{}, "Success"),
+		endpoint.Path("vehicle_id", "string", "uuid", "Vehicle id"),
+		endpoint.Tags("Vehicles"),
+	)
 	return []*swagger.Endpoint{
 		getVehicles,
 		vehiclePurchase,
@@ -99,5 +112,7 @@ func vehiclesAPI() []*swagger.Endpoint {
 		updateVehicle,
 		getVehicleMakes,
 		getVehicle,
+		listVehicle,
+		deListVehicle,
 	}
 }

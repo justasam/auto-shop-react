@@ -19,7 +19,6 @@ import { useAlert } from "react-alert";
 import './index.css';
 
 
-
 const EmployeePanel = () => {
     const [content, setContent] = useState("global-sales");
     const [accountType, setAccountType] = useState();

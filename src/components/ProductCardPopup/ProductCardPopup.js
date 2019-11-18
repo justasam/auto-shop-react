@@ -13,6 +13,10 @@ const ProductCardPopup = ({data, style={}, styleMain={}}) => {
     console.log(spec);
   }
 
+  if(!data.account_type) {
+    data.account_type = "guest";
+  }
+
   return (
     <div style={{
       position: 'fixed',
@@ -60,6 +64,20 @@ const ProductCardPopup = ({data, style={}, styleMain={}}) => {
             overflow: 'hidden',
             paddingBottom: 50
           }} items={data.images}/>
+          <div>
+            {(() => {
+              if(data.account_type == "employee" || data.account_type == "admin") {
+                return (<button type="button">DELIST</button>)
+              }
+
+              if(data.account_type == "customer") {
+                return (<button type="button">ENQUIRE</button>)
+              }
+
+              return null;
+
+            })()}
+          </div>
         </div>
         <div>
           <h2>{data.make.toUpperCase()} - {data.model} ({data.year})</h2>

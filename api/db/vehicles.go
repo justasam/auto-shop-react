@@ -82,6 +82,44 @@ func (c *Client) GetVehicle(id string) (*types.Vehicle, *types.Error) {
 	return &vehicle, nil
 }
 
+// DeListVehicle set state to delisted
+func (c *Client) DeListVehicle(id string) (*types.Vehicle, *types.Error) {
+	query := `UPDATE %s_vehicles SET listed=false WHERE id=?`
+	query = c.applyView(query)
+
+	_, err := c.ex.Exec(query, id)
+	if err != nil {
+		return nil, c.transformError(err)
+	}
+
+	// Get the vehicle back
+	vehicle, dbErr := c.GetVehicle(id)
+	if dbErr != nil {
+		return nil, dbErr
+	}
+
+	return vehicle, nil
+}
+
+// ListVehicle set state to delisted
+func (c *Client) ListVehicle(id string) (*types.Vehicle, *types.Error) {
+	query := `UPDATE %s_vehicles SET listed=true WHERE id=?`
+	query = c.applyView(query)
+
+	_, err := c.ex.Exec(query, id)
+	if err != nil {
+		return nil, c.transformError(err)
+	}
+
+	// Get the vehicle back
+	vehicle, dbErr := c.GetVehicle(id)
+	if dbErr != nil {
+		return nil, dbErr
+	}
+
+	return vehicle, nil
+}
+
 // CreateVehicle creates a new vehicle entry in the db
 func (c *Client) CreateVehicle(p types.VehiclePost) (*types.Vehicle, *types.Error) {
 	query := `INSERT INTO %s_vehicles (id, make, model, year, price, milage,

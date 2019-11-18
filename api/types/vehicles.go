@@ -129,16 +129,18 @@ type VehiclePurchaseEntryPost struct {
 
 // VehiclePurchaseEntry represents listing after vehicle has been purchased
 type VehiclePurchaseEntry struct {
-	ID                      string  `db:"id" json:"id"`
-	VehicleID               string  `db:"vehicle_id" json:"vehicle_id"`
-	PurchasedFor            float64 `db:"purchased_for" json:"purchased_for"`
-	PruchasedFromCustomerID string  `db:"purchased_from_customer_id" json:"purchased_from_customer_id"`
-	PurchasedByEmployeeID   string  `db:"purchased_by_employee_id" json:"purchased_by_employee_id"`
-	CustomerName            string  `db:"customer_name" json:"customer_name,omitempty"`
-	CustomerSurname         string  `db:"customer_surname" json:"customer_surname,omitempty"`
-	VehicleMake             string  `db:"vehicle_make" json:"vehicle_make,omitempty"`
-	VehicleModel            string  `db:"vehicle_model" json:"vehicle_model,omitempty"`
-	VehicleYear             int     `db:"vehicle_year" json:"vehicle_year,omitempty"`
+	ID                      string    `db:"id" json:"id"`
+	VehicleID               string    `db:"vehicle_id" json:"vehicle_id"`
+	PurchasedFor            float64   `db:"purchased_for" json:"purchased_for"`
+	PruchasedFromCustomerID string    `db:"purchased_from_customer_id" json:"purchased_from_customer_id"`
+	PurchasedByEmployeeID   string    `db:"purchased_by_employee_id" json:"purchased_by_employee_id"`
+	CustomerName            string    `db:"customer_name" json:"customer_name,omitempty"`
+	CustomerSurname         string    `db:"customer_surname" json:"customer_surname,omitempty"`
+	VehicleMake             string    `db:"vehicle_make" json:"vehicle_make,omitempty"`
+	VehicleModel            string    `db:"vehicle_model" json:"vehicle_model,omitempty"`
+	VehicleYear             int       `db:"vehicle_year" json:"vehicle_year,omitempty"`
+	CreatedAt               time.Time `db:"created_at" json:"created_at"`
+	BranchID                string    `db:"branch_id" json:"branch_id,omitempty"`
 }
 
 // VehicleMakePost payload for make creation
@@ -166,3 +168,6 @@ type VehicleSalePost struct {
 	EmployeeID string `json:"-"`
 	VehicleID  string `json:"-"`
 }
+
+// VehicleListPost dummy payload
+type VehicleListPost struct{}
