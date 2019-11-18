@@ -72,8 +72,6 @@ const EmployeePanel = () => {
             <aside class="sidenav">
                 <div class="row row--align-v-center row--align-h-center">
                     <ul class="navList">
-                        {accountType == "admin" ?
-                        <div>
                             <li class="navList__heading">Your details<i class="fas fa-sliders-h"></i></li>
                             <li>
                                 <div class="navList__subheading row row--align-v-center" onClick={(e) => {
@@ -93,6 +91,8 @@ const EmployeePanel = () => {
                                     <span class="navList__subheading-title">Change Password</span>
                                 </div>
                             </li>
+                            {accountType == "admin" ?
+                            <div>
                             <li class="navList__heading">Gobal Sales And Purchases<i class="fas fa-globe"></i></li>
                             <li>
                                 <div class="navList__subheading row row--align-v-center" onClick={(e) => {

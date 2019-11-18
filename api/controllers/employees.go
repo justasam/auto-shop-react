@@ -77,9 +77,10 @@ func GetEmployees(c echo.Context) error {
 // GetEmployee returns employee
 func GetEmployee(c echo.Context) error {
 	accountType := c.Get("account_type").(string)
+	ownerID := c.Get("owner_id").(string)
 	employeeID := c.Param("employee_id")
 
-	if accountType != types.AdminAccount {
+	if accountType != types.AdminAccount && ownerID != employeeID {
 		return echo.NewHTTPError(http.StatusForbidden)
 	}
 
