@@ -365,23 +365,26 @@ const DashboardCard = props => {
                             <div className="card__header">
                                 <div className="card__header-title text-light">Branches ({branchesData.length})</div>
                                 <div className="settings">
-                                    <div className="settings__block"><i class="fas fa-plus"></i></div>
+                                    <div className="settings__block" id="showAddBranchesFormBtn"><i class="fas fa-plus"></i></div>
                                 </div>
                             </div>
                             <input type="search" placeholder="Search for names.." title="Type in a name" />
 
                             <table className="rwd-table">
                                 <tr>
-                                    <th>ID</th>
-                                    <th>Name</th>
-                                    <th>Address</th>
+                                    <th>address</th>
+                                    <th>id</th>
+                                    <th>manager_id</th>
+                                    <th>name</th>
                                 </tr>
                                 <tr>
                                     <td>aaaa</td>
                                     <td>aaaa</td>
                                     <td>aaaa</td>
+                                    <td>aaaa</td>
                                 </tr>
                                 <tr>
+                                    <td>bbb</td>
                                     <td>bbb</td>
                                     <td>bbb</td>
                                     <td>bbb</td>
@@ -389,6 +392,19 @@ const DashboardCard = props => {
                             </table>
                         </aside>
                     </div>
+
+                    <aside className="popupForm hidden" id="addBranchesForm">
+                        <button className="close"><i class="fas fa-times"></i></button>
+
+                        <div className="title">address</div>
+                        <input type="text" name="address" value="" />
+                        <div className="title">manager_id</div>
+                        <input type="text" name="manager_id" value="" />
+                        <div className="title">name</div>
+                        <input type="text" name="name" value="" />
+
+                        <button className="add" type="submit" name="button" id="submitAddBranchesForm">Add</button>
+                    </aside>
                 </aside>
 
                 <aside id="customers">
@@ -396,9 +412,6 @@ const DashboardCard = props => {
                         <aside className="card">
                             <div className="card__header">
                                 <div className="card__header-title text-light">Customers ({customersData.total})</div>
-                                <div className="settings">
-                                    <div className="settings__block"><i class="fas fa-plus"></i></div>
-                                </div>
                             </div>
                             <input type="search" placeholder="Search for names.." title="Type in a name" />
 
@@ -445,7 +458,7 @@ const DashboardCard = props => {
                             <div className="card__header">
                                 <div className="card__header-title text-light">Employees ({employeesData.total})</div>
                                 <div className="settings">
-                                    <div className="settings__block"><i class="fas fa-plus"></i></div>
+                                    <div className="settings__block" id="showAddEmployeesFormBtn"><i class="fas fa-plus"></i></div>
                                 </div>
                             </div>
                             <input type="search" placeholder="Search for names.." title="Type in a name" />
@@ -486,6 +499,33 @@ const DashboardCard = props => {
                             </table>
                         </aside>
                     </div>
+
+                    <aside className="popupForm hidden" id="addEmployeesForm">
+                        <button className="close"><i class="fas fa-times"></i></button>
+                        <h3>Add Employees</h3>
+                        <div className="title">ID</div>
+                        <input type="text" name="id" value="" />
+                        <div className="title">Name</div>
+                        <input type="text" name="name" value="" />
+                        <div className="title">surname</div>
+                        <input type="text" name="surname" value="" />
+                        <div className="title">date_of_birth</div>
+                        <input type="text" name="date_of_birth" value="" />
+                        <div className="title">Address</div>
+                        <input type="text" name="address" value="" />
+                        <div className="title">position</div>
+                        <input type="text" name="position" value="" />
+                        <div className="title">email</div>
+                        <input type="text" name="email" value="" />
+                        <div className="title">phone_number</div>
+                        <input type="text" name="phone_number" value="" />
+                        <div className="title">branch_id</div>
+                        <input type="text" name="branch_id" value="" />
+                        <div className="title">account_id</div>
+                        <input type="text" name="account_id" value="" />
+
+                        <button className="add" type="submit" name="button" id="submitAddEmployeesForm">Add</button>
+                    </aside>
                 </aside>
 
                 <aside id="enquiries">
@@ -494,7 +534,7 @@ const DashboardCard = props => {
                             <div className="card__header">
                                 <div className="card__header-title text-light">Enquiries ({enquiriesData.total})</div>
                                 <div className="settings">
-                                    <div className="settings__block"><i class="fas fa-plus"></i></div>
+                                    <div className="settings__block" id="showAddEnquiriesFormBtn"><i class="fas fa-plus"></i></div>
                                 </div>
                             </div>
                             <input type="search" placeholder="Search for names.." title="Type in a name" />
@@ -537,6 +577,37 @@ const DashboardCard = props => {
                             </table>
                         </aside>
                     </div>
+
+                    <aside className="popupForm hidden" id="addEnquiriesForm">
+                        <button className="close"><i class="fas fa-times"></i></button>
+                        <h3>Add Enquiries</h3>
+                        <div className="title">ID</div>
+                        <input type="text" name="id" value="" />
+                        <div className="title">type</div>
+                        <input type="text" name="type" value="" />
+                        <div className="title">description</div>
+                        <input type="text" name="description" value="" />
+                        <div className="title">resolved</div>
+                        <input type="text" name="resolved" value="" />
+                        <div className="title">customer_id</div>
+                        <input type="text" name="customer_id" value="" />
+                        <div className="title">customer_name</div>
+                        <input type="text" name="customer_name" value="" />
+                        <div className="title">customer_surname</div>
+                        <input type="text" name="customer_surname" value="" />
+                        <div className="title">customer_email</div>
+                        <input type="text" name="customer_email" value="" />
+                        <div className="title">resolved_by</div>
+                        <input type="text" name="resolved_by" value="" />
+                        <div className="title">employee_name</div>
+                        <input type="text" name="employee_name" value="" />
+                        <div className="title">employee_surname</div>
+                        <input type="text" name="employee_surname" value="" />
+                        <div className="title">employee_email</div>
+                        <input type="text" name="employee_email" value="" />
+
+                        <button className="add" type="submit" name="button" id="submitAddEnquiriesForm">Add</button>
+                    </aside>
                 </aside>
 
                 <aside id="vehicles">
@@ -545,7 +616,7 @@ const DashboardCard = props => {
                             <div className="card__header">
                                 <div className="card__header-title text-light">Vehicles ({vehiclesData.length})</div>
                                 <div className="settings">
-                                    <div className="settings__block"><i class="fas fa-plus"></i></div>
+                                    <div className="settings__block" id="showAddVehiclesFormBtn"><i class="fas fa-plus"></i></div>
                                 </div>
                             </div>
                             <input type="search" placeholder="Search for names.." title="Type in a name" />
@@ -572,16 +643,21 @@ const DashboardCard = props => {
                             </table>
                         </aside>
                     </div>
+
+                    <aside className="popupForm hidden" id="addVehiclesForm">
+                        <button className="close"><i class="fas fa-times"></i></button>
+
+                        <div className="title">ID</div>
+                        <input type="text" name="id" value="" />
+                        <div className="title">name</div>
+                        <input type="text" name="name" value="" />
+                        <div className="title">image_path</div>
+                        <input type="text" name="image_path" value="" />
+
+                        <button className="add" type="submit" name="button" id="submitAddVehiclesForm">Add</button>
+                    </aside>
                 </aside>
             </section>
-
-            <aside className="popupForm hidden">
-                <button className="close"><i class="fas fa-times"></i></button>
-                <form>
-                    <div className="title">title</div>
-                    <input />
-                </form>
-            </aside>
         </article>
     )
 }

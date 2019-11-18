@@ -117,6 +117,203 @@
         }
     });
 
+    // show addBranchesForm
+    document.querySelector('#showAddBranchesFormBtn').addEventListener("click", () => {
+        document.querySelector('#addBranchesForm').classList.remove('hidden');
+    });
+    // create new branches
+    document.querySelector('#submitAddBranchesForm').addEventListener("click", () => {
+        let form = document.querySelector('#addBranchesForm');
+        let id = form.querySelector('input[name="address"]').value;
+        let name = form.querySelector('input[name="manager_id"]').value;
+        let address = form.querySelector('input[name="name"]').value;
+
+        // sent to server
+        fetch('/branches', {
+                method: 'POST',
+                headers: {
+                    "Accept": 'application/json, text/plain, */*',
+                    "Content-Type": 'application/json'
+                },
+                credentials: 'include',
+                body: JSON.stringify({
+                    "address": address,
+                    "manager_id": manager_id,
+                    "name": name
+                })
+            })
+            .then((res) => res.json())
+            .then((res) => {
+                if (res.status === 200) {
+
+                }
+            });
+
+        // append local
+        if (id && name && address && manager_id) {
+            let table = document.querySelector('#branches table');
+            let row = table.insertRow(1);
+
+            row.insertCell(0).innerHTML = id;
+            row.insertCell(1).innerHTML = name;
+            row.insertCell(2).address = address;
+        }
+    });
+
+    // show addEmployeesForm
+    document.querySelector('#showAddEmployeesFormBtn').addEventListener("click", () => {
+        document.querySelector('#addEmployeesForm').classList.remove('hidden');
+    });
+    // create new employees
+    document.querySelector('#submitAddEmployeesForm').addEventListener("click", () => {
+        let form = document.querySelector('#addEmployeesForm');
+        let address = form.querySelector('input[name="address"]').value;
+        let date_of_birth = form.querySelector('input[name="date_of_birth"]').value;
+        let email = form.querySelector('input[name="email"]').value;
+        let name = form.querySelector('input[name="name"]').value;
+        let password = form.querySelector('input[name="password"]').value;
+        let phone_number = form.querySelector('input[name="phone_number"]').value;
+        let position = form.querySelector('input[name="position"]').value;
+        let surname = form.querySelector('input[name="surname"]').value;
+        let username = form.querySelector('input[name="username"]').value;
+
+        // sent to server
+        fetch('/employees', {
+                method: 'POST',
+                headers: {
+                    "Accept": 'application/json, text/plain, */*',
+                    "Content-Type": 'application/json'
+                },
+                credentials: 'include',
+                body: JSON.stringify({
+                    "address": address,
+                    "branch_id": branch_id,
+                    "date_of_birth": date_of_birth,
+                    "email": email,
+                    "name": name,
+                    "password": password,
+                    "phone_number": phone_number,
+                    "position": position,
+                    "surname": surname,
+                    "username": username
+                })
+            })
+            .then((res) => res.json())
+            .then((res) => {
+                if (res.status === 200) {
+
+                }
+            });
+
+        // append local
+        if (address && branch_id && date_of_birth && email && name && password && phone_number && position && surname && username) {
+            let table = document.querySelector('#employees table');
+            let row = table.insertRow(1);
+
+            row.insertCell(0).innerHTML = address;
+            row.insertCell(1).innerHTML = branch_id;
+            row.insertCell(2).address = date_of_birth;
+            row.insertCell(3).innerHTML = email;
+            row.insertCell(4).innerHTML = name;
+            row.insertCell(5).address = password;
+            row.insertCell(6).innerHTML = phone_number;
+            row.insertCell(7).innerHTML = position;
+            row.insertCell(8).address = surname;
+            row.insertCell(9).address = username;
+        }
+    });
+
+    // show enquiries form
+    document.querySelector('#showAddEnquiriesFormBtn').addEventListener("click", () => {
+        document.querySelector('#addEnquiriesForm').classList.remove('hidden');
+    });
+    // create new enquiries
+    document.querySelector('#submitAddEnquiriesForm').addEventListener("click", () => {
+        let form = document.querySelector('#addEnquiriesForm');
+        let customer_id = form.querySelector('input[name="customer_id"]').value;
+        let service_id = form.querySelector('input[name="service_id"]').value;
+        let type = form.querySelector('input[name="type"]').value;
+        let vehicle_id = form.querySelector('input[name="vehicle_id"]').value;
+
+        // sent to server
+        fetch('/enquiries', {
+                method: 'POST',
+                headers: {
+                    "Accept": 'application/json, text/plain, */*',
+                    "Content-Type": 'application/json'
+                },
+                credentials: 'include',
+                body: JSON.stringify({
+                    "customer_id": customer_id,
+                    "description": description,
+                    "service_id": service_id,
+                    "type": type,
+                    "vehicle_id": vehicle_id
+                })
+            })
+            .then((res) => res.json())
+            .then((res) => {
+                if (res.status === 200) {
+
+                }
+            });
+
+        // append local
+        if (customer_id && description && service_id && type && vehicle_id) {
+            let table = document.querySelector('#enquiries table');
+            let row = table.insertRow(1);
+
+            row.insertCell(0).innerHTML = customer_id;
+            row.insertCell(1).innerHTML = description;
+            row.insertCell(2).address = service_id;
+            row.insertCell(3).innerHTML = type;
+            row.insertCell(4).innerHTML = vehicle_id;
+        }
+    });
+
+    // show vehicles form
+    document.querySelector('#showAddVehiclesFormBtn').addEventListener("click", () => {
+        document.querySelector('#addVehiclesForm').classList.remove('hidden');
+    });
+    // create new vehicles
+    document.querySelector('#submitAddVehiclesForm').addEventListener("click", () => {
+        let form = document.querySelector('#addEnquiriesForm');
+        let image = form.querySelector('input[name="image"]').value;
+        let name = form.querySelector('input[name="name"]').value;
+
+        // sent to server
+        fetch('/vehicles/makes', {
+                method: 'POST',
+                headers: {
+                    "Accept": 'application/json, text/plain, */*',
+                    "Content-Type": 'application/json'
+                },
+                credentials: 'include',
+                body: JSON.stringify({
+                    "image": image,
+                    "name": name
+                })
+            })
+            .then((res) => res.json())
+            .then((res) => {
+                if (res.status === 200) {
+
+                }
+            });
+
+        // append local
+        if (customer_id && description && service_id && type && vehicle_id) {
+            let table = document.querySelector('#enquiries table');
+            let row = table.insertRow(1);
+
+            row.insertCell(0).innerHTML = customer_id;
+            row.insertCell(1).innerHTML = description;
+            row.insertCell(2).address = service_id;
+            row.insertCell(3).innerHTML = type;
+            row.insertCell(4).innerHTML = vehicle_id;
+        }
+    });
+
     // popup form
     document.querySelectorAll('.popupForm').forEach((elem) => {
         // popup form close
@@ -124,6 +321,10 @@
             elem.classList.add('hidden');
         });
     });
+
+    /*
+    /   tabs()
+    */
 
     document.addEventListener("DOMContentLoaded", () => {
         // tabs

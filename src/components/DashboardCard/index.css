@@ -561,6 +561,9 @@
 aside.popupForm {
     position: fixed;
     top: 10vh;
+    max-height: 80vh;
+    overflow-x: hidden;
+    overflow-y: scroll;
     padding: 1em;
     text-align: justify;
     left: 0;
@@ -570,10 +573,25 @@ aside.popupForm {
     width: 90vw;
     max-width: 800px;
     text-align: center;
-    border-radius: 20px;
+    border-radius: 10px;
     z-index: 2;
-    border: 2px black solid;
+    border: 1px rgb(150, 150, 150) solid;
     box-shadow: 15px 10px 30px #888888;
+}
+
+aside.popupForm::-webkit-scrollbar {
+    width: 10px;
+}
+
+aside.popupForm::-webkit-scrollbar-track {
+    -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+    border-radius: 50px;
+}
+
+aside.popupForm::-webkit-scrollbar-thumb {
+    background-color: darkgrey;
+    outline: 1px solid slategrey;
+    border-radius: 50px;
 }
 
 aside.popupForm.hidden {
@@ -625,6 +643,19 @@ aside.popupForm .close {
     top: 1em;
     box-shadow: none;
     border: none;
+}
+
+aside.popupForm button.add {
+    width: 100%;
+    font-weight: bold;
+    background: #394263;
+    text-align: center;
+    border-radius: 30px;
+    height: 1em;
+    outline: none;
+    line-height: .5em;
+    margin: .5em 0;
+    color: white;
 }
 
 /*
