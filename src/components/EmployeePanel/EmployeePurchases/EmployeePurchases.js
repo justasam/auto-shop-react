@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import Paper from '@material-ui/core/Paper';
 import Popup from "reactjs-popup";
+import { Link, withRouter } from 'react-router-dom';
 import {CustomerCard} from '../../CustomerCard'
 import {EmployeeCard} from '../../EmployeeCard'
 import HashLoader from 'react-spinners/HashLoader'
@@ -28,7 +29,7 @@ import {
 } from '@devexpress/dx-react-grid-material-ui';
 import './index.css';
 
-const EmployeePurchases = () => {
+const EmployeePurchases = withRouter((props) => {
     const [columns] = useState([
         { name: 'id', title: 'ID' },
         { name: 'vehicle_id', title: 'Vehicle ID' },
@@ -42,6 +43,7 @@ const EmployeePurchases = () => {
     const [rows, setRows] = useState([])
     const [pageSizes] = useState([5, 10, 15, 0]);
     const getRowId = row => row.id;
+
     const RowDetail = ({ row }) => {
         const [vehicle, setVehicle] = useState({})
         const [loading, setLoading] = useState(true)
@@ -80,6 +82,7 @@ const EmployeePurchases = () => {
                     loading={loading}
                 />
                 :
+                <>
                 <table class="inner-table" style={{width:"100%"}}>
                     <tr>
                         <td>ID:</td><td>{row.id}</td>
@@ -108,21 +111,20 @@ const EmployeePurchases = () => {
                     </tr>
                     <tr>
                         <td>Vehicle ID:</td>
-                        {<td>
-                            <Popup 
-                                trigger={<span style={{
+                        <td>
+                            <Link to={{
+                              hash: 'showcar'
+                            }} style={{
                                     cursor:"pointer",
                                     color:"blue",
                                     textDecoration: "underline"
-                                }}>{vehicle.id}</span>} position="right center"
-                                modal
-                                closeOnDocumentClick
-                            >
-                                <div className="modal">
-                                    <ProductCardPopup data={vehicle}/>
-                                </div>
-                            </Popup>
-                        </td>}
+                                }}>{vehicle.id}</Link>
+                            {props.location.hash ? <ProductCardPopup data={vehicle} style={{
+                              left: 'calc(50% + 120px)',
+                            }} styleMain={{
+                              zIndex: 600
+                            }} /> : null}
+                        </td>
                     </tr>
                     <tr>
                         <td>Purchased By Employee ID:</td>
@@ -159,6 +161,7 @@ const EmployeePurchases = () => {
                         <td>Vehicle Year:</td><td>{row.vehicle_year}</td>
                     </tr>
                 </table>
+              </>
             }
             </div>
         )
@@ -250,6 +253,6 @@ const EmployeePurchases = () => {
     }
     </div>
   );
-};
+});
 
 export default EmployeePurchases;

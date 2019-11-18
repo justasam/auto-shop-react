@@ -6,8 +6,8 @@ import { XCircle } from 'react-feather';
 import { CarouselThumbnails } from '../CarouselThumbnails';
 
 
+const ProductCardPopup = ({data, style={}, styleMain={}}) => {
 
-const ProductCardPopup = ({data}) => {
   return (
     <div style={{
       position: 'fixed',
@@ -15,7 +15,8 @@ const ProductCardPopup = ({data}) => {
       left: 0,
       right: 0,
       bottom: 0,
-      backgroundColor: 'rgba(0,0,0,.5)'
+      backgroundColor: 'rgba(0,0,0,.5)',
+      ...styleMain
     }}>
       <div style={{
         display: 'grid',
@@ -32,7 +33,8 @@ const ProductCardPopup = ({data}) => {
         transform: 'translate(-50%, -50%)',
         backgroundColor: 'white',
         padding: 20,
-        borderRadius: 4
+        borderRadius: 4,
+        ...style
       }} className='shadow'>
         <XCircle size={40} style={{
           position: 'absolute',
