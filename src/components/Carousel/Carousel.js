@@ -92,7 +92,7 @@ const Carousel = ({
     <div className='carousel_wrapper' style={{
       margin: 25,
       maxWidth: '100vw',
-      height: 100
+      paddingBottom: 20,
     }}>
       <h3>{title}</h3>
       <Slider {...settings} style={{
