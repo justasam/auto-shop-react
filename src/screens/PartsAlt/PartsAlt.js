@@ -17,7 +17,7 @@ const PartsAlt = withRouter(props => {
 
   console.log(props.location.search);
 
-  let query = qs.parse(props.location.search,  {parseNumbers: true});
+  let query = qs.parse(props.location.search, { parseNumbers: true });
   query.page_number = query.page_number || 1;
   query.per_page = PerPage;
   // delete query[''];
@@ -52,9 +52,9 @@ const PartsAlt = withRouter(props => {
       }}>PartsAlt</h3>
       <div className='parts_alt_filters'>
         {
-          Filters.map(({title, filters, isMultiple}, i) => {
+          Filters.map(({ title, filters, isMultiple }, i) => (
             <DropdownAlt name={title} options={filters} isMulti={isMultiple || false}
-            key={i}
+              key={i}
               value={
                 query[title] ? filters.find((filter) => filter.value === query[title]) : filters[0]
               }
@@ -69,23 +69,23 @@ const PartsAlt = withRouter(props => {
                   }
                   else {
                     props.history.push({
-                      search: qs.stringify({...query, [title]: selectedOption.value})
+                      search: qs.stringify({ ...query, [title]: selectedOption.value })
                     });
                   }
                 }
               }
-            />
-          })
+            />)
+          )
         }
         <div className='parts_alt_pagination'>
           <h3>Page {query.page_number}</h3>
           <Link to={{
-            search: qs.stringify({...query, page_number: query.page_number - 1})
+            search: qs.stringify({ ...query, page_number: query.page_number - 1 })
           }} className={`link ${query.page_number <= 1 ? 'disabled' : ''}`}>
             <ChevronLeft />
           </Link>
           <Link to={{
-            search: qs.stringify({...query, page_number: query.page_number + 1})
+            search: qs.stringify({ ...query, page_number: query.page_number + 1 })
           }} className={`link ${query.page_number >= pagesMax ? 'disabled' : ''}`}>
             <ChevronRight />
           </Link>
@@ -118,7 +118,7 @@ const PartsAlt = withRouter(props => {
             <p style={{
               textAlign: 'center'
             }}>No results.</p>
-          }
+        }
       </div>
       {props.location.hash && parts.length > 0 ?
         <ProductCardPopup
