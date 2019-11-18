@@ -1,0 +1,29 @@
+body {
+  font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue",
+    Helvetica, Arial, "Lucida Grande", sans-serif;
+  font-weight: 300;
+  font-size: 14px;
+}
+
+.ReactTable {
+  height: 500px;
+}
+
+.rt-tbody,
+.rt-thead {
+  overflow-x: hidden !important;
+}
+
+/* frozen column magic */
+
+.frozen {
+  order: -1;
+  position: relative;
+  left: 0;
+  background: pink;
+  transition: left 0.2s;
+  margin-right: 6px;
+}
+.rt-th.frozen {
+  border-bottom: 1px solid #f8f8f8;
+}

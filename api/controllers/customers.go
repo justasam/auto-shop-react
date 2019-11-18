@@ -75,9 +75,11 @@ func GetCustomers(c echo.Context) error {
 // GetCustomer returns customer
 func GetCustomer(c echo.Context) error {
 	accountType := c.Get("account_type").(string)
+	ownerID := c.Get("owner_id").(string)
 	customerID := c.Param("customer_id")
 
-	if accountType != types.EmployeeAccount && accountType != types.AdminAccount {
+	if accountType != types.EmployeeAccount &&
+		accountType != types.AdminAccount && customerID != ownerID {
 		return echo.NewHTTPError(http.StatusForbidden)
 	}
 
@@ -143,7 +145,9 @@ func UpdateCustomer(c echo.Context) error {
 	customerID := c.Param("customer_id")
 
 	// Customer can only be updated by an admin or the customer itself
-	if accountType != types.AdminAccount && customerID != accountOwnerID {
+	if accountType != types.AdminAccount &&
+		customerID != accountOwnerID &&
+		accountType != types.EmployeeAccount {
 		return echo.NewHTTPError(http.StatusForbidden)
 	}
 
@@ -217,4 +221,56 @@ func GetCustomerEnquiries(c echo.Context) error {
 		PerPage:    perPage,
 		PageNumber: pageNumber,
 	})
+}
+
+// GetCustomerSales returns sales made by customer
+func GetCustomerSales(c echo.Context) error {
+	accountType := c.Get("account_type").(string)
+	ownerID := c.Get("owner_id").(string)
+	customerID := c.Param("customer_id")
+
+	if accountType != types.EmployeeAccount &&
+		accountType != types.AdminAccount &&
+		customerID != ownerID {
+		return echo.NewHTTPError(http.StatusForbidden)
+	}
+
+	db, err := db.Connect(accountType)
+	if err != nil {
+		return fmt.Errorf("Error connecting to the database: %s", err)
+	}
+	defer db.Close()
+
+	sales, dbErr := db.GetCustomerSales(customerID)
+	if dbErr != nil {
+		return dbErr
+	}
+
+	return c.JSON(http.StatusOK, sales)
+}
+
+// GetCustomerPurchases returns purchases made by the customer
+func GetCustomerPurchases(c echo.Context) error {
+	accountType := c.Get("account_type").(string)
+	ownerID := c.Get("owner_id").(string)
+	customerID := c.Param("customer_id")
+
+	if accountType != types.EmployeeAccount &&
+		accountType != types.AdminAccount &&
+		customerID != ownerID {
+		return echo.NewHTTPError(http.StatusForbidden)
+	}
+
+	db, err := db.Connect(accountType)
+	if err != nil {
+		return fmt.Errorf("Error connecting to the database: %s", err)
+	}
+	defer db.Close()
+
+	purchases, dbErr := db.GetCustomerPurchases(customerID)
+	if dbErr != nil {
+		return dbErr
+	}
+
+	return c.JSON(http.StatusOK, purchases)
 }

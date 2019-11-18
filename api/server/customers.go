@@ -93,6 +93,19 @@ func customerAPI() []*swagger.Endpoint {
 		}),
 		endpoint.Tags("Customers"),
 	)
+	getCustomerSales := endpoint.New("GET", "/customers/{customer_id}/sales", "Get customer's sales",
+		endpoint.Handler(controllers.GetCustomerSales),
+		endpoint.Response(http.StatusOK, []types.EmployeePurchase{}, "Successful"),
+		endpoint.Path("customer_id", "string", "uuid", "UUID of a customer"),
+		endpoint.Tags("Customers"),
+	)
+
+	getCustomerPurchases := endpoint.New("GET", "/customers/{customer_id}/purchases", "Get customer's purchases",
+		endpoint.Handler(controllers.GetCustomerPurchases),
+		endpoint.Response(http.StatusOK, []types.EmployeeSale{}, "Successful"),
+		endpoint.Path("customer_id", "string", "uuid", "UUID of a customer"),
+		endpoint.Tags("Customers"),
+	)
 
 	return []*swagger.Endpoint{
 		createCustomer,
@@ -101,5 +114,7 @@ func customerAPI() []*swagger.Endpoint {
 		updateCustomer,
 		deleteCustomer,
 		getCustomerEnquiries,
+		getCustomerSales,
+		getCustomerPurchases,
 	}
 }

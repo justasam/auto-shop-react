@@ -169,7 +169,7 @@ const EmployeeSales = () => {
           expandedRowIds={expandedRowIds}
           onExpandedRowIdsChange={setExpandedRowIds}
         />
-        <VirtualTable />
+        <VirtualTable height="100%"/>
         <TableHeaderRow showSortingControls/>
         <TableRowDetail
           contentComponent={RowDetail}

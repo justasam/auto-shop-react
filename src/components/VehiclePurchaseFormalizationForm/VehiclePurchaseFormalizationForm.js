@@ -2,6 +2,7 @@ import React, {useEffect, useState} from "react";
 import useForm from "react-hook-form";
 import { fileToBase64 } from '../../utils.js'
 import VehiclePurchaseSchema from "./schema.js"
+import { useAlert } from "react-alert";
 import "./index.css";
 
 
@@ -10,6 +11,7 @@ const VehiclePurchaseFormalizationForm = () =>{
     validationSchema: VehiclePurchaseSchema
   });
 
+  const alert = useAlert();
   const onSubmit = async data => {
     let values  = getValues()
     let base64files = [];
@@ -28,13 +30,13 @@ const VehiclePurchaseFormalizationForm = () =>{
         }
     });
 
+    const resp = await response.json();
     if (!response.ok) {
-      alert(response.error);
+      alert.error(JSON.stringify(resp));
       return
     }
 
-    const resp = await response.json();
-    alert("Success");
+    alert.success("Success");
   };
 
   const [customers, setCustomers] = useState([])
@@ -92,7 +94,10 @@ const VehiclePurchaseFormalizationForm = () =>{
 
   return (
     <div>
-      <form onSubmit={handleSubmit(onSubmit)} style={{maxWidth:"650px"}}>
+      <form className="custom-form" onSubmit={handleSubmit(onSubmit)} style={{
+        maxWidth:"650px",
+        margin: "20px auto 20px auto"
+      }}>
         <div style={{
           display: 'grid',
           gridTemplateColumns: '1fr 1fr',

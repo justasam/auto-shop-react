@@ -1,6 +1,7 @@
 import React,  { useState, useEffect} from 'react';
 import useForm from "react-hook-form";
 import * as yup from "yup";
+import { useAlert } from "react-alert";
 import './index.css';
 
 const EmployeeUpdateSchema = yup.object().shape({
@@ -29,6 +30,7 @@ const EmployeeUpdateCard = ({employee, setEmployeeData}) => {
     validationSchema: EmployeeUpdateSchema
   });
 
+  const alert = useAlert();
   const onSubmit = async data => {
     const response = await fetch("/autoshop/api/employees/" + employee.id, {
         method: "PUT",
@@ -41,13 +43,13 @@ const EmployeeUpdateCard = ({employee, setEmployeeData}) => {
     const resp = await response.json();
     console.log(response)
     if (!response.ok) {
-      alert(JSON.stringify(resp));
+      alert.error(JSON.stringify(resp));
       return
     }
 
     setEmployeeData(resp);
 
-    alert("Success");
+    alert.success("Success");
   };
 
   const [branches, setBranches] = useState([])
@@ -109,7 +111,7 @@ const EmployeeUpdateCard = ({employee, setEmployeeData}) => {
 
   return (
     <div>
-      <form onSubmit={handleSubmit(onSubmit)} style={{maxWidth:"650px"}}>
+      <form className="custom-form"  onSubmit={handleSubmit(onSubmit)} style={{maxWidth:"650px"}}>
         <div style={{
           display: 'grid',
           gridTemplateColumns: '1fr 1fr',
@@ -160,7 +162,7 @@ const EmployeeUpdateCard = ({employee, setEmployeeData}) => {
           </div>
           <div>
             <label>Phone Number</label>
-            <input type="tel" name="phone_number" ref={register} />
+            <input type="text" name="phone_number" ref={register} />
             {errors.phone_number && <p>{errors.phone_number.message}</p>}
           </div>
         </div>
