@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Search, ChevronDown } from 'react-feather';
+import Select from 'react-select';
 import './index.css';
 
 const validUUID = data => /^[0-9a-f]{8}-[0-9a-f]{4}-[0-5][0-9a-f]{3}-[089ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(data)
@@ -108,7 +109,7 @@ const Dropdown = React.forwardRef(({name, options, width=170}, ref) => {
       width: width,
       position: 'relative'
     }}>
-      <select ref={ref} name={name} className="input shadow nomp select">
+      <select ref={ref} name={name} className="input shadow nomp select" {value ? {}}>
         {options.map((opt, i) => 
           <option value={opt.value} key={i}>{opt.name}</option>
         )}
@@ -118,15 +119,18 @@ const Dropdown = React.forwardRef(({name, options, width=170}, ref) => {
   )
 });
 
-const DropdownAlt = ({name, options, title}) => {
+const DropdownAlt = ({name, options, title, value, onChange}) => {
   return (
     <div className='dropdownalt'>
       <span className='textshadow nomp selectalt_title'>{title}</span>
-      <select name={name} className='textshadow nomp select selectalt'>
-        {options.map((opt, i) =>
+      <Select name={name} className='textshadow nomp select selectalt'
+        options={options.map((opt, i) =>
           <option value={opt.value} key={i}>{opt.name}</option>
         )}
-      </select>
+        value={value}
+        onChange={onChange}
+      >
+      </Select>
       <ChevronDown size={24} color='#000' height={24} className='selectalt_icon' />
     </div>
   )
