@@ -76,6 +76,25 @@ func GetVehicles(c echo.Context) error {
 	})
 }
 
+// GetVehicle returns vehicle
+func GetVehicle(c echo.Context) error {
+	accountType := c.Get("account_type").(string)
+	vehicleID := c.Param("vehicle_id")
+
+	db, err := db.Connect(accountType)
+	if err != nil {
+		return fmt.Errorf("Error connecting to the database: %s", err)
+	}
+	defer db.Close()
+
+	vehicle, dbErr := db.GetVehicle(vehicleID)
+	if dbErr != nil {
+		return dbErr
+	}
+
+	return c.JSON(http.StatusOK, vehicle)
+}
+
 // GetBestSellingMakes returns best selling makes
 func GetBestSellingMakes(c echo.Context) error {
 	limit, _ := strconv.Atoi(c.QueryParam("limit"))

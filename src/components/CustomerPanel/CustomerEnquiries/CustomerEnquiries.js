@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import Paper from '@material-ui/core/Paper';
 import { useAlert } from "react-alert";
 import HashLoader from 'react-spinners/HashLoader'
+import { ProductCardPopup } from "../../ProductCardPopup"
+import Popup from "reactjs-popup";
 import { 
   RowDetailState,
   FilteringState,
@@ -65,8 +67,27 @@ const CustomerEnquiries = () => {
                   {row.employee_surname && <tr><td>Employee Surname:</td><td>{row.employee_surname}</td></tr>}
                   {row.employee_email && <tr><td>Employee Name:</td><td>{row.employee_email}</td></tr>}
                   {row.vehicle_id ?
-                    <tr><td>Vehicle ID:</td><td>{row.vehicle_id}</td></tr> : null
-                  }
+                    <div>
+                      <tr>
+                        <td>Vehicle ID:</td>
+                        <td>
+                          <Popup 
+                              trigger={<span style={{
+                                  cursor:"pointer",
+                                  color:"blue",
+                                  textDecoration: "underline"
+                              }}>{row.vehicle_id}</span>} position="right center"
+                              modal
+                              closeOnDocumentClick
+                          >
+                              <div className="modal">
+                                  <ProductCardPopup employee_id={row}/>
+                              </div>
+                          </Popup>
+                        </td>
+                      </tr>
+                    </div>
+                  : null}
                   {row.service_id && <tr><td>Employee ID:</td><td>{row.service_id}</td></tr>}
                   {row.description && <tr><td>Description:</td><td>{row.description}</td></tr>}
               </table>

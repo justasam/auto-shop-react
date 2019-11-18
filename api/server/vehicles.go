@@ -25,6 +25,13 @@ func vehiclesAPI() []*swagger.Endpoint {
 		endpoint.Tags("Vehicles"),
 	)
 
+	getVehicle := endpoint.New("GET", "/vehicles/{vehicle_id}", "Get Vehicle",
+		endpoint.Handler(controllers.GetVehicle),
+		endpoint.Response(http.StatusOK, types.Vehicle{}, "Success"),
+		endpoint.Path("vehicle_id", "string", "uuid", "Vehicle id"),
+		endpoint.Tags("Vehicles"),
+	)
+
 	vehiclePurchase := endpoint.New("POST", "/vehicles/purchase", "Vehicle Purchase",
 		endpoint.Handler(controllers.PurchaseVehicle),
 		endpoint.Response(http.StatusCreated, types.Vehicle{}, "Success"),
@@ -91,5 +98,6 @@ func vehiclesAPI() []*swagger.Endpoint {
 		sellVehicle,
 		updateVehicle,
 		getVehicleMakes,
+		getVehicle,
 	}
 }

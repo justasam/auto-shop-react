@@ -5,6 +5,7 @@ import Popup from "reactjs-popup";
 import {CustomerCard} from '../../CustomerCard'
 import {EmployeeCard} from '../../EmployeeCard'
 import HashLoader from 'react-spinners/HashLoader'
+import { ProductCardPopup } from "../../ProductCardPopup"
 import { 
   RowDetailState,
   FilteringState,
@@ -27,79 +28,6 @@ import {
 } from '@devexpress/dx-react-grid-material-ui';
 import './index.css';
 
-const getRowId = row => row.id;
-const RowDetail = ({ row }) => {
-    console.log(row)
-    return (
-        <div>
-            <table class="inner-table" style={{width:"100%"}}>
-                <tr>
-                    <td>ID:</td><td>{row.id}</td>
-                </tr>
-                <tr>
-                    <td>Purchased For:</td><td>{row.purchased_for}</td>
-                </tr>
-                <tr>
-                    <td>Purchased From Customer ID:</td>
-                    <td>
-                        <Popup 
-                            trigger={<span style={{
-                                cursor:"pointer",
-                                color:"blue",
-                                textDecoration: "underline"
-                            }}>{row.purchased_from_customer_id}</span>} position="right center"
-                            modal
-                            closeOnDocumentClick
-                        >
-                            <div className="modal">
-                                <div className="header"><h3>Customer Details</h3></div>
-                                <CustomerCard customer_id={row.purchased_from_customer_id}/>
-                            </div>
-                        </Popup>
-                    </td>
-                </tr>
-                <tr>
-                    <td>Vehicle ID:</td><td>{row.vehicle_id}</td>
-                </tr>
-                <tr>
-                    <td>Purchased By Employee ID:</td>
-                    <td>
-                        <Popup 
-                            trigger={<span style={{
-                                cursor:"pointer",
-                                color:"blue",
-                                textDecoration: "underline"
-                            }}>{row.purchased_by_employee_id}</span>} position="right center"
-                            modal
-                            closeOnDocumentClick
-                        >
-                            <div className="modal">
-                                <div className="header"><h3>Employee Details</h3></div>
-                                <EmployeeCard employee_id={row.purchased_by_employee_id}/>
-                            </div>
-                        </Popup>
-                    </td>
-                </tr>
-                <tr>
-                    <td>Customer Name:</td><td>{row.customer_name}</td>
-                </tr>
-                <tr>
-                    <td>Customer Surname:</td><td>{row.customer_surname}</td>
-                </tr>
-                <tr>
-                    <td>Vehicle Make:</td><td>{row.vehicle_make}</td>
-                </tr>
-                <tr>
-                    <td>Vehicle Model:</td><td>{row.vehicle_model}</td>
-                </tr>
-                <tr>
-                    <td>Vehicle Year:</td><td>{row.vehicle_year}</td>
-                </tr>
-            </table>
-        </div>
-    )
-};
-
 const EmployeePurchases = () => {
     const [columns] = useState([
         { name: 'id', title: 'ID' },
@@ -113,6 +41,129 @@ const EmployeePurchases = () => {
     const [expandedRowIds, setExpandedRowIds] = useState([]);
     const [rows, setRows] = useState([])
     const [pageSizes] = useState([5, 10, 15, 0]);
+    const getRowId = row => row.id;
+    const RowDetail = ({ row }) => {
+        const [vehicle, setVehicle] = useState({})
+        const [loading, setLoading] = useState(true)
+        useEffect(() => {
+            async function getVehicle() {
+                const vehicleResp = await fetch(
+                    "/autoshop/api/vehicles/" + row.vehicle_id, {
+                        method: "GET",
+                        headers: { 
+                            "Content-Type": "application/json"
+                        }
+                    }
+                )             
+
+                let vehicle = await vehicleResp.json()
+                if (!vehicleResp.ok) {
+                    alert.error(vehicle);
+                    return
+                }
+
+                setVehicle(vehicle)
+                setLoading(false);
+            }
+            getVehicle();
+        }, []);
+        console.log(row)
+        return (
+            <div style={{height: "100%"}}>
+            {
+                loading ?
+                <HashLoader
+                    sizeUnit={"px"}
+                    size={150}
+                    css={{height: "100%", margin: "0 auto"}}
+                    color={'#394263'} 
+                    loading={loading}
+                />
+                :
+                <table class="inner-table" style={{width:"100%"}}>
+                    <tr>
+                        <td>ID:</td><td>{row.id}</td>
+                    </tr>
+                    <tr>
+                        <td>Purchased For:</td><td>{row.purchased_for}</td>
+                    </tr>
+                    <tr>
+                        <td>Purchased From Customer ID:</td>
+                        <td>
+                            <Popup 
+                                trigger={<span style={{
+                                    cursor:"pointer",
+                                    color:"blue",
+                                    textDecoration: "underline"
+                                }}>{row.purchased_from_customer_id}</span>} position="right center"
+                                modal
+                                closeOnDocumentClick
+                            >
+                                <div className="modal">
+                                    <div className="header"><h3>Customer Details</h3></div>
+                                    <CustomerCard customer_id={row.purchased_from_customer_id}/>
+                                </div>
+                            </Popup>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Vehicle ID:</td>
+                        {<td>
+                            <Popup 
+                                trigger={<span style={{
+                                    cursor:"pointer",
+                                    color:"blue",
+                                    textDecoration: "underline"
+                                }}>{vehicle.id}</span>} position="right center"
+                                modal
+                                closeOnDocumentClick
+                            >
+                                <div className="modal">
+                                    <ProductCardPopup data={vehicle}/>
+                                </div>
+                            </Popup>
+                        </td>}
+                    </tr>
+                    <tr>
+                        <td>Purchased By Employee ID:</td>
+                        <td>
+                            <Popup 
+                                trigger={<span style={{
+                                    cursor:"pointer",
+                                    color:"blue",
+                                    textDecoration: "underline"
+                                }}>{row.purchased_by_employee_id}</span>} position="right center"
+                                modal
+                                closeOnDocumentClick
+                            >
+                                <div className="modal">
+                                    <div className="header"><h3>Employee Details</h3></div>
+                                    <EmployeeCard employee_id={row.purchased_by_employee_id}/>
+                                </div>
+                            </Popup>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Customer Name:</td><td>{row.customer_name}</td>
+                    </tr>
+                    <tr>
+                        <td>Customer Surname:</td><td>{row.customer_surname}</td>
+                    </tr>
+                    <tr>
+                        <td>Vehicle Make:</td><td>{row.vehicle_make}</td>
+                    </tr>
+                    <tr>
+                        <td>Vehicle Model:</td><td>{row.vehicle_model}</td>
+                    </tr>
+                    <tr>
+                        <td>Vehicle Year:</td><td>{row.vehicle_year}</td>
+                    </tr>
+                </table>
+            }
+            </div>
+        )
+    };
+
 
     const [loading, setLoading] = useState(true)
     useEffect(() => {
