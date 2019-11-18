@@ -24,8 +24,17 @@ func accountsAPI() []*swagger.Endpoint {
 		endpoint.Tags("Accounts"),
 	)
 
+	changePassword := endpoint.New("POST", "/accounts/{account_id}/password", "Changes password",
+		endpoint.Handler(controllers.ChangePassword),
+		endpoint.Path("account_id", "string", "uuid", "Account uuid"),
+		endpoint.Body(types.PasswordChangePost{}, "Password change payload", true),
+		endpoint.Response(http.StatusNoContent, "", "Success"),
+		endpoint.Tags("Accounts"),
+	)
+
 	return []*swagger.Endpoint{
 		getAccount,
 		getCurrentAccount,
+		changePassword,
 	}
 }

@@ -3,6 +3,7 @@ import Paper from '@material-ui/core/Paper';
 import Popup from "reactjs-popup";
 import {CustomerCard} from '../../CustomerCard'
 import {EmployeeCard} from '../../EmployeeCard'
+import { useAlert } from "react-alert";
 import { 
   RowDetailState,
   FilteringState,
@@ -31,6 +32,7 @@ const EmployeeEnquiries = () => {
   const [rows, setRows] = useState([])
   const [pageSizes] = useState([5, 10, 15, 0]);
 
+  const alert = useAlert();
   const getRowId = row => row.id;
   const RowDetail = ({ row }) => {
       console.log(row)
@@ -114,12 +116,12 @@ const EmployeeEnquiries = () => {
                           }
                       });
 
+                      const resp = await response.json();
                       if (!response.ok) {
-                        alert(response.statusText);
+                        alert.error(resp);
                         return
                       }
 
-                      const resp = await response.json();
                       let deltaRows = rows.slice(0);
                       console.log(deltaRows)
                       deltaRows.forEach(function(r, i) {
@@ -196,7 +198,7 @@ const EmployeeEnquiries = () => {
           expandedRowIds={expandedRowIds}
           onExpandedRowIdsChange={setExpandedRowIds}
         />
-        <VirtualTable />
+        <VirtualTable height="100%"/>
         <TableHeaderRow showSortingControls/>
         <TableRowDetail
           contentComponent={RowDetail}

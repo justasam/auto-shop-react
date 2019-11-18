@@ -3,6 +3,7 @@ import Paper from '@material-ui/core/Paper';
 import Popup from "reactjs-popup";
 import {BranchCard} from '../../BranchCard'
 import {EmployeeUpdateCard} from '../../EmployeeUpdateCard'
+import { useAlert } from "react-alert";
 import { 
   RowDetailState,
   FilteringState,
@@ -31,14 +32,16 @@ const EmployeesTable = () => {
   const [rows, setRows] = useState([])
   const [pageSizes] = useState([5, 10, 15, 0]);
 
+  const alert = useAlert();
   const setEmployeeData = (data) => {
     let deltaRows = rows.slice(0);
     deltaRows.forEach(function(r, i) {
-      if(r.id = data.id) {
+      if(r.id == data.id) {
         deltaRows[i] = data;
       }
     })
 
+    console.log(deltaRows)
     setRows(deltaRows);
   }
 
@@ -102,9 +105,12 @@ const EmployeesTable = () => {
                             }
                         });
 
+                        console.log(response);
                         let resp = await response.json();
+                        console.log(resp);
+
                         if (!response.ok) {
-                          alert(JSON.stringify(resp));
+                          alert.error(JSON.stringify(resp));
                           return
                         }
 
@@ -157,12 +163,14 @@ const EmployeesTable = () => {
                 }
             )             
 
-            if (employeesResp.status !== 200) {
+            let resp = await employeesResp.json()
+
+            if (!employeesResp.ok) {
+                alert.error(JSON.stringify(resp))
                 return
             }
 
-            let employees = await employeesResp.json()
-            employees = employees.objects.map((item) => {
+            let employees = resp.objects.map((item) => {
               item.is_deleted = item.is_deleted.toString();
               return item
             });
@@ -193,7 +201,7 @@ const EmployeesTable = () => {
           expandedRowIds={expandedRowIds}
           onExpandedRowIdsChange={setExpandedRowIds}
         />
-        <VirtualTable />
+        <VirtualTable height="100%"/>
         <TableHeaderRow showSortingControls/>
         <TableRowDetail
           contentComponent={RowDetail}

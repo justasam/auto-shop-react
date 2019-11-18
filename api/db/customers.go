@@ -184,6 +184,35 @@ func (c *Client) UpdateCustomer(id string, p types.CustomerPut) (*types.Customer
 
 	return customer, nil
 }
+
+// GetCustomerSales returns all customer sales
+func (c *Client) GetCustomerSales(id string) ([]types.EmployeePurchase, *types.Error) {
+	query := `SELECT * FROM %s_vehicle_purchases where purchased_from_customer_id=?`
+	query = c.applyView(query)
+
+	sales := []types.EmployeePurchase{}
+	err := c.db.Select(&sales, query, id)
+	if err != nil {
+		return nil, c.transformError(err)
+	}
+
+	return sales, nil
+}
+
+// GetCustomerPurchases returns employee purchases
+func (c *Client) GetCustomerPurchases(id string) ([]types.EmployeeSale, *types.Error) {
+	query := `SELECT * FROM %s_vehicle_sales where customer_id=?`
+	query = c.applyView(query)
+
+	purchases := []types.EmployeeSale{}
+	err := c.db.Select(&purchases, query, id)
+	if err != nil {
+		return nil, c.transformError(err)
+	}
+
+	return purchases, nil
+}
+
 func applyCustomerFilter(query string, filter types.GetCustomersFilter) (string, map[string]interface{}) {
 	namedParams := map[string]interface{}{}
 	subQuery := ""

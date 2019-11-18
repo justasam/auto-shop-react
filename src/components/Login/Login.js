@@ -1,6 +1,7 @@
 import React, {useState} from 'react';
 import { Input, Button, TextArea } from '../Inputs';
 import forge from 'node-forge';
+import { useAlert } from "react-alert";
 import './index.css';
 
 const sha256 = (pwd) => {
@@ -16,6 +17,7 @@ const Login = ({hidden, toggleHidden}) => {
   let uname = React.createRef();
   let pwd = React.createRef();
 
+  const alert = useAlert();
   return (
     <div className={`login_form shadow ${hidden ? 'hidden' : ''}`}>
       <h3>Login</h3>
@@ -44,7 +46,6 @@ const Login = ({hidden, toggleHidden}) => {
         console.log(password);
         const data = { username, password };
 
-        try {
           const res = await fetch('autoshop/api/auth/login', {
             method: 'POST',
             body: JSON.stringify(data),
@@ -53,12 +54,18 @@ const Login = ({hidden, toggleHidden}) => {
             }
           });
           const jsonRes = await res.json();
+          if(res.status == 401) {
+            alert.info("Invalid Username or Password")
+            return
+          }
+
+          if(!res.ok) {
+            alert.error(jsonRes)
+            return
+          }
+
+          window.location.reload();
           toggleHidden(!hidden);
-        }
-        catch (error) {
-          console.error('Error:', error)
-          toggleHidden(!hidden);
-        }
 
       }}></Button>
     </div>

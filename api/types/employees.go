@@ -90,6 +90,8 @@ type EmployeeSale struct {
 	SoldByEmployeeID string  `db:"sold_by_employee_id" json:"sold_by_employee_id"`
 	CustomerName     string  `db:"customer_name" json:"customer_name,omitempty"`
 	CustomerSurname  string  `db:"customer_surname" json:"customer_surname,omitempty"`
+	EmployeeName     string  `db:"employee_name" json:"employee_name,omitempty"`
+	EmployeeSurname  string  `db:"employee_surname" json:"employee_surname,omitempty"`
 	VehicleMake      string  `db:"vehicle_make" json:"vehicle_make,omitempty"`
 	VehicleModel     string  `db:"vehicle_model" json:"vehicle_model,omitempty"`
 	VehicleYear      int     `db:"vehicle_year" json:"vehicle_year,omitempty"`
@@ -104,6 +106,8 @@ type EmployeePurchase struct {
 	PurchasedFromCustomerID string  `db:"purchased_from_customer_id" json:"purchased_from_customer_id"`
 	VehicleID               string  `db:"vehicle_id" json:"vehicle_id"`
 	PurchasedByEmployeeID   string  `db:"purchased_by_employee_id" json:"purchased_by_employee_id"`
+	EmployeeName            string  `db:"employee_name" json:"employee_name,omitempty"`
+	EmployeeSurname         string  `db:"employee_surname" json:"employee_surname,omitempty"`
 	CustomerName            string  `db:"customer_name" json:"customer_name,omitempty"`
 	CustomerSurname         string  `db:"customer_surname" json:"customer_surname,omitempty"`
 	VehicleMake             string  `db:"vehicle_make" json:"vehicle_make,omitempty"`

@@ -273,11 +273,6 @@ func GetEmployeePurchases(c echo.Context) error {
 		return dbErr
 	}
 
-	total := 0.0
-	for _, p := range purchases {
-		total += p.PurchasedFor
-	}
-
 	return c.JSON(http.StatusOK, purchases)
 }
 

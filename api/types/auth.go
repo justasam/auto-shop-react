@@ -23,6 +23,15 @@ type LoginPost struct {
 // LogOutPost Dummy payload for log out
 type LogOutPost struct{}
 
+// PasswordChangePost represents password change payload
+type PasswordChangePost struct {
+	Password string `db:"password" json:"password" binding:"required"`
+	ID       string `db:"id" json:"-"`
+	Username string `db:"username" json:"-"`
+	Type     string `db:"type" json:"-"`
+	OwnerID  string `db:"owner_id" json:"-"`
+}
+
 // LoggedUser returns currentlt logged in user
 type LoggedUser struct {
 	Employee *Employee `json:"employee,omitempty"`
@@ -33,7 +42,7 @@ type LoggedUser struct {
 type Account struct {
 	ID       string `db:"id" json:"id"`
 	Username string `db:"username" json:"username"`
-	Password string `db:"password" json:"-"`
+	Password string `db:"password" json:"password"`
 	Type     string `db:"type" json:"type"`
 	OwnerID  string `db:"owner_id" json:"owner_id"`
 }

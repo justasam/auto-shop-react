@@ -1,11 +1,12 @@
 import React, {useEffect, useState} from "react";
 import useForm from "react-hook-form";
 import * as yup from "yup";
+import { useAlert } from "react-alert";
 import "./index.css";
 
 const VehicleSaleSchema = yup.object().shape({
   vehicle_id: yup.string().required("Vehicle is required"),
-  customer_id: yup.string().required("Customer is required"),
+  sold_to: yup.string().required("Customer is required"),
   sold_for: yup.
     number("Sold for must be a number").
     required("Sold for is required").
@@ -18,24 +19,28 @@ const VehicleSaleFormalizationForm = () =>{
     validationSchema: VehicleSaleSchema
   });
 
+  const alert = useAlert();
   const onSubmit = async data => {
-    let values  = getValues()
+    let payload = {
+      sold_to: data.sold_to,
+      sold_for: data.sold_for
+    }
 
-    const response = await fetch("/autoshop/api/vehicles/purchase", {
+    const response = await fetch("/autoshop/api/vehicles/"+data.vehicle_id+"/sold", {
         method: "POST",
-        body: JSON.stringify(data),
+        body: JSON.stringify(payload),
         headers: {
             "Content-Type": "application/json"
         }
     });
 
+    const resp = await response.json();
     if (!response.ok) {
-      alert(response.error);
+      alert.error(JSON.stringify(resp));
       return
     }
 
-    const resp = await response.json();
-    alert("Success");
+    alert.success("Success");
   };
 
   const [customers, setCustomers] = useState([])
@@ -94,7 +99,7 @@ const VehicleSaleFormalizationForm = () =>{
 
   return (
     <div>
-      <form onSubmit={handleSubmit(onSubmit)} 
+      <form className="custom-form" onSubmit={handleSubmit(onSubmit)} 
       style={{
         maxWidth: "400px",
         margin:"20px auto 20px auto"
@@ -115,12 +120,12 @@ const VehicleSaleFormalizationForm = () =>{
           </div>
           <div style={{ marginBottom: 10 }}>
             <label>Customer the vehicle is being sold to</label>
-            <select name="customer_id" ref={register}>
+            <select name="sold_to" ref={register}>
               {customers.map((val) => {
                 return <option value={val.value}>{val.name}</option>
               })}
             </select>
-            {errors.customer_id && <p>{errors.customer_id.message}</p>}
+            {errors.sold_to && <p>{errors.sold_to.message}</p>}
           </div>
           <div>
             <label>Sold For</label>

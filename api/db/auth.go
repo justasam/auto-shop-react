@@ -88,3 +88,16 @@ func (c *Client) DeleteOwnerAccount(customerID string) *types.Error {
 
 	return nil
 }
+
+// ChangePassword changes password
+func (c *Client) ChangePassword(id, newPass string) *types.Error {
+	query := `UPDATE %s_accounts SET password=? WHERE id=?`
+	query = c.applyView(query)
+
+	_, err := c.ex.Exec(query, newPass, id)
+	if err != nil {
+		return c.transformError(err)
+	}
+
+	return nil
+}
