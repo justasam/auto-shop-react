@@ -109,7 +109,7 @@ const Dropdown = React.forwardRef(({name, options, width=170}, ref) => {
       width: width,
       position: 'relative'
     }}>
-      <select ref={ref} name={name} className="input shadow nomp select" {value ? {}}>
+      <select ref={ref} name={name} className="input shadow nomp select">
         {options.map((opt, i) => 
           <option value={opt.value} key={i}>{opt.name}</option>
         )}
@@ -124,14 +124,11 @@ const DropdownAlt = ({name, options, title, value, onChange}) => {
     <div className='dropdownalt'>
       <span className='textshadow nomp selectalt_title'>{title}</span>
       <Select name={name} className='textshadow nomp select selectalt'
-        options={options.map((opt, i) =>
-          <option value={opt.value} key={i}>{opt.name}</option>
-        )}
+        options={options}
         value={value}
         onChange={onChange}
       >
       </Select>
-      <ChevronDown size={24} color='#000' height={24} className='selectalt_icon' />
     </div>
   )
 }

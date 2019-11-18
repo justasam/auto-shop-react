@@ -16,6 +16,7 @@ const getPageFromSearch = search => {
 const getSearchFromPage = page => `?p=${page}`;
 
 function parseQuery(queryString) {
+  if (queryString === '') return {};
   var query = {};
   var pairs = (queryString[0] === '?' ? queryString.substr(1) : queryString).split('&');
   for (var i = 0; i < pairs.length; i++) {
@@ -37,14 +38,16 @@ function setQuery(name, val, query) {
     .join('&');
 }
 
-const PerPage = 5;
+const PerPage = 9;
 
 const PartsAlt = withRouter(props => {
   let [parts, setParts] = useState([]);
+  console.log(props.location.search);
 
   let query = parseQuery(props.location.search);
   query.page_number = query.page_number || 1;
   query.per_page = PerPage;
+  // delete query[''];
 
   let [pagesMax, setPagesMax] = useState(1);
   console.log(query);
@@ -65,7 +68,7 @@ const PartsAlt = withRouter(props => {
     };
 
     getData();
-  }, [query]);
+  }, [props.location.search]);
 
   return (
     <div>
@@ -80,19 +83,22 @@ const PartsAlt = withRouter(props => {
           (value) => window.location.query = setQuery('model', value, query)
         }
           options={[
-            { value: 'any', name: 'Any' },
-            { value: 'golf_3', name: 'Golf 3' },
-            { value: 'loremipsum', name: 'lorem' }
+            { value: 'any', label: 'Any' },
+            { value: 'volkswagen', label: 'Volkswagen' },
+            { value: 'renault', label: 'Renault' },
+            { value: 'ford', label: 'Ford' },
+            { value: 'bmw', label: 'BMW' },
+            { value: 'mazda', label: 'MAZDA' },
           ]} />
         <div className='parts_alt_pagination'>
           <h3>Page {query.page_number}</h3>
           <Link to={{
-            search: setQuery('page_number', page - 1, query)
+            search: setQuery('page_number', query.page_number - 1, query)
           }} className={`link ${query.page_number <= 1 ? 'disabled' : ''}`}>
             <ChevronLeft />
           </Link>
           <Link to={{
-            search: setQuery('page_number', page + 1, query)
+            search: setQuery('page_number', query.page_number + 1, query)
           }} className={`link ${query.page_number >= pagesMax ? 'disabled' : ''}`}>
             <ChevronRight />
           </Link>
