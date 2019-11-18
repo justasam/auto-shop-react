@@ -121,15 +121,13 @@ const Dropdown = React.forwardRef(({name, options, width=170}, ref) => {
 
 const DropdownAlt = ({name, options, title, value, onChange}) => {
   return (
-    <div className='dropdownalt'>
-      <span className='textshadow nomp selectalt_title'>{title}</span>
-      <Select name={name}
-        options={options}
-        value={value}
-        onChange={onChange}
-      >
-      </Select>
-    </div>
+    <Select name={name}
+      options={options}
+      value={value}
+      onChange={onChange}
+      className='dropdownalt'
+    >
+    </Select>
   )
 }
 

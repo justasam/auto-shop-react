@@ -51,6 +51,6 @@ const Engine = [
 export default [
   {title: 'make', filters: Make},
   {title: 'model', filters: Model},
-  {title: 'body_types', filters: BodyTypes, isMultiple: true},
-  {title: 'colours', filters: Colours, isMultiple: true},
+  {title: 'body_type', filters: BodyTypes},
+  {title: 'colour', filters: Colours},
 ];

@@ -17,7 +17,7 @@ const PartsAlt = withRouter(props => {
 
   console.log(props.location.search);
 
-  let query = qs.parse(props.location.search, { parseNumbers: true });
+  let query = qs.parse(props.location.search, { parseNumbers: true, arrayFormat: 'bracket'});
   query.page_number = query.page_number || 1;
   query.per_page = PerPage;
   // delete query[''];
@@ -68,8 +68,11 @@ const PartsAlt = withRouter(props => {
                     });
                   }
                   else {
+                    if (isMultiple) {
+                      selectedOption.value = [selectedOption.value, ...(query[title] || [])];
+                    }
                     props.history.push({
-                      search: qs.stringify({ ...query, [title]: selectedOption.value })
+                      search: qs.stringify({ ...query, [title]: selectedOption.value }, {arrayFormat: 'bracket'})
                     });
                   }
                 }
