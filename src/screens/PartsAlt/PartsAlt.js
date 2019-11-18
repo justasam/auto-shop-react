@@ -302,11 +302,12 @@ const getPageFromSearch = search => {
 
 const getSearchFromPage = page => `?p=${page}`;
 
-const PerPage = 10;
+const PerPage = 5;
 
 const PartsAlt = withRouter(props => {
   let [parts, setParts] = useState([]);
-
+  let [filters, setFilters] = useState([]);
+  
   let page = getPageFromSearch(props.location.search);
 
   let [pagesMax, setPagesMax] = useState(1);

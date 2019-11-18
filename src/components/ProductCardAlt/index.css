@@ -11,6 +11,7 @@
   content: 'MORE INFO';
   text-align: center;
   font-size: 24px;
+  padding: 20px;
   background-color: rgba(255, 255, 255, .4);
   pointer-events: none;
 }

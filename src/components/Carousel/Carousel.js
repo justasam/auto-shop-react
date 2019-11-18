@@ -67,7 +67,7 @@ const Carousel = ({
 }) => {
   const settings = {
     dots: false,
-    slidesToShow: 3,
+    slidesToShow: Math.min(3, items.length),
     slidesToScroll: 1,
     nextArrow: <ModernArrow left={false} />,
     prevArrow: <ModernArrow />
