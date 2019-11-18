@@ -9,7 +9,7 @@ import { CarouselThumbnails } from '../CarouselThumbnails';
 const ProductCardPopup = ({data, style={}, styleMain={}}) => {
   let data2 = [];
 
-  for (let spec in JSON.parse(data.specificaction)) {
+  for (let spec in JSON.parse(data.specification)) {
     console.log(spec);
   }
 
