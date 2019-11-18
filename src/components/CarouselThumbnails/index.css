@@ -11,7 +11,7 @@ li.slick-active {
   border: 3px solid rgba(180,59,57,0.7)
 }
 
-.slick-current {
+/* .slick-current {
   margin-left: 0;
   padding: 0;
 }
@@ -19,4 +19,4 @@ li.slick-active {
 .slick-slide {
   padding-top: 0;
   padding-bottom: 0;
-}
+} */
