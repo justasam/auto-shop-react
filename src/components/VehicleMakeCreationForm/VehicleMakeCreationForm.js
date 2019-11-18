@@ -23,13 +23,11 @@ const VehicleMakeCreationForm = () =>{
   const alert = useAlert();
   const onSubmit = async data => {
     let values  = getValues()
-    let base64files = [];
-    for (let file of values.images) {
-        file = await fileToBase64(file);
-        file = file.split(',')[1];
-        base64files.push(file);
-    }
-    data.images = base64files;
+
+    let file = await fileToBase64(values.image[0]);
+    file = file.split(',')[1];
+
+    data.image = file;
 
     const response = await fetch("/autoshop/api/vehicles/makes", {
         method: "POST",

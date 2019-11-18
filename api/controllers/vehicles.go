@@ -92,6 +92,78 @@ func GetVehicle(c echo.Context) error {
 		return dbErr
 	}
 
+	if !vehicle.Listed {
+		if accountType != types.AdminAccount && accountType != types.EmployeeAccount {
+			return echo.NewHTTPError(http.StatusNotFound)
+		}
+	}
+
+	return c.JSON(http.StatusOK, vehicle)
+}
+
+// DeListVehicle delists a vehicle
+func DeListVehicle(c echo.Context) error {
+	accountType := c.Get("account_type").(string)
+	vehicleID := c.Param("vehicle_id")
+
+	if accountType != types.AdminAccount && accountType != types.EmployeeAccount {
+		return echo.NewHTTPError(http.StatusForbidden)
+	}
+
+	db, err := db.Connect(accountType)
+	if err != nil {
+		return fmt.Errorf("Error connecting to the database: %s", err)
+	}
+	defer db.Close()
+
+	// Check if the vehicle exists
+	vehicle, dbErr := db.GetVehicle(vehicleID)
+	if dbErr != nil {
+		return dbErr
+	}
+
+	if vehicle == nil {
+		return echo.NewHTTPError(http.StatusNotFound)
+	}
+
+	vehicle, dbErr = db.DeListVehicle(vehicleID)
+	if dbErr != nil {
+		return dbErr
+	}
+
+	return c.JSON(http.StatusOK, vehicle)
+}
+
+// ListVehicle delists a vehicle
+func ListVehicle(c echo.Context) error {
+	accountType := c.Get("account_type").(string)
+	vehicleID := c.Param("vehicle_id")
+
+	if accountType != types.AdminAccount && accountType != types.EmployeeAccount {
+		return echo.NewHTTPError(http.StatusForbidden)
+	}
+
+	db, err := db.Connect(accountType)
+	if err != nil {
+		return fmt.Errorf("Error connecting to the database: %s", err)
+	}
+	defer db.Close()
+
+	// Check if the vehicle exists
+	vehicle, dbErr := db.GetVehicle(vehicleID)
+	if dbErr != nil {
+		return dbErr
+	}
+
+	if vehicle == nil {
+		return echo.NewHTTPError(http.StatusNotFound)
+	}
+
+	vehicle, dbErr = db.ListVehicle(vehicleID)
+	if dbErr != nil {
+		return dbErr
+	}
+
 	return c.JSON(http.StatusOK, vehicle)
 }
 

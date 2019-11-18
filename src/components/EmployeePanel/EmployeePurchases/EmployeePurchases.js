@@ -69,7 +69,6 @@ const EmployeePurchases = withRouter((props) => {
             }
             getVehicle();
         }, []);
-        console.log(row)
         return (
             <div style={{height: "100%"}}>
             {
@@ -185,7 +184,6 @@ const EmployeePurchases = withRouter((props) => {
             }
 
             let account = await accountResp.json()
-            console.log(account)
 
             account = account.employee
             const response = await fetch(
@@ -198,7 +196,6 @@ const EmployeePurchases = withRouter((props) => {
                 }
             )
             let data = await response.json();
-            console.log(data)
             setLoading(false);
             setRows(data);
         }
