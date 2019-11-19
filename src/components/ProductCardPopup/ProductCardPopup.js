@@ -38,7 +38,9 @@ const ProductCardPopup = ({data, style={}, styleMain={}}) => {
       bottom: 0,
       backgroundColor: 'rgba(0,0,0,.5)',
       ...styleMain
-    }}>
+    }} onClick={() => {
+          window.location.hash = '';
+      }}>
       <div style={{
         display: 'grid',
         gridTemplateColumns: '1fr 1fr',
