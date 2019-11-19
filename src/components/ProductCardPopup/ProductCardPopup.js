@@ -5,7 +5,7 @@ import { XCircle } from 'react-feather';
 import { CarouselThumbnails } from '../CarouselThumbnails';
 
 
-const ProductCardPopup = ({data, style={}, styleMain={}}) => {
+const ProductCardPopup = ({ data, style = {}, styleMain = {} }) => {
   let specElements = [];
   let specChildren;
   let specification = JSON.parse(data.specification);
@@ -25,22 +25,24 @@ const ProductCardPopup = ({data, style={}, styleMain={}}) => {
   }
 
   console.log(data.account_type);
-  if(!data.account_type) {
+  if (!data.account_type) {
     data.account_type = "guest";
   }
 
   return (
-    <div style={{
-      position: 'fixed',
-      top: 0,
-      left: 0,
-      right: 0,
-      bottom: 0,
-      backgroundColor: 'rgba(0,0,0,.5)',
-      ...styleMain
-    }} onClick={() => {
+    <div>
+      <div
+        style={{
+          position: 'fixed',
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          backgroundColor: 'rgba(0,0,0,.5)',
+          ...styleMain
+        }} onClick={() => {
           window.location.hash = '';
-      }}>
+        }}></div>
       <div style={{
         display: 'grid',
         gridTemplateColumns: '1fr 1fr',
@@ -76,14 +78,14 @@ const ProductCardPopup = ({data, style={}, styleMain={}}) => {
           <CarouselThumbnails style={{
             display: 'block',
             paddingBottom: 50
-          }} items={data.images}/>
+          }} items={data.images} />
           <div>
             {(() => {
-              if(data.account_type == "employee" || data.account_type == "admin") {
+              if (data.account_type == "employee" || data.account_type == "admin") {
                 return (<button type="button">DELIST</button>)
               }
 
-              if(data.account_type == "customer") {
+              if (data.account_type == "customer") {
                 return (<button type="button">ENQUIRE</button>)
               }
 
