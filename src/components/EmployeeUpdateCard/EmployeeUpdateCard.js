@@ -31,7 +31,6 @@ const EmployeeUpdateCard = ({employee, setEmployeeData}) => {
     validationSchema: EmployeeUpdateSchema
   });
 
-  const [loading, setLoading] = useState(true)
   const alert = useAlert();
   const onSubmit = async data => {
     const response = await fetch("/autoshop/api/employees/" + employee.id, {
@@ -56,6 +55,8 @@ const EmployeeUpdateCard = ({employee, setEmployeeData}) => {
 
   const [branches, setBranches] = useState([])
   const [positions, setPositions] = useState([])
+  const [loadingCust, setLoadingCust] = useState(true)
+  const [loadingBranch, setLoadingBranch] = useState(true)
   useEffect(() => {
       async function getBranches() {
           const response = await fetch(
@@ -77,6 +78,7 @@ const EmployeeUpdateCard = ({employee, setEmployeeData}) => {
               }
           });
 
+          setLoadingBranch(false);
           setBranches(data);
       }
       getBranches();
@@ -101,11 +103,11 @@ const EmployeeUpdateCard = ({employee, setEmployeeData}) => {
               }
           });
 
+          setLoadingCust(false);
           setPositions(data);
       }
       getPositions();
       
-      setLoading(false);
       for(let key in employee) {
         setValue(key, employee[key]);
       }
@@ -115,13 +117,13 @@ const EmployeeUpdateCard = ({employee, setEmployeeData}) => {
   return (
     <div style={{height: "100%"}}>
       {
-        loading ?
+        loadingBranch || loadingCust ?
           <HashLoader
             sizeUnit={"px"}
             size={150}
             css={{height: "100%", margin: "0 auto"}}
             color={'#394263'} 
-            loading={loading}
+            loading={loadingBranch || loadingCust}
           />
         :
       <form className="custom-form"  onSubmit={handleSubmit(onSubmit)} style={{maxWidth:"650px"}}>

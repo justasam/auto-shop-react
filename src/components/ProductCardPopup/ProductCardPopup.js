@@ -1,18 +1,27 @@
 import React from 'react';
 import './index.css';
-
+import { useAlert } from "react-alert";
 import { XCircle } from 'react-feather';
 
 import { CarouselThumbnails } from '../CarouselThumbnails';
 
 
 const ProductCardPopup = ({data, style={}, styleMain={}}) => {
-  let data2 = [];
+  const alert = useAlert();
 
-  for (let spec in JSON.parse(data.specification)) {
-    console.log(spec);
+  let data2 = [];
+  try {
+    for (let spec in JSON.parse(data.specification)) {
+      console.log(spec);
+    }
+  } catch (e) {
+    console.log("Failed to unmarshal JSON: " + e)
+    alert.error("Failed to parse json");
+    window.location.hash = '';
+    return null;
   }
 
+  console.log(data.account_type);
   if(!data.account_type) {
     data.account_type = "guest";
   }

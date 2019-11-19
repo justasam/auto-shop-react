@@ -5,7 +5,9 @@ import Popup from "reactjs-popup";
 import { Link, withRouter } from 'react-router-dom';
 import {CustomerCard} from '../../CustomerCard'
 import {EmployeeCard} from '../../EmployeeCard'
+import { useAlert } from "react-alert";
 import HashLoader from 'react-spinners/HashLoader'
+
 import { ProductCardPopup } from "../../ProductCardPopup"
 import { 
   RowDetailState,
@@ -43,6 +45,7 @@ const EmployeePurchases = withRouter((props) => {
     const [rows, setRows] = useState([])
     const [pageSizes] = useState([5, 10, 15, 0]);
     const getRowId = row => row.id;
+    const alert = useAlert();
 
     const RowDetail = ({ row }) => {
         const [vehicle, setVehicle] = useState({})
@@ -63,6 +66,9 @@ const EmployeePurchases = withRouter((props) => {
                     alert.error(vehicle);
                     return
                 }
+
+                let accountType = vehicleResp.headers.get("X-Autoshop-Account-Type");
+                vehicle.account_type = accountType;
 
                 setVehicle(vehicle)
                 setLoading(false);
@@ -166,7 +172,6 @@ const EmployeePurchases = withRouter((props) => {
         )
     };
 
-
     const [loading, setLoading] = useState(true)
     useEffect(() => {
         async function getEmployeeSales() {
@@ -179,11 +184,11 @@ const EmployeePurchases = withRouter((props) => {
                 }
             )             
 
-            if (accountResp.status !== 200) {
-                return
-            }
-
             let account = await accountResp.json()
+            if (!accountResp.ok) {
+                alert.error(account);
+                return;
+            }
 
             account = account.employee
             const response = await fetch(

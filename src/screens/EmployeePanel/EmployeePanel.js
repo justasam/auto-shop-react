@@ -11,6 +11,7 @@ import { CustomersTable } from '../../components/EmployeePanel/CustomersTable';
 import { EmployeeSales } from '../../components/EmployeePanel/EmployeeSales';
 import { EmployeePurchases } from '../../components/EmployeePanel/EmployeePurchases';
 import { EmployeeEnquiries } from '../../components/EmployeePanel/EmployeeEnquiries';
+import { VehiclesTable } from '../../components/EmployeePanel/VehiclesTable';
 import { GlobalSales } from '../../components/EmployeePanel/GlobalSales';
 import { GlobalPurchases } from '../../components/EmployeePanel/GlobalPurchases';
 import { PasswordUpdateForm } from '../../components/PasswordUpdateForm';
@@ -157,6 +158,13 @@ const EmployeePanel = () => {
                                 <span class="navList__subheading-icon"><i class="fas fa-car"></i></span>
                                 <span class="navList__subheading-title">Create Vehicle Make</span>
                             </div>
+                            <div class="navList__subheading row row--align-v-center" onClick={(e) => {
+                                e.preventDefault();
+                                setContent("vehicles-list")
+                            }}>
+                                <span class="navList__subheading-icon"><i class="fas fa-list"></i></span>
+                                <span class="navList__subheading-title">Vehicle List</span>
+                            </div>
                         </li>
                         <li class="navList__heading">Enquiries<i class="fas fa-envelope"></i></li>
                         <li>
@@ -273,6 +281,8 @@ const EmployeePanel = () => {
                             return <GlobalSales/>;
                         case "global-purchases":
                             return <GlobalPurchases/>;
+                        case "vehicles-list":
+                            return <VehiclesTable/>;
                         default:
                             return null;
                     }
