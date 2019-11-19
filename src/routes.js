@@ -31,7 +31,7 @@ export const Routes = () => {
     <div>
     <AlertProvider template={AlertTemplate} {...options}>
       <NavBar />
-      <div style={{paddingTop: "4vh", margin: 0}}></div>
+      <div style={{paddingTop: "52px", margin: 0}}></div>
       <Switch>
         <Route exact path="/Home" component={HomeScreen} />
         <Route exact path="/Parts" component={Parts} />
