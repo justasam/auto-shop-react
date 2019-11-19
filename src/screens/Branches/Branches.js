@@ -1,62 +1,90 @@
-import React from 'react';
-import { GoogleMap } from '../../components/GoogleMap';
-import { CompanyInfoCard } from '../../components/CompanyInfoCard';
+import React,  { useState, useEffect} from 'react';
+import { useAlert } from "react-alert";
+import HashLoader from 'react-spinners/HashLoader'
+import Popup from "reactjs-popup";
+import {BranchCard} from '../../components/BranchCard'
 
 import './index.css';
 
 const Branches = props => {
-  // var locations = [
-  //     ['<b>Name 1</b><br>Address Line 1<br>Bismarck, ND 58501<br>Phone: 701-555-1234<br><a href="#" >Link<a> of some sort.', 56.4745215, -3.1069149, 4],
-  //     ['<b>Name 2</b><br>Address Line 1<br>Fargo, ND 58103<br>Phone: 701-555-4321<br><a href="#" target="_blank">Link<a> of some sort.', 56.4748924,-3.0721133, 4]
-  //     /*
-  //       * Next point on map
-  //       *   -Notice how the last number within the brackets incrementally increases from the prior marker
-  //       *   -Use http://itouchmap.com/latlong.html to get Latitude and Longitude of a specific address
-  //       *   -Follow the model below:
-  //       *      ['<b>Name 3</b><br>Address Line 1<br>City, ST Zipcode<br>Phone: ###-###-####<br><a href="#" target="_blank">Link<a> of some sort.', ##.####, -##.####, #]
-  //       */
-  // ];
+  const [branches, setBranches] = useState([])
+  const [loadingBranch, setLoadingBranch] = useState(true)
+  const alert = useAlert();
+  useEffect(() => {
+    async function getBranches() {
+        const response = await fetch(
+            "/autoshop/api/branches",
+            {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json"
+                }
+            }
+        )
 
-  // var map = new google.maps.Map(document.getElementById('map'), {
-  //     zoom: 11,
-  //     /* Zoom level of your map */
-  //     center: new google.maps.LatLng(56.4745215, -3.1069149),
-  //     /* coordinates for the center of your map */
-  //     mapTypeId: google.maps.MapTypeId.ROADMAP
-  // });
+        let data = await response.json();
+        if(!response.ok){
+          alert.error(JSON.stringify(data));
+          return
+        }
 
-  // var infowindow = new google.maps.InfoWindow();
+        setLoadingBranch(false);
+        setBranches(data);
+    }
+    getBranches();
+  }, {});
 
-  // var marker, i;
-
-  // for (i = 0; i < locations.length; i++) {
-  //     marker = new google.maps.Marker({
-  //         position: new google.maps.LatLng(locations[i][1], locations[i][2]),
-  //         map: map
-  //     });
-
-  //     google.maps.event.addListener(marker, 'click', (function(marker, i) {
-  //         return function() {
-  //             infowindow.setContent(locations[i][0]);
-  //             infowindow.open(map, marker);
-  //         }
-  //     })(marker, i));
-  // }
+  console.log(branches)
   return (
-    <div>
-        <div id="map"></div>
-        <ul className="CompanyInfoCards">
-          <li className="CompanyInfoCards__item">
-              <div className="CompanyInfoCards__container">
-                  <div className="card__image card__image--fence"></div>
-                  <div className="card__content">
-                      <div className="card__title">Company</div>
-                      <p className="card__text">info</p>
-                      <button className="btn btn--block card__btn">detail</button>
-                  </div>
+    <div style={{height: "100%"}}>
+      {(() => {
+        if(loadingBranch) {
+          return(
+            <HashLoader
+              sizeUnit={"px"}
+              size={150}
+              css={{height: "100%", margin: "0 auto"}}
+              color={'#394263'} 
+              loading={loadingBranch}
+            />
+          )
+        } else {
+          let data = branches.map(function (item, index){
+            return(
+                <li className="CompanyInfoCards__item">
+                    <div className="CompanyInfoCards__container">
+                        <div className="card__image card__image--fence"></div>
+                        <div className="card__content">
+                            <div className="card__title">{item.name}</div>
+                            <p className="card__text">{item.address}</p>
+                            <Popup 
+                                trigger={<button className="btn btn--block card__btn">Details</button>} position="right center"
+                                modal
+                                closeOnDocumentClick
+                            >
+                                <div className="modal">
+                                    <div className="header"><h3>Branch Details</h3></div>
+                                    <BranchCard branch_id={item.id}/>
+                                </div>
+                            </Popup>
+                        </div>
+                    </div>
+                </li>
+            ) 
+          })
+            return(
+              <div>
+                <div id="map"></div>
+                <ul className="CompanyInfoCards" style={{
+                  display: "grid",
+                  gridTemplateColumns: "auto"
+                }}>
+                 {data} 
+                </ul>
               </div>
-          </li>
-        </ul>
+            )
+        }
+      })()}
     </div>
   )
 }

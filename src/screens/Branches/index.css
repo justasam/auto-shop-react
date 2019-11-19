@@ -1,0 +1,80 @@
+.CompanyInfoCards {
+    display: flex;
+    flex-wrap: wrap;
+    list-style: none;
+    padding: 0;
+    align-items: center;
+    justify-content: center;
+}
+
+.CompanyInfoCards_item {
+    display: flex;
+    border-radius: 20px;
+    overflow: hidden;
+    margin: 1em;
+    box-shadow: 15px 10px 30px #888
+}
+
+.CompanyInfoCards__container {
+    width: 100%;
+    background-color: #fff;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.card__image {
+    height: 150px;
+    width: 100%;
+    object-fit: cover;
+    background-position: 50%;
+    background-repeat: no-repeat;
+    background-size: cover;
+    border-top-left-radius: .25rem;
+    border-top-right-radius: .25rem;
+    -webkit-filter: contrast(90%);
+    filter: contrast(90%);
+    border-radius: 10px;
+    overflow: hidden;
+    position: relative;
+    transition: -webkit-filter .5s cubic-bezier(.43,.41,.22,.91);
+    -webkit-transition: -webkit-filter .5s cubic-bezier(.43,.41,.22,.91);
+    transition: filter .5s cubic-bezier(.43,.41,.22,.91);
+    transition: filter .5s cubic-bezier(.43,.41,.22,.91),-webkit-filter .5s cubic-bezier(.43,.41,.22,.91);
+}
+
+.card__image--fence {
+    background-image: url(https://images.unsplash.com/photo-1551522435-a13afa10f103?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1500&q=80);
+}
+
+.card__content {
+    display: flex;
+    flex: 1 1 auto;
+    flex-direction: column;
+    padding: 1rem;
+}
+
+.card__title {
+    color: #696969;
+    font-size: 1.25rem;
+    font-weight: 300;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+}
+
+.card__text {
+    flex: 1 1 auto;
+    font-size: .875rem;
+    line-height: 1.5;
+    margin-bottom: 1.25rem;
+}
+
+.CompanyInfoCards button {
+    border-radius: 30px;
+    outline: none;
+    border: none;
+    color: #fff;
+    -webkit-transition: all 1s ease;
+    transition: all 1s ease;
+    background-color: #02b0bd;
+}

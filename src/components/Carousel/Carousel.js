@@ -116,7 +116,7 @@ const Carousel = withRouter(({
               border: '2px solid red',
               margin: '0 10px'
             }} key={i} onClickCapture={handleClick} onMouseUpCapture={handleMouseUp} onMouseDownCapture={handleMouseDown}>
-              <Link to={showPopup ? `#${i}` : `/PartsAlt?make=${item.title}`}>
+              <Link to={showPopup ? `#${i}` : `/Vehicles?make=${item.title}`}>
                 <img style={{
                   width: '100%',
                   height: '100%',

@@ -65,7 +65,7 @@ const NavBar = () => {
       </NavLink>
       <ul className="navbar_links_main mediumtext transformcenter">
         <li className="navbar_link"><NavLink activeClassName="is-active" to="/Home">HOME</NavLink></li>
-        <li className="navbar_link"><NavLink activeClassName="is-active" to="/PartsAlt">VEHICLES</NavLink></li>
+        <li className="navbar_link"><NavLink activeClassName="is-active" to="/Vehicles">VEHICLES</NavLink></li>
         <li className="navbar_link"><NavLink activeClassName="is-active" to="/Branches">BRANCHES</NavLink></li>
       </ul>
       <ul className="navbar_links_sep mediumtext">

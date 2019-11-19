@@ -10,10 +10,14 @@ type BranchPost struct {
 
 // Branch represents a branch
 type Branch struct {
-	ID        string  `db:"id" json:"id"`
-	Name      string  `db:"name" json:"name"`
-	Address   string  `db:"address" json:"address"`
-	ManagerID *string `db:"manager_id" json:"manager_id,omitempty"`
+	ID             string  `db:"id" json:"id"`
+	Name           string  `db:"name" json:"name"`
+	Address        string  `db:"address" json:"address"`
+	ManagerID      *string `db:"manager_id" json:"manager_id,omitempty"`
+	ManagerName    *string `db:"manager_name" json:"manager_name,omitempty"`
+	ManagerSurname *string `db:"manager_surname" json:"manager_surname,omitempty"`
+	ManagerEmail   *string `db:"manager_email" json:"manager_email,omitempty"`
+	ManagerPhone   *string `db:"manager_phone" json:"manager_phone,omitempty"`
 }
 
 // BranchPut represents branch update payload

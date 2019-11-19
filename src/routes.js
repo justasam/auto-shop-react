@@ -35,7 +35,7 @@ export const Routes = () => {
       <Switch>
         <Route exact path="/Home" component={HomeScreen} />
         <Route exact path="/Parts" component={Parts} />
-        <Route exact path="/PartsAlt" component={PartsAlt} />
+        <Route exact path="/Vehicles" component={PartsAlt} />
         <Route exact path="/Branches" component={Branches} />
         <Route exact path="/Cart" component={Cart} />
         <Route exact path="/Reg" component={Reg} />
