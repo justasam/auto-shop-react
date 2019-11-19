@@ -49,7 +49,6 @@ const EmployeePurchases = withRouter((props) => {
   const [vehicle, setVehicle] = useState()
   const [loading, setLoading] = useState(false)
 
-
   const RowDetail = ({ row }) => {
     async function getVehicle() {
       setLoading(true);
@@ -73,7 +72,6 @@ const EmployeePurchases = withRouter((props) => {
       setLoading(false);
       setVehicle(vehicle)
     }
-    console.log('vvv', vehicle);
     return (
       <div style={{ height: "100%" }}>
         {

@@ -2,8 +2,8 @@ import React, { useState, useEffect } from 'react';
 import Paper from '@material-ui/core/Paper';
 import HashLoader from 'react-spinners/HashLoader'
 import {useAlert} from "react-alert";
+import { Link, withRouter } from 'react-router-dom';
 import { ProductCardPopup } from "../../ProductCardPopup"
-import Popup from "reactjs-popup";
 import { 
   RowDetailState,
   FilteringState,
@@ -27,7 +27,7 @@ import {
 import './index.css';
 
 
-const CustomerPurchases = () => {
+const CustomerPurchases = withRouter((props) => {
   const [columns] = useState([
       { name: 'vehicle_make', title: 'Vehicle Make' },
       { name: 'vehicle_model', title: 'Vehicle Model' },
@@ -40,35 +40,33 @@ const CustomerPurchases = () => {
   const [rows, setRows] = useState([])
   const [pageSizes] = useState([5, 10, 15, 0]);
   const alert = useAlert();
-  const [loading, setLoading] = useState(true)
+  const [vehicle, setVehicle] = useState()
+  const [loading, setLoading] = useState(false)
   const getRowId = row => row.id;
 
   const RowDetail = ({ row }) => {
-    const [vehicle, setVehicle] = useState({})
-    const [loading, setLoading] = useState(true)
-    useEffect(() => {
-        async function getVehicle() {
-            const vehicleResp = await fetch(
-                "/autoshop/api/vehicles/" + row.vehicle_id, {
-                    method: "GET",
-                    headers: { 
-                        "Content-Type": "application/json"
-                    }
-                }
-            )             
-
-            let vehicle = await vehicleResp.json()
-            if (!vehicleResp.ok) {
-                alert.error(vehicle);
-                return
-            }
-
-            setVehicle(vehicle)
-            setLoading(false);
+    async function getVehicle() {
+      setLoading(true);
+      const vehicleResp = await fetch(
+        "/autoshop/api/vehicles/" + row.vehicle_id, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json"
         }
-        getVehicle();
-    }, []);
+      }
+      )
 
+      let vehicle = await vehicleResp.json()
+      if (!vehicleResp.ok) {
+        alert.error(vehicle);
+        return
+      }
+
+      let accountType = vehicleResp.headers.get("X-Autoshop-Account-Type");
+      vehicle.account_type = accountType;
+      setLoading(false);
+      setVehicle(vehicle)
+    }
     return (
       <div style={{height: "100%"}}>
       {
@@ -93,21 +91,30 @@ const CustomerPurchases = () => {
             </tr>
             <tr>
               <td>Vehicle ID:</td>
-              {<td>
-                  <Popup 
-                      trigger={<span style={{
-                          cursor:"pointer",
-                          color:"blue",
-                          textDecoration: "underline"
-                      }}>{vehicle.id}</span>} position="right center"
-                      modal
-                      closeOnDocumentClick
-                  >
-                      <div className="modal">
-                          <ProductCardPopup data={vehicle}/>
-                      </div>
-                  </Popup>
-              </td>}
+              <td>
+                <Link to={{
+                  hash: 'showcar'
+                }} onClick={
+                  async (e) => {
+                    e.preventDefault();
+
+                    if (!vehicle || vehicle.id !== row.vehicle_id) await getVehicle();
+
+                    props.history.push({
+                      hash: 'showcar'
+                    });
+                  }
+                } style={{
+                  cursor: "pointer",
+                  color: "blue",
+                  textDecoration: "underline"
+                }}>{row.vehicle_id}</Link>
+                {props.location.hash && vehicle && vehicle.id === row.vehicle_id ? <ProductCardPopup data={vehicle} style={{
+                  left: 'calc(50% + 120px)',
+                }} styleMain={{
+                  zIndex: 600
+                }} /> : null}
+              </td>
             </tr>
             <tr>
                 <td>Vehicle Make:</td><td>{row.vehicle_make}</td>
@@ -221,6 +228,6 @@ const CustomerPurchases = () => {
       }
     </div>
   );
-};
+});
 
 export default CustomerPurchases;

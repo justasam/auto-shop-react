@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import Paper from '@material-ui/core/Paper';
 import HashLoader from 'react-spinners/HashLoader'
 import {useAlert} from "react-alert";
+import { Link, withRouter } from 'react-router-dom';
+import { ProductCardPopup } from "../../ProductCardPopup"
 import { 
   RowDetailState,
   FilteringState,
@@ -24,40 +26,6 @@ import {
 } from '@devexpress/dx-react-grid-material-ui';
 import './index.css';
 
-const getRowId = row => row.id;
-const RowDetail = ({ row }) => {
-    console.log(row)
-    return (
-        <div>
-            <table class="inner-table" style={{width:"100%"}}>
-                <tr>
-                    <td>ID:</td><td>{row.id}</td>
-                </tr>
-                <tr>
-                    <td>Sold For:</td><td>{row.purchased_for}</td>
-                </tr>
-                <tr>
-                    <td>Vehicle ID:</td><td>{row.vehicle_id}</td>
-                </tr>
-                <tr>
-                    <td>Vehicle Make:</td><td>{row.vehicle_make}</td>
-                </tr>
-                <tr>
-                    <td>Vehicle Model:</td><td>{row.vehicle_model}</td>
-                </tr>
-                <tr>
-                    <td>Vehicle Year:</td><td>{row.vehicle_year}</td>
-                </tr>
-                <tr>
-                    <td>Employee Name:</td><td>{row.employee_name}</td>
-                </tr>
-                <tr>
-                    <td>Employee Surname:</td><td>{row.employee_surname}</td>
-                </tr>
-            </table>
-        </div>
-    )
-};
 
 const CustomerSales = () => {
     const [columns] = useState([
@@ -72,7 +40,87 @@ const CustomerSales = () => {
     const [rows, setRows] = useState([])
     const [pageSizes] = useState([5, 10, 15, 0]);
     const alert = useAlert();
-    const [loading, setLoading] = useState(true)
+    const [loading, setLoading] = useState(false)
+    const [vehicle, setVehicle] = useState()
+    const getRowId = row => row.id;
+    const RowDetail = ({ row }) => {
+      async function getVehicle() {
+        setLoading(true);
+        const vehicleResp = await fetch(
+          "/autoshop/api/vehicles/" + row.vehicle_id, {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json"
+          }
+        }
+        )
+
+        let vehicle = await vehicleResp.json()
+        if (!vehicleResp.ok) {
+          alert.error(vehicle);
+          return
+        }
+
+        let accountType = vehicleResp.headers.get("X-Autoshop-Account-Type");
+        vehicle.account_type = accountType;
+        setLoading(false);
+        setVehicle(vehicle)
+      }
+      return (
+          <div>
+              <table class="inner-table" style={{width:"100%"}}>
+                  <tr>
+                      <td>ID:</td><td>{row.id}</td>
+                  </tr>
+                  <tr>
+                      <td>Sold For:</td><td>{row.purchased_for}</td>
+                  </tr>
+                  <tr>
+                      <td>Vehicle ID:</td>
+                      <td>
+                        <Link to={{
+                          hash: 'showcar'
+                        }} onClick={
+                          async (e) => {
+                            e.preventDefault();
+
+                            if (!vehicle || vehicle.id !== row.vehicle_id) await getVehicle();
+
+                            props.history.push({
+                              hash: 'showcar'
+                            });
+                          }
+                        } style={{
+                          cursor: "pointer",
+                          color: "blue",
+                          textDecoration: "underline"
+                        }}>{row.vehicle_id}</Link>
+                        {props.location.hash && vehicle && vehicle.id === row.vehicle_id ? <ProductCardPopup data={vehicle} style={{
+                          left: 'calc(50% + 120px)',
+                        }} styleMain={{
+                          zIndex: 600
+                        }} /> : null}
+                      </td>
+                  </tr>
+                  <tr>
+                      <td>Vehicle Make:</td><td>{row.vehicle_make}</td>
+                  </tr>
+                  <tr>
+                      <td>Vehicle Model:</td><td>{row.vehicle_model}</td>
+                  </tr>
+                  <tr>
+                      <td>Vehicle Year:</td><td>{row.vehicle_year}</td>
+                  </tr>
+                  <tr>
+                      <td>Employee Name:</td><td>{row.employee_name}</td>
+                  </tr>
+                  <tr>
+                      <td>Employee Surname:</td><td>{row.employee_surname}</td>
+                  </tr>
+              </table>
+          </div>
+      )
+    };
     useEffect(() => {
         async function getCustomerSales() {
             const userResp = await fetch(
