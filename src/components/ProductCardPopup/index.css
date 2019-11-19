@@ -18,8 +18,11 @@
   border-top: 2px solid #bbb;
 }
 
+.productcardalt_description {
+  margin: 0 auto;
+}
 .productcardalt_description td {
-  padding: 5px;
+  padding: 10px;
 }
 
 .ttitle {

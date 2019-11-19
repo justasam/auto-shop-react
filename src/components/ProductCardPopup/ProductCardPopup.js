@@ -42,7 +42,7 @@ const ProductCardPopup = ({data, style={}, styleMain={}}) => {
       <div style={{
         display: 'grid',
         gridTemplateColumns: '1fr 1fr',
-        gridTemplateRows: '600px 1fr',
+        gridTemplateRows: 'min-content',
         gap: 20,
         width: '1000px',
         maxWidth: '80vw',
@@ -50,7 +50,7 @@ const ProductCardPopup = ({data, style={}, styleMain={}}) => {
         maxHeight: '80vh',
         overflowY: 'auto',
         position: 'fixed',
-        top: '50%',
+        top: 'calc(50% + 52px)',
         left: '50%',
         transform: 'translate(-50%, -50%)',
         backgroundColor: 'white',
@@ -94,6 +94,9 @@ const ProductCardPopup = ({data, style={}, styleMain={}}) => {
           <h2>{data.make.toUpperCase()} - {data.model} ({data.year})</h2>
           <p>{data.description}</p>
           <h1>£ {data.price}{`${data.is_sold ? ' - SOLD!' : ''}`}</h1>
+          <h3 style={{
+            textAlign: 'center'
+          }}>Specification</h3>
           <table className='productcardalt_description'>
             <tr><td className='ttitle'>Make</td><td>{data.make}</td><td className='ttitle'>Model</td><td>{data.model}</td></tr>
             <tr><td className='ttitle'>Year</td><td>{data.year}</td><td className='ttitle'>Price</td><td>{data.price}</td></tr>
