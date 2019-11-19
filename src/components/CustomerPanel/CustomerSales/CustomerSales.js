@@ -27,7 +27,7 @@ import {
 import './index.css';
 
 
-const CustomerSales = () => {
+const CustomerSales = withRouter((props) => {
     const [columns] = useState([
         { name: 'vehicle_make', title: 'Vehicle Make' },
         { name: 'vehicle_model', title: 'Vehicle Model' },
@@ -58,7 +58,7 @@ const CustomerSales = () => {
         let vehicle = await vehicleResp.json()
         if (!vehicleResp.ok) {
           alert.error(vehicle);
-          return
+          return null
         }
 
         let accountType = vehicleResp.headers.get("X-Autoshop-Account-Type");
@@ -212,6 +212,6 @@ const CustomerSales = () => {
       }
     </div>
   );
-};
+});
 
 export default CustomerSales;

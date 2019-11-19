@@ -1,0 +1,107 @@
+.custom-form body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
+    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
+    sans-serif;
+}
+
+.custom-form form {
+  margin: auto 20px auto 20px auto;
+}
+
+.custom-form h1 {
+  font-weight: 100;
+  color: white;
+  text-align: center;
+  padding-bottom: 10px;
+  border-bottom: 1px solid rgb(79, 98, 148);
+}
+
+.custom-form p {
+  color: #bf1650;
+}
+
+.custom-form p::before {
+  display: inline;
+  content: "⚠ ";
+}
+
+.custom-form input {
+  display: block;
+  box-sizing: border-box;
+  width: 100%;
+  border-radius: 4px;
+  border: 1px solid black;
+  padding: 10px 15px;
+  margin-bottom: 10px;
+  font-size: 14px;
+}
+
+.custom-form label {
+  line-height: 2;
+  text-align: left;
+  display: block;
+  margin-bottom: 13px;
+  margin-top: 20px;
+  color: black;
+  font-size: 14px;
+}
+
+.custom-form button[type="submit"],
+.custom-form input[type="submit"] {
+  background: #394263;
+  color: white;
+  text-transform: uppercase;
+  border: none;
+  margin-top: 40px;
+  padding: 20px;
+  font-size: 16px;
+  font-weight: 100;
+  letter-spacing: 10px;
+}
+
+.custom-form button[type="submit"]:hover,
+.custom-form input[type="submit"]:hover {
+  background: #525769;
+}
+
+.custom-form button[type="submit"]:active,
+.custom-form input[type="button"]:active,
+input[type="submit"]:active {
+  transition: 0.3s all;
+  transform: translateY(3px);
+  border: 1px solid transparent;
+  opacity: 0.8;
+}
+
+.custom-form input:disabled {
+  opacity: 0.4;
+}
+
+.custom-form input[type="button"]:hover {
+  transition: 0.3s all;
+}
+
+.custom-form button[type="submit"],
+.custom-form input[type="button"],
+.custom-form input[type="submit"] {
+  -webkit-appearance: none;
+}
+
+.custom-form pre {
+  color: white;
+}
+
+.custom-form hr {
+  margin-top: 30px;
+}
+
+.custom-form button {
+  display: block;
+  appearance: none;
+  margin-top: 40px;
+  border: 1px solid #333;
+  margin-bottom: 20px;
+  text-transform: uppercase;
+  padding: 10px 20px;
+  border-radius: 4px;
+}

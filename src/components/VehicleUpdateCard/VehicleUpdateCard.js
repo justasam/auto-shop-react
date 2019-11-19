@@ -121,7 +121,15 @@ const VehicleUpdateCard = ({vehicle, setVehicleData}) =>{
           </div>
           <div>
             <label>Fuel Type</label>
-            <input type="text" name="fuel_type" ref={register} />
+            <select name="fuel_type" ref={register}>
+              <option value="bi-fuel">Bi Fuel</option>
+              <option value="diesel">Diesel</option>
+              <option value="petrol">Petrol</option>
+              <option value="ethanol">Ethanol</option>
+              <option value="electric">Electric</option>
+              <option value="hybrid-diesel-electric">Hybrid - Diesel/Electric</option>
+              <option value="hybrid-petrol-electric">Hybrid - Petrol/Electric</option>
+            </select>
             {errors.fuel_type && <p>{errors.fuel_type.message}</p>}
           </div>
           <div>
@@ -131,7 +139,10 @@ const VehicleUpdateCard = ({vehicle, setVehicleData}) =>{
           </div>
           <div>
             <label>Gearbox</label>
-            <input type="text" name="gearbox" ref={register} />
+            <select name="gearbox" ref={register}>
+              <option value="manual">Manual</option>
+              <option value="automatic">Automatic</option>
+            </select>
             {errors.gearbox && <p>{errors.gearbox.message}</p>}
           </div>
           <div>

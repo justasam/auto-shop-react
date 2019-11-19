@@ -42,6 +42,11 @@ func GetVehicles(c echo.Context) error {
 		pageNumb = payload.PageNumber
 	}
 
+	if accountType != types.AdminAccount && accountType != types.EmployeeAccount {
+		listed := true
+		payload.Listed = &listed
+	}
+
 	vehicles, total, dbErr := db.GetVehicles(&payload, pageNumb, perPage)
 	if dbErr != nil {
 		return dbErr
@@ -90,12 +95,6 @@ func GetVehicle(c echo.Context) error {
 	vehicle, dbErr := db.GetVehicle(vehicleID)
 	if dbErr != nil {
 		return dbErr
-	}
-
-	if !vehicle.Listed {
-		if accountType != types.AdminAccount && accountType != types.EmployeeAccount {
-			return echo.NewHTTPError(http.StatusNotFound)
-		}
 	}
 
 	return c.JSON(http.StatusOK, vehicle)

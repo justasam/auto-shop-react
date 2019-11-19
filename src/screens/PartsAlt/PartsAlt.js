@@ -18,9 +18,23 @@ const PartsAlt = withRouter(props => {
   console.log(props.location.search);
 
   let query = qs.parse(props.location.search, { parseNumbers: true, arrayFormat: 'bracket'});
+  query.page_number = parseInt(query.page_number);
   query.page_number = query.page_number || 1;
   query.per_page = PerPage;
-  // delete query[''];
+  if (query.seats_to) query.seats_to = parseInt(query.seats_to);
+  if (query.seats_from) query.seats_from = parseInt(query.seats_from);
+
+  if (query.price_to) query.price_to = parseInt(query.price_to);
+  if (query.price_from) query.price_from = parseInt(query.price_from);
+
+  if (query.milage_to) query.milage_to = parseInt(query.milage_to);
+  if (query.milage_from) query.milage_from = parseInt(query.milage_from);
+
+  if (query.engine_to) query.engine_to = parseFloat(query.engine_to);
+  if (query.engine_from) query.engine_from = parseFloat(query.engine_from);
+
+  if (query.doors) query.doors = parseInt(query.doors);
+
   if (query.year_from) query.year_from += '';
   if (query.year_to) query.year_to += '';
 

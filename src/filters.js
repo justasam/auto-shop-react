@@ -1,14 +1,49 @@
-const Listed = [
-  { value: 'any', 'label': 'Listed at (any)'}
-];
+// const Listed = [
+//   { value: 'any', 'label': 'Listed at (any)'}
+// ];
 const BodyTypes = [
   { value: 'any', label: 'Body Type (any)'},
-  { value: 'hatchback', label: 'Hatchback'}
+  { value: 'hatchback', label: 'Hatchback'},
+  { value: 'supermini', label: 'Supermini'},
+  { value: 'mini-mpv', label: 'Mini-MPV'},
+  { value: 'mpv', label: 'MPV'},
+  { value: 'saloon', label: 'Saloon'},
+  { value: 'estate', label: 'Estate'},
+  { value: 'camper', label: 'Camper'},
+  { value: 'combi-van', label: 'Combi Van'},
+  { value: 'convertible', label: 'Convertible'},
+  { value: 'coupe', label: 'Coupe'},
+  { value: 'minibus', label: 'Minibus'},
+  { value: 'pickup', label: 'Pickup'},
+  { value: 'suv', label: 'SUV'},
 ];
+
 const Colours = [
   { value: 'any', label: 'Colour (any)'},
-  { value: 'grey', label: 'Grey'}
+  { value: 'beige', label: 'Beige'},
+  { value: 'black', label: 'Black'},
+  { value: 'blue', label: 'Blue'},
+  { value: 'bronze', label: 'Bronze'},
+  { value: 'brown', label: 'Brown'},
+  { value: 'burgundy', label: 'Burgundy'},
+  { value: 'gold', label: 'Gold'},
+  { value: 'green', label: 'Green'},
+  { value: 'grey', label: 'Grey'},
+  { value: 'gray', label: 'Gray'},
+  { value: 'indigo', label: 'Indigo'},
+  { value: 'magenta', label: 'Magenta'},
+  { value: 'maroon', label: 'Maroon'},
+  { value: 'navy', label: 'Navy'},
+  { value: 'orange', label: 'Orange'},
+  { value: 'pink', label: 'Pink'},
+  { value: 'purple', label: 'Purple'},
+  { value: 'red', label: 'Red'},
+  { value: 'silver', label: 'Silver'},
+  { value: 'turquoise', label: 'Turquoise'},
+  { value: 'white', label: 'White'},
+  { value: 'yellow', label: 'Yellow'},
 ];
+
 const Doors = [
   { value: 'any', label: 'Doors (any)'},
   { value: 1, label: '1 door'},
@@ -19,30 +54,64 @@ const Doors = [
   { value: 6, label: '6 doors'},
 ];
 const Drivetrain = [
-  { value: 'any', label: 'Drivetrain (any)'}
+  { value: 'any', label: 'Drivetrain (any)'},
+  { value: 'awd', label: 'All Wheel Drive'},
+  { value: 'fwd', label: 'Front Wheel Drive'},
+  { value: 'rwd', label: 'Rear Wheel Drive'},
 ];
 const EngineFrom = [
-  { value: 'any', label: 'Engine From'},
+  { value: 'any', label: 'Engine From (any)'},
   { value: 0, label: 'Engine From 0'},
+  { value: 0.5, label: 'Engine From 0.5'},
   { value: 1, label: 'Engine From 1'},
+  { value: 1.5, label: 'Engine From 1.5'},
   { value: 2, label: 'Engine From 2'},
+  { value: 2.5, label: 'Engine From 2.5'},
   { value: 3, label: 'Engine From 3'},
+  { value: 3.5, label: 'Engine From 3.5'},
+  { value: 4, label: 'Engine From 4'},
+  { value: 4.5, label: 'Engine From 4.5'},
+  { value: 5, label: 'Engine From 5'},
+  { value: 5.5, label: 'Engine From 5.5'},
+  { value: 6, label: 'Engine From 6'},
+  { value: 6.5, label: 'Engine From 6.5'},
+  { value: 7.5, label: 'Engine From 7'},
+  { value: 8, label: 'Engine From 8'},
 ];
 const EngineTo = [
-  { value: 'any', label: 'Engine To'},
-  { value: 1, label: 'Engine To 1'},
-  { value: 2, label: 'Engine To 2'},
-  { value: 3, label: 'Engine To 3'},
-  { value: 4, label: 'Engine To 4'},
+  { value: 'any', label: 'Engine To (any)'},
+  { value: 0.5, label: 'Engine to 0.5'},
+  { value: 1, label: 'Engine to 1'},
+  { value: 1.5, label: 'Engine to 1.5'},
+  { value: 2, label: 'Engine to 2'},
+  { value: 2.5, label: 'Engine to 2.5'},
+  { value: 3, label: 'Engine to 3'},
+  { value: 3.5, label: 'Engine to 3.5'},
+  { value: 4, label: 'Engine to 4'},
+  { value: 4.5, label: 'Engine to 4.5'},
+  { value: 5, label: 'Engine to 5'},
+  { value: 5.5, label: 'Engine to 5.5'},
+  { value: 6, label: 'Engine to 6'},
+  { value: 6.5, label: 'Engine to 6.5'},
+  { value: 7.5, label: 'Engine to 7'},
+  { value: 8, label: 'Engine to 8'},
 ];
-const FuelConsumption = [
-  { value: 'any', label: 'Fuel Consumption'},
-];
+
 const FuelType = [
   { value: 'any', label: 'Fuel Type (any)'},
+  { value: 'bi-fuel', label: 'Bi Fuel'},
+  { value: 'diesel', label: 'Diesel'},
+  { value: 'petrol', label: 'Petrol'},
+  { value: 'ethanol', label: 'Ethanol'},
+  { value: 'electric', label: 'Electric'},
+  { value: 'hybrid-diesel-electric', label: 'Hybrid - Diesel/Electric'},
+  { value: 'hybrid-petrol-electric', label: 'Hybrid - Petrol/Electric'},
 ];
+
 const Gearbox = [
   { value: 'any', label: 'Gearbox (any)'},
+  { value: 'automatic', label: 'Automatic'},
+  { value: 'manual', label: 'Manual'},
 ]
 const Make = [
   { value: 'any', label: 'Make (any)'},
@@ -53,29 +122,53 @@ const Make = [
   { value: 'mazda', label: 'Mazda'},
   { value: 'seat', label: 'Seat'},
 ];
+
 const MilageFrom = [
   { value: 'any', label: 'Mileage From (any)'},
   { value: 10000, label: 'Mileage From 10k'},
   { value: 50000, label: 'Mileage From 50k'},
   { value: 100000, label: 'Mileage From 100k'},
+  { value: 150000, label: 'Mileage From 150k'},
+  { value: 200000, label: 'Mileage From 200k'},
+  { value: 250000, label: 'Mileage From 250k'},
+  { value: 300000, label: 'Mileage From 300k'},
+  { value: 350000, label: 'Mileage From 350k'},
+  { value: 400000, label: 'Mileage From 400k'},
+  { value: 450000, label: 'Mileage From 450k'},
+  { value: 500000, label: 'Mileage From 500k'},
 ];
 const MilageTo = [
   { value: 'any', label: 'Mileage To (any)'},
   { value: 10000, label: 'Mileage To 10k'},
   { value: 50000, label: 'Mileage To 50k'},
   { value: 100000, label: 'Mileage To 100k'},
+  { value: 150000, label: 'Mileage To 150k'},
+  { value: 200000, label: 'Mileage To 200k'},
+  { value: 250000, label: 'Mileage To 250k'},
+  { value: 300000, label: 'Mileage To 300k'},
+  { value: 350000, label: 'Mileage To 350k'},
+  { value: 400000, label: 'Mileage To 400k'},
+  { value: 450000, label: 'Mileage To 450k'},
+  { value: 500000, label: 'Mileage To 500k'},
 ];
-const Model = [
-  { value: 'any', label: 'Model (any)'}
-];
+
 const PriceFrom = [
   { value: 'any', label: 'Price From (any)'},
+  { value: 100, label: 'Price From £100'},
+  { value: 500, label: 'Price From £500'},
+  { value: 1000, label: 'Price From £1000'},
+  { value: 3000, label: 'Price From £3000'},
+  { value: 6000, label: 'Price From £6000'},
   { value: 10000, label: 'Price From 10k'},
   { value: 50000, label: 'Price From 50k'},
   { value: 100000, label: 'Price From 100k'},
 ];
 const PriceTo = [
   { value: 'any', label: 'Price To (any)'},
+  { value: 500, label: 'Price To £500'},
+  { value: 1000, label: 'Price To £1000'},
+  { value: 3000, label: 'Price To £3000'},
+  { value: 6000, label: 'Price To £6000'},
   { value: 10000, label: 'Price To 10k'},
   { value: 50000, label: 'Price To 50k'},
   { value: 100000, label: 'Price To 100k'},
@@ -94,32 +187,51 @@ const SeatsTo = [
 ];
 const YearFrom = [
   { value: 'any', label: 'Year From (any)'},
+  { value: '1900', label: 'Year From 1900'},
+  { value: '1930', label: 'Year From 1930'},
+  { value: '1960', label: 'Year From 1960'},
+  { value: '1970', label: 'Year From 1970'},
+  { value: '1980', label: 'Year From 1980'},
+  { value: '1990', label: 'Year From 1990'},
   { value: '2000', label: 'Year From 2000'},
+  { value: '2005', label: 'Year From 2005'},
   { value: '2010', label: 'Year From 2010'},
+  { value: '2012', label: 'Year From 2012'},
+  { value: '2014', label: 'Year From 2014'},
   { value: '2016', label: 'Year From 2016'},
+  { value: '2018', label: 'Year From 2018'},
+  { value: '2019', label: 'Year From 2019'},
 ];
+
 const YearTo = [
   { value: 'any', label: 'Year To (any)'},
+  { value: '1930', label: 'Year To 1930'},
+  { value: '1960', label: 'Year To 1960'},
+  { value: '1970', label: 'Year To 1970'},
+  { value: '1980', label: 'Year To 1980'},
+  { value: '1990', label: 'Year To 1990'},
   { value: '2000', label: 'Year To 2000'},
+  { value: '2005', label: 'Year To 2005'},
   { value: '2010', label: 'Year To 2010'},
+  { value: '2012', label: 'Year To 2012'},
+  { value: '2014', label: 'Year To 2014'},
   { value: '2016', label: 'Year To 2016'},
+  { value: '2018', label: 'Year To 2018'},
+  { value: '2019', label: 'Year To 2019'},
 ];
 
 export default [
-  {title: 'ListedAtLatest', filters: Listed},
   {title: 'body_type', filters: BodyTypes},
   {title: 'colour', filters: Colours},
   {title: 'doors', filters: Doors},
   {title: 'drivetrain', filters: Drivetrain},
   {title: 'engine_from', filters: EngineFrom},
   {title: 'engine_to', filters: EngineTo},
-  {title: 'fuel_consumption', filters: FuelConsumption},
   {title: 'fuel_type', filters: FuelType},
   {title: 'gearbox', filters: Gearbox},
   {title: 'make', filters: Make},
   {title: 'milage_from', filters: MilageFrom},
   {title: 'milage_to', filters: MilageTo},
-  {title: 'model', filters: Model},
   {title: 'price_from', filters: PriceFrom},
   {title: 'price_to', filters: PriceTo},
   {title: 'seats_from', filters: SeatsFrom},

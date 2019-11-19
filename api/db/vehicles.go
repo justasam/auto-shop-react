@@ -21,6 +21,7 @@ func (c *Client) GetVehicles(filter *types.GetVehiclesFilter, pageNumber, perPag
 	query := fmt.Sprintf(queryf, "count(*)")
 	query = c.applyView(query)
 
+	spew.Dump(query, namedParams)
 	nstmt, err := c.db.PrepareNamed(query)
 	if err != nil {
 		return nil, 0, c.transformError(err)
@@ -413,111 +414,111 @@ func applyVehicleFilter(query string, filter *types.GetVehiclesFilter) (string, 
 	subQuery := ""
 	if filter.Make != nil {
 		namedParams["make"] = *filter.Make
-		subQuery += "AND make=:make"
+		subQuery += " AND make=:make"
 	}
 
 	if filter.Model != nil {
 		namedParams["model"] = *filter.Model
-		subQuery += "AND model=:model"
+		subQuery += " AND model=:model"
 	}
 
 	if filter.YearFrom != nil {
 		namedParams["year_from"] = *filter.YearFrom
-		subQuery += "AND year >= :year_from"
+		subQuery += " AND year >= :year_from"
 	}
 
 	if filter.YearTo != nil {
 		namedParams["year_to"] = *filter.YearTo
-		subQuery += "AND year <= :year_to"
+		subQuery += " AND year <= :year_to"
 	}
 
 	if filter.PriceFrom != nil {
 		namedParams["price_from"] = *filter.PriceFrom
-		subQuery += "AND price >= :price_from"
+		subQuery += " AND price >= :price_from"
 	}
 
 	if filter.PriceTo != nil {
 		namedParams["price_to"] = *filter.PriceTo
-		subQuery += "AND price <= :price_to"
+		subQuery += " AND price <= :price_to"
 	}
 
 	if filter.MilageFrom != nil {
 		namedParams["milage_from"] = *filter.MilageFrom
-		subQuery += "AND mileage <= :milage_from"
+		subQuery += " AND milage >= :milage_from"
 	}
 
 	if filter.MilageTo != nil {
-		namedParams["milage_to"] = *filter.MilageFrom
-		subQuery += "AND mileage <= :milage_to"
+		namedParams["milage_to"] = *filter.MilageTo
+		subQuery += " AND milage <= :milage_to"
 	}
 
 	if filter.BodyType != nil {
 		namedParams["body_type"] = *filter.BodyType
-		subQuery += "AND body_type=:body_type"
+		subQuery += " AND body_type=:body_type"
 	}
 
 	if filter.FuelType != nil {
 		namedParams["fuel_type"] = *filter.FuelType
-		subQuery += "AND fuel_type=:fuel_type"
+		subQuery += " AND fuel_type=:fuel_type"
 	}
 
 	if filter.Doors != nil {
 		namedParams["doors"] = *filter.Doors
-		subQuery += "AND doors=:doors"
+		subQuery += " AND doors=:doors"
 	}
 
 	if filter.Gearbox != nil {
 		namedParams["gearbox"] = *filter.Gearbox
-		subQuery += "AND gearbox=:gearbox"
+		subQuery += " AND gearbox=:gearbox"
 	}
 
 	if filter.Drivetrain != nil {
 		namedParams["drivetrain"] = *filter.Drivetrain
-		subQuery += "AND drivetrain=:drivetrain"
+		subQuery += " AND drivetrain=:drivetrain"
 	}
 
 	if filter.SeatsFrom != nil {
 		namedParams["seats_from"] = *filter.SeatsFrom
-		subQuery += "AND seats >= :seats_from"
+		subQuery += " AND seats >= :seats_from"
 	}
 
 	if filter.SeatsTo != nil {
 		namedParams["seats_to"] = *filter.SeatsTo
-		subQuery += "AND seats <= :seats_to"
+		subQuery += " AND seats <= :seats_to"
 	}
 
 	if filter.FuelConsumption != nil {
 		namedParams["fuel_consumption"] = *filter.FuelConsumption
-		subQuery += "AND fuel_consumption <= :fuel_consumption"
+		subQuery += " AND fuel_consumption <= :fuel_consumption"
 	}
 
 	if filter.Colour != nil {
 		namedParams["colour"] = *filter.Colour
-		subQuery += "AND colour=:colour"
+		subQuery += " AND colour=:colour"
 	}
 
 	if filter.EngineFrom != nil {
 		namedParams["engine_from"] = *filter.EngineFrom
-		subQuery += "AND engine >= :engine_from"
+		subQuery += " AND engine >= :engine_from"
 	}
 
 	if filter.EngineTo != nil {
 		namedParams["engine_to"] = *filter.EngineTo
-		subQuery += "AND engine <= :engine_to"
+		subQuery += " AND engine <= :engine_to"
 	}
 
 	if filter.ListedAtLatest != nil {
 		namedParams["created_at"] = *filter.ListedAtLatest
-		subQuery += "AND create_at >= :created_at"
+		subQuery += " AND created_at >= :created_at"
 	}
 
 	if filter.Listed != nil {
 		namedParams["listed"] = *filter.Listed
-		subQuery += "AND listed=:listed"
+		subQuery += " AND listed=:listed"
 	}
 
 	if len(subQuery) > 0 {
-		subQuery = strings.TrimPrefix(subQuery, "AND")
+		subQuery = strings.TrimPrefix(subQuery, " AND")
 		query += "WHERE " + subQuery
 	}
 

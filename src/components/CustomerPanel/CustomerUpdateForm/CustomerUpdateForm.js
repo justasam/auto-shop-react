@@ -11,7 +11,7 @@ const CustomerUpdateSchema = yup.object().shape({
   date_of_birth: yup.
     string().
     required("Date of birth is required").
-    test("validRange", "Date or birth cannot be negative and must be between 1920-2000", function(value){
+    test("validRange", "Date or birth must be of the format YYYY-MM-DD and must be between 1920-01-01 and 2020-12-30", function(value){
       console.log(value)
       let data = Date.parse(value)
       if (!data) {
@@ -21,7 +21,10 @@ const CustomerUpdateSchema = yup.object().shape({
     }),
   address: yup.string().required("Address is required"),
   email: yup.string().required("Email is required").email(),
-  phone_number: yup.string().required("Phone number is required"),
+  phone_number: yup
+  .string()
+  .matches(/^\+(?:[0-9] ?){6,14}[0-9]$/, 
+  "Phone  number requires country code and must be at least 5 digits long (country code exlucded)"),
 });
 
 const CustomerUpdateForm = ({customer_id}) => {
