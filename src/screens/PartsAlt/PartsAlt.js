@@ -21,6 +21,8 @@ const PartsAlt = withRouter(props => {
   query.page_number = query.page_number || 1;
   query.per_page = PerPage;
   // delete query[''];
+  if (query.year_from) query.year_from += '';
+  if (query.year_to) query.year_to += '';
 
   let [pagesMax, setPagesMax] = useState(1);
   console.log(query);
