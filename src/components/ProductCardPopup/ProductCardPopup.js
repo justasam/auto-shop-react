@@ -60,6 +60,7 @@ const ProductCardPopup = ({ data, style = {}, styleMain = {} }) => {
         backgroundColor: 'white',
         padding: 20,
         borderRadius: 4,
+        zIndex: 700,
         ...style
       }} className='shadow'>
         <XCircle size={40} style={{
