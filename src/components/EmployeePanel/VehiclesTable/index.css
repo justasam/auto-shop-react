@@ -8,5 +8,7 @@
   background-color: #dddddd;
 } */
 
-tr:nth-child(odd) {background: rgb(238, 237, 237)}
-tr:nth-child(even) {background: rgb(255, 255, 255)}
+.vehicle-update-popup-content {
+  height: 100%;
+  overflow: auto;
+}

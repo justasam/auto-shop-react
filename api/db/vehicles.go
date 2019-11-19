@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"strings"
 
+	"github.com/davecgh/go-spew/spew"
 	"github.com/jmoiron/sqlx"
 	uuid "github.com/satori/go.uuid"
 
@@ -25,6 +26,8 @@ func (c *Client) GetVehicles(filter *types.GetVehiclesFilter, pageNumber, perPag
 		return nil, 0, c.transformError(err)
 	}
 
+	spew.Dump(nstmt.QueryString)
+	spew.Dump(namedParams)
 	var total int
 	err = nstmt.Get(&total, namedParams)
 	if err != nil {
@@ -32,10 +35,10 @@ func (c *Client) GetVehicles(filter *types.GetVehiclesFilter, pageNumber, perPag
 	}
 
 	queryf = `SELECT %s FROM %%s_vehicles v 
-		JOIN %%s_vehicle_pictures vp ON vp.vehicle_id = v.id`
+		JOIN %%s_vehicle_pictures vp ON vp.vehicle_id = v.id `
 	queryf, namedParams = applyVehicleFilter(queryf, filter)
 
-	query = fmt.Sprintf(queryf, "v.*, GROUP_CONCAT(vp.file_name) AS vehicle_pictures")
+	query = fmt.Sprintf(queryf, "v.*, GROUP_CONCAT(vp.file_name) AS vehicle_pictures ")
 	query = c.applyView(query)
 	query += " GROUP BY id LIMIT :offset, :limit"
 
@@ -47,6 +50,7 @@ func (c *Client) GetVehicles(filter *types.GetVehiclesFilter, pageNumber, perPag
 		return nil, 0, c.transformError(err)
 	}
 
+	spew.Dump(nstmt.QueryString)
 	vehicles := []types.Vehicle{}
 	err = nstmt.Select(&vehicles, namedParams)
 	if err != nil {
@@ -447,16 +451,14 @@ func applyVehicleFilter(query string, filter *types.GetVehiclesFilter) (string, 
 		subQuery += "AND mileage <= :milage_to"
 	}
 
-	if len(filter.BodyTypes) > 0 {
-		bodyTypes := strings.Join(filter.BodyTypes, "','")
-		namedParams["body_types"] = bodyTypes
-		subQuery += "AND body_type IN (':body_types')"
+	if filter.BodyType != nil {
+		namedParams["body_type"] = *filter.BodyType
+		subQuery += "AND body_type=:body_type"
 	}
 
-	if len(filter.FuelTypes) > 0 {
-		fuelTypes := strings.Join(filter.FuelTypes, "','")
-		namedParams["fuel_types"] = fuelTypes
-		subQuery += "AND fuel_type IN (':fuel_types')"
+	if filter.FuelType != nil {
+		namedParams["fuel_type"] = *filter.FuelType
+		subQuery += "AND fuel_type=:fuel_type"
 	}
 
 	if filter.Doors != nil {
@@ -489,10 +491,9 @@ func applyVehicleFilter(query string, filter *types.GetVehiclesFilter) (string, 
 		subQuery += "AND fuel_consumption <= :fuel_consumption"
 	}
 
-	if len(filter.Colours) > 0 {
-		colours := strings.Join(filter.Colours, "','")
-		namedParams["colours"] = colours
-		subQuery += "AND colour in (':colours')"
+	if filter.Colour != nil {
+		namedParams["colour"] = *filter.Colour
+		subQuery += "AND colour=:colour"
 	}
 
 	if filter.EngineFrom != nil {

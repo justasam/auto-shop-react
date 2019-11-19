@@ -1,6 +1,5 @@
 import React from 'react';
 import './index.css';
-
 import { XCircle } from 'react-feather';
 
 import { CarouselThumbnails } from '../CarouselThumbnails';
@@ -25,6 +24,7 @@ const ProductCardPopup = ({data, style={}, styleMain={}}) => {
     );
   }
 
+  console.log(data.account_type);
   if(!data.account_type) {
     data.account_type = "guest";
   }
