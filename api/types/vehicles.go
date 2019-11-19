@@ -14,15 +14,15 @@ type GetVehiclesFilter struct {
 	PriceTo         *float64 `json:"price_to,omitempty"`
 	MilageFrom      *int     `json:"milage_from,omitempty"`
 	MilageTo        *int     `json:"milage_to,omitempty"`
-	BodyTypes       []string `json:"body_types,omitempty"`
-	FuelTypes       []string `json:"fuel_types,omitempty"`
+	BodyType        *string  `json:"body_type,omitempty"`
+	FuelType        *string  `json:"fuel_type,omitempty"`
 	Doors           *int     `json:"doors,omitempty"`
 	Gearbox         *string  `json:"gearbox,omitempty"`
 	Drivetrain      *string  `json:"drivetrain,omitempty"`
 	SeatsFrom       *int     `json:"seats_from,omitempty"`
 	SeatsTo         *int     `json:"seats_to,omitempty"`
 	FuelConsumption *float64 `json:"fuel_consumption,omitempty"`
-	Colours         []string `json:"colours,omitempty"`
+	Colour          *string  `json:"colour,omitempty"`
 	EngineFrom      *float64 `json:"engine_from,omitempty"`
 	EngineTo        *float64 `json:"engine_to,omitempty"`
 	PerPage         int      `json:"per_page" minimum:"1" default:"10"`
@@ -58,7 +58,7 @@ type Vehicle struct {
 	Colour          string    `db:"colour" json:"colour"`
 	Engine          float64   `db:"engine" json:"engine"`
 	Description     string    `db:"description" json:"description"`
-	Specificaction  string    `db:"specification" json:"specificaction"`
+	Specificaction  string    `db:"specification" json:"specification"`
 	Listed          bool      `db:"listed" json:"listed"`
 	IsSold          bool      `db:"is_sold" json:"is_sold"`
 	Images          []string  `json:"images"`
