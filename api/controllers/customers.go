@@ -106,7 +106,7 @@ func DeleteCustomer(c echo.Context) error {
 	accountType := c.Get("account_type").(string)
 	customerID := c.Param("customer_id")
 
-	if accountType != types.AdminAccount {
+	if accountType != types.AdminAccount && accountType != types.EmployeeAccount {
 		return echo.NewHTTPError(http.StatusForbidden)
 	}
 

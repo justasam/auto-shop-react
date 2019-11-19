@@ -65,7 +65,7 @@ const PartsAlt = withRouter(props => {
       <h3 style={{
         padding: '10px 20px',
         fontSize: 22
-      }}>PartsAlt</h3>
+      }}>Vehicles</h3>
       <div className='parts_alt_filters'>
         {
           Filters.map(({ title, filters, isMultiple }, i) => (
