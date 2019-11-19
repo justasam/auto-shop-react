@@ -93,7 +93,16 @@ const ProductCardPopup = ({data, style={}, styleMain={}}) => {
         <div>
           <h2>{data.make.toUpperCase()} - {data.model} ({data.year})</h2>
           <p>{data.description}</p>
-          <h1>£ {data.price}</h1>
+          <h1>£ {data.price}{`${data.is_sold ? ' - SOLD!' : ''}`}</h1>
+          <table className='productcardalt_description'>
+            <tr><td className='ttitle'>Make</td><td>{data.make}</td><td className='ttitle'>Model</td><td>{data.model}</td></tr>
+            <tr><td className='ttitle'>Year</td><td>{data.year}</td><td className='ttitle'>Price</td><td>{data.price}</td></tr>
+            <tr><td className='ttitle'>Mileage</td><td>{data.milage}</td><td className='ttitle'>Body Type</td><td>{data.body_type}</td></tr>
+            <tr><td className='ttitle'>Fuel Type</td><td>{data.fuel_type}</td><td className='ttitle'>Doors</td><td>{data.doors}</td></tr>
+            <tr><td className='ttitle'>Gearbox</td><td>{data.gearbox}</td><td className='ttitle'>Drivetrain</td><td>{data.drivetrain}</td></tr>
+            <tr><td className='ttitle'>Seats</td><td>{data.seats}</td><td className='ttitle'>Fuel Consumption</td><td>{data.fuel_consumption}</td></tr>
+            <tr><td className='ttitle'>Colour</td><td>{data.colour}</td><td className='ttitle'>Engine</td><td>{data.engine}</td></tr>
+          </table>
         </div>
         <div style={{
           border: '2px solid #eee',
