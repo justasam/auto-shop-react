@@ -48,33 +48,30 @@ const EmployeePurchases = withRouter((props) => {
     const alert = useAlert();
 
     const RowDetail = ({ row }) => {
-        const [vehicle, setVehicle] = useState({})
+        const [vehicle, setVehicle] = useState()
         const [loading, setLoading] = useState(true)
-        useEffect(() => {
-            async function getVehicle() {
-                const vehicleResp = await fetch(
-                    "/autoshop/api/vehicles/" + row.vehicle_id, {
-                        method: "GET",
-                        headers: { 
-                            "Content-Type": "application/json"
-                        }
+        async function getVehicle() {
+            const vehicleResp = await fetch(
+                "/autoshop/api/vehicles/" + row.vehicle_id, {
+                    method: "GET",
+                    headers: { 
+                        "Content-Type": "application/json"
                     }
-                )             
-
-                let vehicle = await vehicleResp.json()
-                if (!vehicleResp.ok) {
-                    alert.error(vehicle);
-                    return
                 }
+            )             
 
-                let accountType = vehicleResp.headers.get("X-Autoshop-Account-Type");
-                vehicle.account_type = accountType;
-
-                setVehicle(vehicle)
-                setLoading(false);
+            let vehicle = await vehicleResp.json()
+            if (!vehicleResp.ok) {
+                alert.error(vehicle);
+                return
             }
-            getVehicle();
-        }, []);
+
+            let accountType = vehicleResp.headers.get("X-Autoshop-Account-Type");
+            vehicle.account_type = accountType;
+
+            setVehicle(vehicle)
+            setLoading(false);
+        }
         return (
             <div style={{height: "100%"}}>
             {
@@ -119,12 +116,22 @@ const EmployeePurchases = withRouter((props) => {
                         <td>
                             <Link to={{
                               hash: 'showcar'
-                            }} style={{
+                            }} onClick={
+                              async (e) => {
+                                e.preventDefault();
+                                
+                                if (!vehicle) await getVehicle();
+
+                                props.history.push({
+                                  hash: 'showcar'
+                                });
+                              }
+                            } style={{
                                     cursor:"pointer",
                                     color:"blue",
                                     textDecoration: "underline"
                                 }}>{vehicle.id}</Link>
-                            {props.location.hash ? <ProductCardPopup data={vehicle} style={{
+                            {props.location.hash && vehicle ? <ProductCardPopup data={vehicle} style={{
                               left: 'calc(50% + 120px)',
                             }} styleMain={{
                               zIndex: 600
