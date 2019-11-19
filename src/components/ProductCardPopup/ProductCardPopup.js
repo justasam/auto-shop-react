@@ -7,10 +7,22 @@ import { CarouselThumbnails } from '../CarouselThumbnails';
 
 
 const ProductCardPopup = ({data, style={}, styleMain={}}) => {
-  let data2 = [];
-
-  for (let spec in JSON.parse(data.specification)) {
-    console.log(spec);
+  let specElements = [];
+  let specChildren;
+  let specification = JSON.parse(data.specification);
+  for (let spec in specification) {
+    specChildren = [];
+    for (let spec2 in specification[spec]) {
+      specChildren.push(
+        <p className='specification_content'>{spec2}: {specification[spec][spec2]}</p>
+      )
+    }
+    specElements.push(
+      <div className='specification_wrapper'>
+        <h2 className='specification_head'>{spec}</h2>
+        {specChildren}
+      </div>
+    );
   }
 
   if(!data.account_type) {
@@ -35,7 +47,8 @@ const ProductCardPopup = ({data, style={}, styleMain={}}) => {
         width: '1000px',
         maxWidth: '80vw',
         height: '1000px',
-        maxHeight: '80vw',
+        maxHeight: '80vh',
+        overflowY: 'auto',
         position: 'fixed',
         top: '50%',
         left: '50%',
@@ -55,13 +68,11 @@ const ProductCardPopup = ({data, style={}, styleMain={}}) => {
           window.location.hash = '';
         }} />
         <div style={{
-          position: 'relative'
+          position: 'relative',
+          overflow: 'hidden',
         }}>
           <CarouselThumbnails style={{
-            position: 'absolute',
             display: 'block',
-            maxWidth: '100%',
-            overflow: 'hidden',
             paddingBottom: 50
           }} items={data.images}/>
           <div>
@@ -85,10 +96,14 @@ const ProductCardPopup = ({data, style={}, styleMain={}}) => {
           <h1>£ {data.price}</h1>
         </div>
         <div style={{
-          border: '2px solid red',
-          gridColumn: 'span 2'
+          border: '2px solid #eee',
+          gridColumn: 'span 2',
+          position: 'relative',
+          padding: '0',
+          display: 'flex',
+          justifyContent: 'space-between'
         }}>
-          <p>{data.specificaction}</p>
+          {specElements}
         </div>
       </div>
     </div>
