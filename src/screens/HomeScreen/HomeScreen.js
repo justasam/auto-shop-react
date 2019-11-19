@@ -55,7 +55,17 @@ const HomeScreen = props => {
   return (
     <div>
       <BlurryImage src="https://www.tesla.com/ns_videos/commerce/content/dam/tesla/tesla-shop-marketing-imagery/hero-carousel/wall-connector.jpg">
-        <SearchGroup />
+        <p style={{
+          textAlign: 'center',
+          fontSize: '3.3vw',
+          fontStyle: 'italic',
+          display: 'block',
+          position: 'absolute',
+          top: '50%',
+          left: '50%',
+          transform: 'translate(-50%, -50%)',
+          color: 'white'
+        }}>Taking care of your former loved ones</p>
       </BlurryImage>
       {bestSellingMakes.length > 0 ? <Carousel height='300px' items={bestSellingMakes}/> : null}
       {recentlyListedVehicles.length > 0 ? <Carousel showPopup items={recentlyListedVehicles} title="RECENTLY LISTED VEHICLES"/> : null}
