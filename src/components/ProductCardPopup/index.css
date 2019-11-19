@@ -17,6 +17,11 @@
   margin: 0;
   border-top: 2px solid #bbb;
 }
-/* .specification_content
-.specification_wrapper
-.specification_head */
+
+.productcardalt_description td {
+  padding: 5px;
+}
+
+.ttitle {
+  font-weight: bold;
+}
