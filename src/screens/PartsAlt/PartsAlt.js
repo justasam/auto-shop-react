@@ -53,6 +53,8 @@ const PartsAlt = withRouter(props => {
       });
       const jsonRes = await res.json();
       setPagesMax(Math.ceil(jsonRes.total / PerPage));
+      let accountType = res.headers.get("X-Autoshop-Account-Type");
+      jsonRes.objects = jsonRes.objects.map((object) => ({...object, account_type: accountType}));
       setParts(jsonRes.objects);
       setLoading(false);
     };

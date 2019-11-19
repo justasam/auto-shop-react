@@ -93,50 +93,52 @@ const Carousel = withRouter(({
   }
 
   return (
-    <div className='carousel_wrapper' style={{
-      position: 'relative',
-      overflow: 'hidden',
-      margin: 25,
-      maxWidth: '100vw',
-      padding: '20px 0px',
-      height: height
-    }}>
-      <h3>{title}</h3>
-      <Slider {...settings} style={{
+    <>
+      <div className='carousel_wrapper' style={{
         position: 'relative',
-        display: 'block',
-        padding: '0 100px'
-      }} ref={carouselRef}>
-        {items.map((item, i) => {
-          item.title = item.title || (item.make + ' ' + item.model);
-          item.image = item.image || item.images[0];
-          item.description = item.description || '';
-          return (
-            <div style={{
-              border: '2px solid red',
-              margin: '0 10px'
-            }} key={i} onClickCapture={handleClick} onMouseUpCapture={handleMouseUp} onMouseDownCapture={handleMouseDown}>
-              <Link to={showPopup ? `#${i}` : `/Vehicles?make=${item.title}`}>
-                <img style={{
-                  width: '100%',
-                  height: '100%',
-                  objectFit: 'cover'
-                }} src={item.image} alt={item.title}></img>
-              </Link>
-              <h4>{
-                item.title.length > 0 &&
-                item.title[0].toUpperCase() + item.title.slice(1)
-              }</h4>
-              <h5>{
-                item.description.length > 0 &&
-                item.description[0].toUpperCase() + item.description.slice(1)
-              }</h5>
-            </div>
-          );
-        })}
-      </Slider>
+        overflow: 'hidden',
+        margin: 25,
+        maxWidth: '100vw',
+        padding: '20px 0px',
+        height: height
+      }}>
+        <h3>{title}</h3>
+        <Slider {...settings} style={{
+          position: 'relative',
+          display: 'block',
+          padding: '0 100px'
+        }} ref={carouselRef}>
+          {items.map((item, i) => {
+            item.title = item.title || (item.make + ' ' + item.model);
+            item.image = item.image || item.images[0];
+            item.description = item.description || '';
+            return (
+              <div style={{
+                border: '2px solid red',
+                margin: '0 10px'
+              }} key={i} onClickCapture={handleClick} onMouseUpCapture={handleMouseUp} onMouseDownCapture={handleMouseDown}>
+                <Link to={showPopup ? `#${i}` : `/Vehicles?make=${item.title}`}>
+                  <img style={{
+                    width: '100%',
+                    height: '100%',
+                    objectFit: 'cover'
+                  }} src={item.image} alt={item.title}></img>
+                </Link>
+                <h4>{
+                  item.title.length > 0 &&
+                  item.title[0].toUpperCase() + item.title.slice(1)
+                }</h4>
+                <h5>{
+                  item.description.length > 0 &&
+                  item.description[0].toUpperCase() + item.description.slice(1)
+                }</h5>
+              </div>
+            );
+          })}
+        </Slider>
+      </div>
       {props.location.hash && showPopup ? <ProductCardPopup data={items[parseInt(props.location.hash.split('#')[1])]} /> : null}
-    </div>
+    </>
   )
 });
 

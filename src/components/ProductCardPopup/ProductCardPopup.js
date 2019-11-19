@@ -80,7 +80,12 @@ const ProductCardPopup = ({ data, style = {}, styleMain = {} }) => {
             display: 'block',
             paddingBottom: 50
           }} items={data.images} />
-          <div>
+        </div>
+        <div>
+          <h2>{data.make.toUpperCase()} - {data.model} ({data.year})</h2>
+          <p>{data.description}</p>
+          <h1>£ {data.price}{`${data.is_sold ? ' - SOLD!' : ''}`}</h1>
+          <div className='account_buttons'>
             {(() => {
               if (data.account_type == "employee" || data.account_type == "admin") {
                 return (<button type="button">DELIST</button>)
@@ -94,11 +99,6 @@ const ProductCardPopup = ({ data, style = {}, styleMain = {} }) => {
 
             })()}
           </div>
-        </div>
-        <div>
-          <h2>{data.make.toUpperCase()} - {data.model} ({data.year})</h2>
-          <p>{data.description}</p>
-          <h1>£ {data.price}{`${data.is_sold ? ' - SOLD!' : ''}`}</h1>
           <h3 style={{
             textAlign: 'center'
           }}>Specification</h3>

@@ -44,7 +44,8 @@ const HomeScreen = props => {
         );
 
         let data = await response.json();
-        data = data.objects;
+        let accountType = response.headers.get("X-Autoshop-Account-Type");
+        data = data.objects.map((object) => ({...object, account_type: accountType}));
         setRecentlyListedVehicles(data);
     };
 
