@@ -10,7 +10,7 @@
     "@material-ui/icons": "^4.5.1",
     "csso": "^4.0.2",
     "match-sorter": "^4.0.2",
-    "node-forge": "^0.9.1",
+    "node-forge": "^0.10.0",
     "query-string": "^6.9.0",
     "react": "^16.10.2",
     "react-alert": "^6.0.0",
